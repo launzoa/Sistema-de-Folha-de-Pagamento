@@ -22,8 +22,6 @@ A princípio, para fazer a folha de pagamento (simples), é preciso seguir algun
 3. Calcular o salário líquido, que é o valor que o funcionário irá receber;
 
 
-
-
 - **Gestão de Cadastros:** Permitirá a inclusão, leitura e atualização de dados de funcionários, mantendo obrigatoriamente um histórico versionado de alterações salariais. A gestão também conta com a entrada e gestão de planilhas.
 - **Histórico das Folhas de Pagamento:** Fornecerá uma interface para visualizar as antigas folhas de pagamento referente aos meses anteriores.
 - **Gestão de Exceções Mensais:** Fornecerá uma interfaces para o lançamento de eventos variáveis que ocorrem em uma competência específica, como o registro de **horas extras** realizadas, bonificações concedidas, ou **descontos devidos a faltas injustificadas e atrasos (atestado)**.
@@ -35,7 +33,6 @@ A princípio, para fazer a folha de pagamento (simples), é preciso seguir algun
 **O que o produto NÃO fará nesta fase inicial (Restrições de Escopo):**
 
 - Não realizará pagamentos para regimes não-CLT (PJ, estagiários).
-    
 - Não gerenciará a retenção na fonte de impostos que não constam no fluxo atual aprovado (como tabelas progressivas de IRRF e INSS).
 
 ##### 1.3 Definições, Acrônimos e Abreviações
@@ -90,6 +87,49 @@ Em resumo, o cálculo da folha de pagamento, é dado por:
 
 
 ##### 2.3 Características do Usuário
+
+### Janelas
+* 1 janela para cadastro de dados críticos (empresa, adm/rh)
+* 1 janela para cadastro para dos funcionarios (dados pessoas, salário, etc). O foco são em dados estáticos.
+* 1 janela para cadastro de proventos e descontos (horas extras)
+* 1 janela para o cadastro de horas (dias/horas trabalhados)
+* 1 janela para a saída (emissão da folha de pagamento)
+* 1 janela para histórico de folhas de pagamento
+### 3
+
+**1. Cadastros Básicos**
+- Cadastro de Empresa (Dados do empregador, CNPJ, alíquotas tributárias) e do ADM/RH.
+- Cadastro de Verbas/Rubricas (Proventos e Descontos)
+- Cadastro de Funcionários (Dados pessoais, dependentes, admissão, cargos e salários)
+
+**2. Apuração de Frequência**
+- Registro de Dias Trabalhados
+- Apuração de Horas Extras
+- Apuração de Faltas e Atrasos
+- Cálculo de Descanso Semanal Remunerado (DSR) 
+
+**3. Processamento de Proventos (Ganhos)**
+- Cálculo do Salário Base ou Proporcional
+- Cálculo de Adicionais (Insalubridade, Periculosidade, Noturno)
+- Cálculo de Comissões ou Premiações
+- Pagamento de Adiantamento Quinzenal (Vale) 
+
+**4. Processamento de Descontos**
+- Cálculo de INSS (Previdência Social)
+- Cálculo de IRRF (Imposto de Renda Retido na Fonte)
+* Desconto de Benefícios (Vale-Transporte, Vale-Refeição, Plano de Saúde)  
+- Descontos Diversos (Adiantamentos, Pensão Alimentícia)
+
+**5. Encargos e Obrigações Acessórias**
+- Cálculo de FGTS (Fundo de Garantia)
+- Cálculo de INSS Patronal
+- Integração/Geração de eventos para o eSocial
+
+**6. Saídas e Relatórios**
+- Cálculo do Salário Líquido
+- Geração do Holerite (Recibo de Pagamento)
+- Geração de Arquivo de Remessa Bancária (Líquidos para pagamento)
+- Relatório de Resumo da Folha
 
 # Referências:
 Sólides:
