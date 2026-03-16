@@ -95,7 +95,42 @@ Em resumo, o cálculo da folha de pagamento, é dado por:
 * 1 janela para o cadastro de horas (dias/horas trabalhados)
 * 1 janela para a saída (emissão da folha de pagamento)
 * 1 janela para histórico de folhas de pagamento
-### 3
+### 3 Requisitos
+##### 3.1 Requisitos Funcionais (RF)
+- **RF01 - Gestão de Cadastros Críticos:** O Requisito Funcional 01 (RF01) estabelece a base estrutural e os parâmetros globais de funcionamento do sistema de folha de pagamento.
+	- O sistema deve prover uma interface dedicada e restrita para o cadastro, leitura e armazenamento dos dados estruturais do empregador. Isso engloba informações como o CNPJ e as alíquotas tributárias vigentes (fundamentais para o processamento matemático subsequente). A premissa técnica destes dados é a sua estabilidade: são informações organizacionais de caráter estático que sofrem modificações com baixíssima frequência, distinguindo-se claramente dos eventos transacionais de fechamento mensal.
+	- O requisito impõe uma regra de negócio baseada na separação de privilégios. O sistema deve distinguir obrigatoriamente o usuário Administrador (ADM) do operador comum (o funcionário do setor que utiliza o sistema diariamente para apurar frequências e gerar folhas),. A permissão para inserir, editar ou excluir os dados críticos da empresa é uma prerrogativa exclusiva e isolada do perfil ADM. O operador diário terá, no máximo, permissões de leitura destas informações, prevenindo adulterações acidentais ou intencionais nos alicerces contábeis do sistema.
+	- A persistência e a configuração correta destes cadastros básicos atuam como uma pré-condição lógica obrigatória para a operação do software. Sem que os dados da empresa estejam devidamente registrados e blindados pelo Administrador, os módulos subsequentes do sistema (como a apuração de horas, o processamento de exceções e a emissão do holerite) não podem ser instanciados ou executados.
+
+- **RF02 - Gestão de Cadastros não-Críticos:** O Requisito Funcional 02 (RF02) descreve a função do sistema responsável pelo armazenamento e gerenciamento das informações dos empregados. 
+	-  **Faz:** O sistema deve prover interfaces de usuário e estruturas de dados para permitir a inclusão, leitura e atualização do cadastro dos funcionários. Os dados obrigatórios contemplam informações pessoais, registro de dependentes, data de admissão e a alocação de cargo.
+	- **Não faz:** O sistema não pode realizar atualizações destrutivas no campo de remuneração (ou seja, apagar o salário antigo ao registrar um novo). É obrigatório manter um registro temporal e versionado de todas as alterações salariais. Do ponto de vista técnico, cada salário deve estar atrelado a um período de vigência, garantindo que o sistema possa consultar o valor exato do salário base em meses anteriores para auditorias ou cálculos de recálculo retroativo.
+
+- **RF03 - Lançamento de Exceções Mensais:** O Requisito Funcional 03 (RF03) estabelece o mecanismo pelo qual o sistema recebe e gerencia as ocorrências temporárias que alteram a remuneração de um colaborador. No contexto da especificação de sistemas, este requisito trata do fluxo de dados dinâmicos (transacionais), em oposição aos dados estáticos e permanentes definidos no cadastro do funcionário.
+	- O sistema deve fornecer uma interface específica para que o operador registre eventos pontuais que impactam exclusivamente o mês corrente (a competência atual). Esta rotina abrange a entrada de ocorrências que não são fixas, compreendendo tanto os acréscimos na remuneração (como horas extras realizadas e bonificações concedidas) quanto as deduções (como faltas injustificadas e atrasos).
+	- A entrada dessas exceções não é realizada de forma genérica. O sistema obriga que todo evento variável seja categorizado através do uso de "Rubricas" (ou Verbas). Uma rubrica atua como um código contábil que identifica de maneira inequívoca a natureza daquele valor na folha de pagamento. O uso de rubricas é o que sinaliza para o motor de cálculo se o lançamento inserido é um "Provento" (um valor de natureza creditícia que será somado ao salário) ou um "Desconto" (um valor que será subtraído).
+	- A mecânica de exceções atua sob uma delimitação estrita de tempo. Os eventos inseridos neste módulo afetam apenas o cálculo matemático que transforma o salário bruto em salário líquido no respectivo mês de processamento. Isso significa que o lançamento de uma hora extra ou de uma falta não altera o contrato base do funcionário, garantindo que o holerite daquela competência detalhe perfeitamente a realidade daquele mês isolado.
+
+- **RF04 - Processamento Lógico de Folha:** O Requisito Funcional 04 (RF04) corresponde à declaração do serviço algorítmico e matemático central oferecido pelo sistema de software. Ele especifica a rotina de fechamento de folha que transforma o salário bruto em salário líquido do colaborador. 
+- Primeiro, é realizado o cálculo do salário bruto, derivado da multiplicação do salário base (ou "Valor dia") pelo quantitativo de horas ou dias efetivamente trabalhados; Após, é feita a consolidação de proventos, somando-se à base os eventos variáveis de natureza creditícia (como horas extras, adicionais e comissões); Por fim, é realizado o processamento de deduções, que subtrai do montante os descontos obrigatórios estipulados por lei (INSS, IRRF) e outras deduções aplicáveis (como faltas e atrasos). O produto desta equação é o salário líquido.
+
+
+ **RF05 - Geração de Artefatos:** O Requisito Funcional 05 (RF05) descreve o serviço final do ciclo de processamento da folha, responsável pela materialização dos cálculos matemáticos em um documento oficial e inteligível. 
+ * Após a execução do motor de cálculo, o sistema deve agregar todas as variáveis processadas para gerar o demonstrativo de pagamento individual (o Holerite ou Contra-cheque). Este documento deve discriminar de forma transparente todas as rubricas aplicadas na competência. A compilação deve detalhar obrigatoriamente o salário bruto (base e horas trabalhadas), a lista de proventos (como horas extras e prêmios), os descontos (como encargos sociais, faltas e benefícios) e, por fim, apresentar com exatidão o salário líquido a ser recebido pelo funcionário.
+* O sistema deve prover uma janela de interface dedicada estritamente à emissão e conferência da folha de pagamento. Essa funcionalidade garante que o operador (gestor ou RH) possa visualizar o demonstrativo individual compilado diretamente na tela do software de forma clara e estruturada.
+* Para que o artefato cumpra a sua função legal e probatória nas relações trabalhistas, a informação não pode ficar restrita ao banco de dados ou à tela do sistema. O requisito impõe que o documento gerado seja exportável (podendo ser salvo em formatos digitais padrão para envio eletrônico) e que possua uma versão formatada para impressão física. Isso garante a entrega do comprovante detalhado ao colaborador, atestando o cumprimento das obrigações da empresa.
+
+**RF06 - Histórico de Competências:** O sistema deve fornecer uma interface para visualização e recuperação de folhas de pagamento fechadas de meses anteriores,.
+
+##### 3.2. Requisitos Não Funcionais (RNF)
+Consistem em restrições sobre os serviços oferecidos pelo sistema, incluindo confiabilidade, eficiência e segurança,.
+
+- **RNF01 - Persistência e Integridade Transacional:** O fechamento da folha deve ser atômico. Falhas no software ou hardware durante o processamento não podem corromper os registros financeiros (exigindo mecanismos de consistência de dados),.
+- **RNF02 - Controle de Acesso e Isolamento:** O acesso às interfaces de parametrização e cálculo deve ser restrito a usuários do grupo Administrativo/RH, exigindo autenticação,.
+
+### 3.3. Requisitos de Interface (RI)
+
+- **RI01 - Módulos de Interface:** A interface de usuário deve ser segregada em janelas específicas: (1) Dados críticos da empresa, (2) Cadastro estático de funcionários, (3) Cadastro de proventos e descontos, (4) Cadastro de horas/frequência, (5) Emissão da folha e (6) Histórico,.
 
 **1. Cadastros Básicos**
 - Cadastro de Empresa (Dados do empregador, CNPJ, alíquotas tributárias) e do ADM/RH.
