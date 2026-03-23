@@ -52,4 +52,50 @@ Este documento segue o padrão IEEE 830 (Software Requirements Specification) ad
 - Fórmulas de cálculo são identificadas pelo código **[F-XX]** e detalhadas na seção 4.2.
 - Itens marcados com `*****` ou `VER` indicam pontos ainda em aberto, pendentes de decisão pela equipe.
 
+# 2. Descrição Geral
+
+### 2.1 - Perspectiva do Produto
+* O sistema é uma aplicação desktop standalone desenvolvida em Java, voltada para o escritório independentes ou para departamentos inclusos na empresa (Recursos Humanos ou contabilidade). 
+- A interface do sistema é desenvolvida através do Java Desktop (biblioteca Swing ou JavaFX). 
+- A aplicação deve ser executada localmente na máquina do usuário, conectada a um banco de dados, podendo, ou não, estar na mesma máquina (instalação local) ou em algum servidor na rede interna da empresa (com a integração sendo responsável pela empresa).   
+
+### 2.2 Funcionalidades do Produto
+As principais funções esperadas pelo sistema são:
+- **Cálculo Automático**: O processamento do salário bruto em salário líquido.
+- **Gestão de Ponto/Exceções**: Gestão do relógio de ponto dos funcionários, contendo as horas extras de trabalho, faltas e atrasos.
+- **Provisões Trabalhistas**: Cálculo mensal proventos e exceções.
+- **Emissão de Documentos**: Geração do Holerite e, respectivamente, a sua emissão como arquivo PDF.
+
+### 2.3 Características do Usuário
+O sistema tem como usuário principal os analista de escritórios de RH/DP (integrados ou não na empresa alvo) , que já possuem o conhecimento das regras da CLT, mas que buscam agilidade no cálculo manual. 
+
+### 2.4 Restrições Gerais
+* **Legislação**: O sistema deve seguir estritamente a tabela vigente da CLT (2024/2025/2026).
+* **Segurança**: Dados salariais são protegidos pela LGPD (Lei Geral de Proteção de Dados). O acesso deve ser restrito por login e senha.
+* **Conformidade**: O sistema não permite a alteração de folhas de meses já encerrados para garantir a integridade contábil.
+
+### 2.5 Suposições e Dependências
+É esperado que o usuário possua acesso a um computador suficientemente capaz de executar o sistema e de manter o banco de dados do sistema. Se espera que o usuário tenha noção prévia (mínima) a respeito das leis trabalhistas do contrato CLT e de tributos de exceções (FGTS, etc.).
+
+O sistema depende estritamente do cadastramento mensal de "exceções" (faltas/extras) antes do fechamento da folha, assim como uma conexão estável com o banco de dados.  
+
+Ao emitir a folha de pagamento, assume-se que o usuário esteja em prol da verdade, não se sujeitando a emissão de contratos fantasmas (que não existam), falsa verdade, ou qualquer tipo de divergência em desacordo com a lei.
+
+# 3. Requisitos Específicos
+
+### 3.1 Requisitos de Interface com o Usuário (GUI)
+
+### 3.1.1 Padrões Gerais da Interface
+Todos os seguintes requisitos se aplicam a todas as telas do sistema e são referentes a nomenclatura \[3.1.1]\:
+1. O sistema deve possuir uma interface gráfica.
+2. Todas as telas devem exibir, no cabeçalho, o nome do sistema : "SFP-CLT".
+3. Todas as telas devem exibir, no cabeçalho, o nome do usuário.
+4. A paleta de cores, tipografia e espaçamento devem ser padronizados e consistentes em todas as telas da aplicação, seguindo um guia de estilo definido pré-definido pelo sistema (paleta de cores, tipografia e espaçamento).
+5. Todos os formulários devem indicar visualmente os campos obrigatórios, utilizando marcador de asterisco ( * ) em vermelho ao lado do rótulo.
+6. O sistema deve exibir mensagem de confirmação com opções de "Confirmar" e "Cancelar", antes de executar qualquer operação irreversível.
+7. O sistema deve exibir mensagens de erro em linguagem clara e objetiva, sem códigos de exceção Java expostos ao usuário.
+8. Campos monetários devem ser formatados automaticamente com separador de milhar (ponto) e duas casas decimais (ex: R$ 3.500,00).
+9. Campos de data devem utilizar máscara DD/MM/AAAA e validar se a data informada é uma data calendário válida.
+10. O sistema deve manter a resolução mínima de tela de 1280 x 720 pixels como referência de layout.
+11. A interface deve permitir acesso às funcionalidades do sistema.
 
