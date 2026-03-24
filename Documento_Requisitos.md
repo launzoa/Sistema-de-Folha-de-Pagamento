@@ -223,15 +223,15 @@ Este módulo engloba os requisitos referentes ao registro e manutenção dos dad
 	* **3.2.1.1.1 —** Cidade;
 	* **3.2.1.1.1 —** UF;
 	* **3.2.1.1.1 —** CEP
-* **3.2.1.1.1 —** Nome do Responsável Legal.
-**3.2.1.1.2 —** O CNPJ deve ser validado pelo algoritmo oficial de dígitos verificadores da Receita Federal.
-**3.2.1.1.2 —** O sistema deve rejeitar CNPJs com todos os dígitos iguais (ex.: 11.111.111/1111-11) mesmo que passem na verificação matemática.
-**3.2.1.1.3 —** O sistema deve armazenar os seguintes parâmetros fiscais utilizados nos cálculos da folha:
-	**3.2.1.1.3 —** Alíquota de FGTS: valor percentual 8,00%.
-	**3.2.1.1.3 —** Horas mensais contratuais: inteiro positivo (padrão: 220 horas). Representa o divisor para cálculo do valor-hora.
-	**3.2.1.1.3 —** Percentual de adicional de hora extra padrão (50%), fixo por legislação.
-	**3.2.1.1.3 —** Percentual de adicional de hora extra especial (100%): aplicável a domingos, feriados e período noturno contínuo, conforme CLT Art. 59-A.
-	**3.2.1.1.3 —** Valor mensal da Cesta Básica: valor monetário (R$), podendo ser zero.
+* **3.2.1.1.1 —** Nome do Responsável Legal.	
+**3.2.1.1.2 —** O CNPJ deve ser validado pelo algoritmo oficial de dígitos verificadores da Receita Federal.	
+**3.2.1.1.2 —** O sistema deve rejeitar CNPJs com todos os dígitos iguais (ex.: 11.111.111/1111-11) mesmo que passem na verificação matemática.	
+**3.2.1.1.3 —** O sistema deve armazenar os seguintes parâmetros fiscais utilizados nos cálculos da folha:	
+	**3.2.1.1.3 —** Alíquota de FGTS: valor percentual 8,00%.	
+	**3.2.1.1.3 —** Horas mensais contratuais: inteiro positivo (padrão: 220 horas). Representa o divisor para cálculo do valor-hora.	
+	**3.2.1.1.3 —** Percentual de adicional de hora extra padrão (50%), fixo por legislação.	
+	**3.2.1.1.3 —** Percentual de adicional de hora extra especial (100%): aplicável a domingos, feriados e período noturno contínuo, conforme CLT Art. 59-A.	
+	**3.2.1.1.3 —** Valor mensal da Cesta Básica: valor monetário (R$), podendo ser zero.	
 
 #### 3.2.1.2 Cadastro de Funcionários
 **3.2.1.2 —** O sistema deve permitir o cadastro, a edição e a inativação de funcionários CLT.
