@@ -99,3 +99,66 @@ Todos os seguintes requisitos se aplicam a todas as telas do sistema e são refe
 10. O sistema deve manter a resolução mínima de tela de 1280 x 720 pixels como referência de layout.
 11. A interface deve permitir acesso às funcionalidades do sistema.
 
+### 3.1.2 Tela de Login e Autenticação
+Todos os seguintes requisitos se aplicam a todas as telas do sistema e são referentes a nomenclatura \[3.1.2]\:
+1. O sistema deve apresentar uma tela de login como tela inicial obrigatória, bloqueando o acesso a qualquer outra funcionalidade antes da autenticação do usuário 
+2. A tela de login deve conter o campo "Usuário" com as seguintes especificações:
+	1. Deve ser em formato de texto;
+	2. Restringido para no máximo 50 caracteres;
+	3. Preenchimento obrigatório.
+3. A tela de login deve conter o campo "Senha" contendo as seguintes especificações :
+	1. Deve ser em formato de texto;
+	2. Não visível para usuário, ex: ocultado com asteriscos;
+	3. Preenchimento obrigatório.
+4. A tela de login deve exibir o logotipo ou nome do sistema.
+5. A tela de login deve exibir a versão atual do software.
+6. O sistema deve registrar um histórico (log) de segurança contendo todas as tentativas de acesso (bem-sucedida ou não). O histórico deve conter:
+	1. Nome do usuário;
+	2. Data de entrada;
+	3. Hora de entrada;
+	4. Informar se o acesso foi bem-sucedido ou não.
+7. O campo de senha não deve permitir copiar o conteúdo via atalho de teclado (Ctrl+C) ou menu de contexto.
+8. A sessão do usuário deve ser encerrada automaticamente após 30 minutos de inatividade, redirecionando para a tela de login com mensagem explicativa.
+9. O sistema deve oferecer opção "Sair" acessível em todas as telas para encerramento manual da sessão com segurança.
+
+### 3.1.3 Menu Principal e sua Navegação
+Todos os seguintes requisitos se aplicam a todas as telas do sistema e são referentes a nomenclatura \[3.1.3]\:
+1. Após autenticação bem-sucedida, o sistema deve exibir um menu principal com acesso a todos os módulos habilitados para o perfil do usuário logado.
+2. O menu principal deve conter as seguintes entradas: 
+	1. Cadastros de funcionários;
+	2. Planilha para o relógio de ponto dos funcionários;
+	3. Lançamento de exceções; 
+	4. Emissão da folha de pagamento do mês atual; 
+	5. Histórico;
+	6. Sair.
+3. Itens de menu restritos ao perfil de Administrador devem ser desabilitados para os usuários.
+4. O menu deve apresentar um indicador visual do módulo atualmente ativo (item selecionado destacado).
+5. O sistema deve exibir um dashboard, de forma resumida, contedo: 
+	1. O mês de competência corrente; 
+	2. A quantidade de funcionários ativos cadastrados; 
+	3. O status da folha do mês corrente ("Aberta" ou "Fechada").
+
+### 3.1.4 Tela de Cadastro de Funcionários
+Todos os seguintes requisitos se aplicam a todas as telas do sistema e são referentes a nomenclatura \[3.1.4]\:
+1. O sistema deve apresentar tela de cadastro de funcionários com os seguintes campos obrigatórios: 
+	1. Nome completo do funcionário, com o tipo do campo sendo texto e contendo no máximo 150 caracteres; 
+	2. CPF (máscara 000.000.000-00, único no sistema); 
+	3. Data de Nascimento (DD/MM/AAAA);
+	4. Data de Admissão (DD/MM/AAAA);
+	5. Cargo, com tipo texto de no máximo 100 caracteres;
+	6. Salário Base (valor monetário, mínimo R$ 1.518,00 conforme piso CLT 2025).
+2. O sistema deve apresentar os seguintes campos opcionais para cada funcionário:  
+	1. Número de Dependentes (inteiro ≥ 0)
+	2. Banco e Conta para depósito salarial.
+3. O campo CPF deve ser validado pelo algoritmo de dígitos verificadores da Receita Federal. O sistema deve rejeitar CPFs com todos os dígitos iguais.
+4. O sistema deve impedir o cadastro de dois funcionários com o mesmo CPF, exibindo mensagem de erro específica.
+5. A tela de listagem de funcionários deve apresentar tabela com colunas: 
+	1. Nome;
+	2. CPF (parcialmente ocultado: \*\*\*XXX-XX);
+	3. Cargo;
+	4. Salário Base;
+	5. Status (Ativo/Inativo).
+6. A listagem deve permitir busca por CPF.
+7. O sistema deve permitir inativar um funcionário (demissão), registrando a data de desligamento. 
+8. Funcionários inativos não devem participar do processamento da folha de meses posteriores à data de desligamento.
+9. O sistema não deve permitir a exclusão permanente de registros de funcionários, apenas a inativação, para preservar o histórico de folhas passadas.
