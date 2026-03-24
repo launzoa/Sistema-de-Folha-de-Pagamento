@@ -372,7 +372,7 @@ Este módulo descreve o cálculo de todos os valores de natureza creditícia que
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 📐 **Fórmula — Salário Proporcional [RN-07]**<br><br>Salário_Proporcional = (Salário_Base ÷ Dias_Úteis_do_Mês) × Dias_Trabalhados<br><br>Exemplo: Admissão em 10/03 \| Dias úteis de março = 21<br><br>Dias trabalhados a partir do dia 10 = 16<br><br>Salário Base = R$ 4.400,00<br><br>Salário_Proporcional = (4.400 ÷ 21) × 16 = R$ 3.352,38 |
 
-#### 3.2.3.2 Horas Extras — Processamento
+#### 3.2.3.2 Horas Extras — Processamento	
 **3.2.3.2 —** O sistema deve consolidar todos os lançamentos de horas extras do mês de competência.
 **3.2.3.2 —** O sistema deve calcular o total de proventos de horas extras por tipo de adicional, aplicando as fórmulas definidas em RN-06.
 	**3.2.3.2.1 —** O valor total de horas extras deve ser somado ao salário base para compor o salário bruto. Elas são base de incidência de INSS e FGTS.
