@@ -162,3 +162,90 @@ Todos os seguintes requisitos se aplicam a todas as telas do sistema e são refe
 7. O sistema deve permitir inativar um funcionário (demissão), registrando a data de desligamento. 
 8. Funcionários inativos não devem participar do processamento da folha de meses posteriores à data de desligamento.
 9. O sistema não deve permitir a exclusão permanente de registros de funcionários, apenas a inativação, para preservar o histórico de folhas passadas.
+
+
+## 3.2 Requisitos Funcionais
+### 3.2.1 - Cadastros e Configurações
+Este módulo engloba os requisitos referentes ao registro e a manutenção dos dados empresariais do sistema: empresa, funcionários, usuários e parâmetros fiscais. A integridade dos dados cadastrais é pré-requisito para a correção de todos os cálculos subsequentes.
+
+#### 3.2.1.1 Cadastro da Empresa
+
+1. O cadastro deve incluir obrigatoriamente: 
+	1. Razão Social, compreendendo os seguintes requisitos:
+		1. Deve ser em formato texto;
+		2. Deve conter no máximo 150 caracteres.
+	2. CNPJ;	
+	3. Endereço, contendo os seguintes campos:
+		1. Logradouro; 
+		2. Número;
+		3. Complemento; 
+		4. Bairro;
+		5. Cidade;
+		6. UF;
+		7. CEP
+	4. Nome do Responsável Legal.
+2. O CNPJ deve ser validado pelo algoritmo oficial de dígitos verificadores da Receita Federal; 
+3. O sistema deve armazenar os seguintes parâmetros fiscais utilizados nos cálculos da folha:	
+	1. Alíquota de FGTS: valor percentual 8,00%.	
+	2. Horas mensais contratuais (padrão: 220 horas).	
+	3. Percentual de adicional de hora extra padrão (50%), fixo por legislação.	
+	4. Percentual de adicional de hora extra especial (100%): aplicável a domingos, feriados e período noturno contínuo, conforme CLT Art. 59-A.	
+	5. Valor mensal da Cesta Básica: valor monetário (R$), podendo ser zero.	
+
+#### 3.2.1.2 Cadastro de Funcionários
+
+1. O sistema deve permitir o cadastro, a edição e a inativação de funcionários.
+2. A exclusão permanente de funcionários de registros não é permitida.
+3. Campos obrigatórios para cadastro de funcionários: 
+	1. Nome Completo;
+	2. CPF;
+	3. Data de Nascimento;
+	4. Data de Admissão;
+	5. Cargo; 
+	6. Salário Base Contratual;
+	7. Banco;
+	8. Conta-corrente para depósito.
+4. Campos opcionais:
+	1. Número de Dependentes;
+	2. E-mail pessoal e/ou institucional.
+5. O sistema deve garantir unicidade do CPF.
+6. O salário base do funcionário deve ser maior e/ou igual ao salário mínimo nacional vigente. 
+7. O sistema deve rejeitar valores abaixo do piso, exibindo mensagem com o valor mínimo aceitável.
+8. O sistema deve manter histórico completo de alterações salariais. Cada entrada do histórico deve registrar: 
+	1. Salário anterior;
+	2. Novo salário; 
+	3. Data de alteração; 
+	4. Usuário que alterou.
+9. O sistema deve identificar o mês de admissão de cada funcionário para aplicar cálculo proporcional automaticamente na primeira folha processada após admissão.
+10. A inativação de um funcionário deve registrar obrigatoriamente a data de desligamento. 
+11. O sistema deve calcular e exibir automaticamente (no cadastro do funcionário) o tempo de empresa em anos e meses completos com base na data de admissão.
+
+#### 3.2.1.3 Cadastro de Rubricas
+
+1. O sistema deve manter uma tabela de rubricas (códigos de itens da folha) que classifica cada valor como provento ou desconto, fixo ou variável.
+2. Cada rubrica deve conter: 
+	1. Código único (numérico de 3 dígitos); 
+	2. Natureza (provento ou desconto); 
+	3. Tipo (Fixo ou Variável); 
+	4. Incidência (incide INSS, incide FGTS ou incide IRRF).
+3. O sistema já deve incluir as rubricas esperadas (padronizadas) pré-cadastradas conforme apresentadas no Apêndice 4.1. 
+4. As rubricas de códigos 001 a 005 são consideradas obrigatórias e não podem ser excluídas nem ter seu código, natureza ou flags de incidência alterados. 
+5. As rubricas de códigos 006 a 008 e 101 a 106 podem ser excluídas pelo Administrador, desde que não estejam referenciadas em nenhuma folha já processada.
+6. *O Administrador pode criar rubricas personalizadas (código ≥ 500) para benefícios ou descontos específicos da empresa.*
+
+#### 3.2.1.4 Cadastro de Usuários do Sistema
+
+1. O sistema deve permitir o cadastro de usuários.
+2. Para o usuário "Administrador", são incluídos:
+	1. Acesso total; 
+	2. Configuração de parâmetros;
+	3. Gestão de usuários, englobando:
+		1. Adicionar usuário;
+		2. Remover usuário;
+3. O usuário "Comum", terá o acesso operacional: 
+	1. Cadastros;
+	2. Lançamentos; 
+	3. Processamento;
+	4. Emissão dos holerites.
+4. Deve existir ao menos um usuário com perfil de "Administrador" ativo a todo momento.
+5. Nenhuma senha deve ser armazenada ou exibida em texto plano em qualquer circunstância.
