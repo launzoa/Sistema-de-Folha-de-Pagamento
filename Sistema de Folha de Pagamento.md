@@ -1,4 +1,4 @@
-# Introdução
+# 1. Introdução
 ### 1.1 Propósito do Documento de Requisitos
 O sistema automatiza o cálculo e a emissão de uma folha de pagamento de funcionários em um contexto empresarial. A folha de pagamento é baseada no regime/contrato CLT. Outros regimes, como não-CLT (PJ, estagiários) estão fora do escopo do sistema, devido as suas condições e requisitos serem menos claros e determinados, variando de contrato a contrato. 
 
@@ -79,7 +79,7 @@ Ao emitir a folha de pagamento, assume-se que o usuário esteja em prol da verda
 
 # 3. Requisitos Específicos
 
-### 3.1 Requisitos de Interface com o Usuário (GUI)
+## 3.1 Requisitos de Interface com o Usuário (GUI)
 
 ### 3.1.1 Padrões Gerais da Interface
 Todos os seguintes requisitos se aplicam a todas as telas do sistema.
@@ -222,7 +222,6 @@ Todos os seguintes requisitos se aplicam a tela de visualização e a emissão d
 	1. O sistema não deve exibir botões de edição ou processamento para folhas com status "Fechada", apenas o botão "Visualizar".
 
 ## 3.2 Requisitos Funcionais
-
 ### 3.2.1 Cadastro da Empresa
 Todos os seguintes requisitos se aplicam ao cadastro e configuração da empresa e seus parâmetros:
 - 3.2.1.1 - O cadastro da empresa deve incluir obrigatoriamente: 
@@ -422,85 +421,93 @@ Todos os seguintes requisitos se aplicam aos processos rastreáveis pela platafo
 ### 3.2.30 Quadro Consolidado de Regras de Negócio (RN)
 - 3.2.30.1 - O sistema deve manter e respeitar o quadro consolidado com todas as regras de negócio derivadas da legislação para viabilizar rastreabilidade e testes.
 
-## 3.3 Requisitos não Funcionais
+## 3.3 Requisitos Não Funcionais
 
-### 3.3.1 Desempenho
-Todos os seguintes requisitos se aplicam à fluidez, capacidade técnica e eficiência temporal do software, baseando-se no hardware de referência (Processador dual-core 2,0 GHz, 4 GB RAM, Windows 10 e disco de leitura):
-- 3.3.1.1 - O sistema deve tracionar os cálculos processando uma base de até 50 funcionários sob o limiar temporal máximo de 15 segundos.
-- 3.3.1.2 - O sistema deve ampliar a janela limite, aceitando processar planilhas preenchidas por até 200 colaboradores em no máximo 45 segundos.
-- 3.3.1.3 - O sistema deve entregar a listagem na tela após interações de consulta na margem fixa de 3 segundos (suportando teto de 500 registros ativos/inativos).
-- 3.3.1.4 - O sistema deve finalizar o tempo total da operação de fechamento e conversão isolada de um recibo PDF em até 5 segundos de espera na máquina de referência.
-- 3.3.1.5 - O sistema deve inicializar na retaguarda o framework principal e acender na tela o dashboard em um teto restrito a 8 segundos.
-- 3.3.1.6 - O sistema deve gerenciar uma arquitetura interna propícia para reter simultaneamente 500 perfis salvos e preservar um backlog com até 60 exercícios contábeis.
+### Requisitos de Produto
+Especificam o comportamento do software em execução (desempenho, memória, confiabilidade, segurança e usabilidade).
 
-### 3.3.2 Segurança 
+#### 3.3.1 Requisitos de Eficiência (Desempenho e Espaço)
+- **[3.3.1.1]** O sistema deve tracionar os cálculos processando uma base de até 50 funcionários sob o limiar temporal máximo de 15 segundos.
+- **[3.3.1.2]** O sistema deve ampliar a janela limite, aceitando processar planilhas preenchidas por até 200 colaboradores em no máximo 45 segundos.
+- **[3.3.1.3]** O sistema deve entregar a listagem na tela após interações de consulta na margem fixa de 3 segundos (suportando teto de 500 registros ativos/inativos).	
+- **[3.3.1.4]** O sistema deve finalizar o tempo total da operação de fechamento e conversão isolada de um recibo PDF em até 5 segundos de espera na máquina de referência.
+- **[3.3.1.5]** O sistema deve inicializar na retaguarda o framework principal e acender na tela o dashboard em um teto restrito a 8 segundos.
+- **[3.3.1.6]** O sistema deve gerenciar uma arquitetura interna propícia para reter simultaneamente 500 perfis salvos e preservar um backlog com até 60 exercícios contábeis.
+
+#### 3.3.2 Requisitos de Segurança 
 Todos os seguintes requisitos se aplicam à política de acesso e tratamento da sensibilidade das informações conforme a Lei Geral de Proteção de Dados:
-- 3.3.2.1 - O sistema deve blindar a entrada demandando aprovação de senhas em todas as sessões e distribuir funções limitadas a partir da estirpe do perfil do operador logado.
-- 3.3.2.2 - O sistema deve derrubar a sessão atual forçando novo reingresso em casos atípicos onde o ambiente permanecer paralisado por meia hora ininterrupta.
-- 3.3.2.3 - O sistema deve aplicar o congelamento transitório impedindo a conta de submeter chaves por 5 minutos assim que a terceira rejeição seguida for detectada.
-- 3.3.2.4 - O sistema deve cifrar integralmente o cofre das senhas usando tecnologia bcrypt aplicada sob nível modular 10 (fator de custo).
-- 3.3.2.5 - O sistema deve repelir botões ou e-mails dedicados à recuperação da chave atual, restando o "Reset" do administrador como o único protocolo alternativo.
-- 3.3.2.6 - O sistema deve proibir na inclusão, ou nas atualizações periódicas, registros compostos por sequências inferiores a 8 toques, forçando a mescla do repertório contendo letra (maiúscula/minúscula) e números.
-- 3.3.2.7 - O sistema deve estampar os documentos expostos encriptando o miolo do registro de Cadastro Físico (`***.***.XXX-XX`).
-- 3.3.2.8 - O sistema deve mapear nos trilhos de rastreamento toda requisição de exportação originada da base de finanças alinhada ao relógio (data/hora).
-- 3.3.2.9 - O sistema deve trabalhar encapsulado retendo no perímetro as tabelas sem escoar ou repassar tráfego confidencial do domínio para provedores web espelhados ou bases externas.
-- 3.3.2.10 - O sistema deve resguardar as pontes de comunicação do arquivo interno, desautorizando o trâmite contendo usuários atrelados às engrenagens abertas em blocos literais.
-- 3.3.2.11 - O sistema deve criar canal de rastreio à parte do arquivo rotineiro em formato "apenas inserção", cimentando de modo imutável falhas contínuas de portas e acessos maliciosos na plataforma.
+- **[3.3.2.1]** O sistema deve blindar a entrada demandando aprovação de senhas em todas as sessões e distribuir funções limitadas a partir da estirpe do perfil do operador.
+- **[3.3.2.2]** O sistema deve derrubar a sessão atual forçando novo reingresso em casos atípicos onde o ambiente permanecer paralisado por meia hora ininterrupta.
+- **[3.3.2.3]** O sistema deve aplicar o congelamento transitório impedindo a conta de submeter chaves por 5 minutos assim que a terceira rejeição seguida for detectada.
+- **[3.3.2.4]** O sistema deve cifrar integralmente o cofre das senhas usando tecnologia bcrypt aplicada sob nível modular 10.
+- **[3.3.2.5]** O sistema deve repelir botões ou e-mails de recuperação da chave, restando o "Reset" do administrador como único protocolo.
+- **[3.3.2.6]** O sistema deve proibir senhas inferiores a 8 dígitos, forçando mescla de letras e números.
+- **[3.3.2.7]** O sistema deve traçar resumos criptográficos na vertente da cadeia SHA-256 e agrupar com o saldo das quantias elaboradas ao selar as auditorias.
+- **[3.3.2.8]** O sistema deve mapear nos trilhos de rastreamento toda requisição de exportação originada da base de finanças alinhada ao relógio (data/hora).
+- **[3.3.2.9]** O sistema deve trabalhar encapsulado retendo no perímetro as tabelas sem escoar tráfego confidencial para provedores web espelhados ou bases externas.
+- **[3.3.2.10]** O sistema deve resguardar as pontes de comunicação do arquivo interno, desautorizando o trâmite em blocos literais.
+- **[3.3.2.11]** O sistema deve criar canal de rastreio em formato "apenas inserção", cimentando de modo imutável falhas contínuas de portas e acessos maliciosos.
 
-### 3.3.3 Confiabilidade 
+#### 3.3.3 Requisitos de Confiabilidade e Disponibilidade:
 Todos os seguintes requisitos se aplicam à robustez das regras, contorno dos imprevistos infraestruturais e integridade contábil das somatórias geradas:
-- 3.3.3.1 - O sistema deve sustentar todo encadeamento matemático com precisão travada obrigatoriamente em duas dezenas para centavos.
-- 3.3.3.2 - O sistema deve promover consistência assegurando cálculos de resultado idempotente caso não haja mudança manual de parâmetros da folha anterior ao novo fechamento.
-- 3.3.3.3 - O sistema deve encapsular o giro de fechamento sobre trilhos da arquitetura transacional (ACID), estornando apenas o lote afetado caso trave a base de determinado trabalhador para não corromper o montante fechado de forma devida.
-- 3.3.3.4 - O sistema deve realizar uma verificação (scan) em todo o rol ativo paralisando os fechamentos em caso de anomalias detectadas no momento de partida.
-- 3.3.3.5 - O sistema deve empacotar via auto-função e gravar um clone espelho assinado da base terminada na máscara pré-configurada ( `SFPCLT_BACKUP_[AAAAMM]-[YYYYMMDD_HHMMSS]` ) atrelado sempre de forma compulsória no segundo que precede o veredito final do mês em questão.
-- 3.3.3.6 - O sistema deve disparar alerta se o diretório configurado pelo backup não for localizado ou não exibir privilégios para liberação da escrita.
-- 3.3.3.7 - O sistema deve gerenciar ausências vitais emitindo pop-up de aguardo atrelado a 30 segundos de pausa assim que as conexões subjacentes que mantém a mesa rodando evaporarem, forçando o restabelecimento imediato em vez do encerramento forçado da máquina central.
-- 3.3.3.8 - O sistema deve identificar e dialogar abertamente quando a impressão local dos PDFs estagnar, ou os clusters dedicados na máquina acusarem exaustão de armazenamento de discos sem derrubar ou corromper subitamente as abas da plataforma ativa.
-- 3.3.3.9 - O sistema deve traçar resumos criptográficos na vertente da cadeia SHA-256 e agrupar com o saldo das quantias elaboradas ao selar as auditorias.
-- 3.3.3.10 - O sistema deve precaver as manutenções, perdas ou encerramentos repentinos preservando a gaveta dos apontamentos mensais, resgatando a inserção em andamento do usuário tão logo o próximo retorno seja garantido no software.
+- **[3.3.3.1]** O sistema deve sustentar todo cálculo matemático com a precisão travada obrigatoriamente em duas dezenas para centavos.
+- **[3.3.3.2]** O sistema deve promover consistência assegurando cálculos de resultado idempotente caso não haja mudança manual de parâmetros da folha anterior ao novo fechamento.
+- **[3.3.3.3]** O sistema deve encapsular o giro de fechamento sobre trilhos da arquitetura transacional (ACID), estornando apenas o lote afetado caso trave a base de determinado trabalhador para não corromper o montante fechado de forma devida.       
+- **[3.3.3.4]** O sistema deve realizar uma verificação (scan) em todo o rol ativo paralisando os fechamentos em caso de anomalias detectadas no momento de partida.   
+- **[3.3.3.5]** O sistema deve estampar aviso indicativo caso os dados de conexão subjacentes se ausentem do radar provisório impossibilitando arranques manuais.
+- **[3.3.3.6]** O sistema deve estar liberado e sem engasgos nas rotinas do expediente comum.
+- **[3.3.3.7]** O sistema deve gerenciar ausências vitais emitindo pop-up de aguardo atrelado a 30 segundos de pausa assim que as conexões subjacentes que mantém a mesa rodando evaporarem, forçando o restabelecimento imediato.       
+- **[3.3.3.8]** O sistema deve identificar e dialogar abertamente quando a impressão local dos PDFs estagnar, ou os clusters acusarem exaustão de armazenamento, sem derrubar ou corromper subitamente as abas da plataforma ativa.
+- **[3.3.3.9]** O sistema deve precaver as manutenções ou perdas repentinas preservando a gaveta dos apontamentos mensais, resgatando a inserção em andamento do usuário no próximo retorno.
 
-### 3.3.4 Usabilidade 
-Todos os seguintes requisitos se aplicam aos padrões de interação simplificada aos usuários leigos e fluxos de interfaces contínuas:
-- 3.3.4.1 - O sistema deve proporcionar ambientação simples e indutiva propiciando a feitura veloz para operadores sem extensa curva teórica com teto referencial delimitado nas equipes avaliativas contendo 10 perfis a gerar.
-- 3.3.4.2 - O sistema deve transcrever o teor das irregularidades e dos bugs contornados num idioma acessível dispensando blocos alfanuméricos provindos nas cadeias originais do Java (Exceptions).
-- 3.3.4.3 - O sistema deve apresentar barricada secundária requisitando chancela por botão de "Confirmar" ou "Cancelar" nos gatilhos imutáveis como supressão e exclusão direta nas engrenagens e reset imposto de conta por autoridade do domínio master.
-- 3.3.4.4 - O sistema deve garantir flexibilidade total amparando trocas do curso visual exclusivamente nas chaves contíguas originadas no periférico sem restrição compulsória às delimitações do mouse guiando-se pelas premissas tabulares contínuas do formulário nativo.
-- 3.3.4.5 - O sistema deve sincronizar matrizes padronizadas nas abas distribuídas.
-- 3.3.4.6 - O sistema deve estampar as credenciais que ditam a seção contínua atrelando o calendário vigente nos cabeçalhos universais ou alocações restritas nos rodapés.
+#### 3.3.4 Requisitos de Usabilidade 
+Todos os seguintes requisitos se aplicam aos padrões de interação simplificada aos usuários leigos e fluxos de interfaces contínuas:    
+- **[3.3.4.1]** O sistema deve proporcionar ambientação simples e indutiva propiciando a feitura veloz para operadores sem extensa curva teórica com teto referencial delimitado nas equipes avaliativas contendo 10 perfis a gerar.
+- **[3.3.4.2]** O sistema deve transcrever o teor das irregularidades e dos bugs contornados num idioma acessível dispensando blocos alfanuméricos provindos nas cadeias originais do Java (Exceptions).
+- **[3.3.4.3]** O sistema deve apresentar barricada secundária requisitando chancela por botão de "Confirmar" ou "Cancelar" nos gatilhos imutáveis como supressão e exclusão direta nas engrenagens e reset imposto de conta por autoridade do domínio master.
+- **[3.3.4.4]** O sistema deve garantir flexibilidade total amparando trocas do curso visual exclusivamente nas chaves contíguas originadas no periférico sem restrição compulsória às delimitações do mouse guiando-se pelas premissas tabulares contínuas do formulário nativo.
+- **[3.3.4.5]** O sistema deve sincronizar matrizes padronizadas nas abas distribuídas.
+- **[3.3.4.6]** O sistema deve estampar as credenciais que ditam a seção contínua atrelando o calendário vigente nos cabeçalhos universais ou alocações restritas nos rodapés.
+### Requisitos Organizacionais
+Derivados das políticas da organização, ambiente de operação e processos de desenvolvimento da equipe.
 
-### 3.3.5 Disponibilidade 
-Todos os seguintes requisitos se aplicam à resiliência nos ciclos empresariais:
-- 3.3.5.1 - O sistema deve estar liberado e sem engasgos nas rotinas do expediente comum.
-- 3.3.5.2 - O sistema deve restringir as revisões obrigatórias em programações alocadas exclusivamente na zona desocupada com antecedência obrigatória afixada em 24h para os ativos.
-- 3.3.5.3 - O sistema deve estampar aviso indicativo caso os dados de conexão subjacentes se ausentem do radar provisório impossibilitando arranques manuais.
+#### 3.3.5 Requisitos Operacionais 
+- **[3.3.5.1]** O sistema deve empacotar e gravar um clone espelho assinado da base terminada na máscara pré-configurada atrelado compulsória no segundo que precede o veredito final do mês.
+- **[3.3.5.2]** O sistema deve disparar alerta se o diretório configurado pelo backup não for localizado ou não exibir privilégios para liberação da escrita.
+- **[3.3.5.3]** O sistema deve restringir as revisões obrigatórias em programações alocadas exclusivamente na zona desocupada com antecedência obrigatória afixada em 24h.
+- **[3.3.5.4]** O sistema deve organizar a confecção orgânica nos históricos mantendo retenção dos registros de log pelo lapso dos últimos 30 dias (sfpclt-YYYY-MM-DD.log).
+- **[3.3.5.5]** O sistema deve exigir papéis administrativos exclusivamente no rito de instalação inaugural, abstendo essas cobranças na condução cotidiana.
 
-### 3.3.6 Manutenibilidade 
+#### 3.3.6 Requisitos de Desenvolvimento (Manutenibilidade)
 Todos os seguintes requisitos se aplicam às boas práticas de arquitetura exigidas na construção técnica:
-- 3.3.6.1 - O sistema deve separar as responsabilidades programáticas nos blocos obrigatórios conhecidos como Apresentação (View), Negócio (Service) e Persistência (Repository/DAO).
-- 3.3.6.2 - O sistema deve abstrair bases sensíveis ao calendário governamental (salário mínimo, recolhimentos do FGTS, impostos na margem ou percentual da tabela noturna/extra), viabilizando sua atualização anual através da operação direta sem dependências ou obrigatoriedade contínua ligada à classe técnica recompilada.
-- 3.3.6.3 - O sistema deve englobar pilhas operacionais prontas com testes integráveis baseados nas ferramentas (Gradle/Maven).
-- 3.3.6.4 - O sistema deve organizar a confecção orgânica nos históricos mantendo retenção dos registros pelo lapso fechado nos últimos trinta dias sobre o formato nomeado de `sfpclt-YYYY-MM-DD.log`.
-- 3.3.6.5 - O sistema deve exibir as falhas primárias nas mensagens agrupadas com as trilhas contíguas rastreadas via classe base sob subscrições apontadas (StackTrace).
-- 3.3.6.6 - O sistema deve segmentar suas partes nas rotinas (processamentos e auditoria) sobre domínios desacoplados e apartados funcionalmente.
-- 3.3.6.7 - O sistema deve englobar manuais restritos detalhados descrevendo sua arquitetura distribuída junto com pontes contíguas na sua instalação final.
+- **[3.3.6.1]** O sistema deve separar as responsabilidades programáticas nos blocos obrigatórios conhecidos como Apresentação (View), Negócio (Service) e Persistência (Repository/DAO).
+- **[3.3.6.2]** O sistema deve abstrair bases sensíveis ao calendário governamental, viabilizando atualização anual via operação direta sem necessidade de recompilação.
+- **[3.3.6.3]** O sistema deve englobar pilhas operacionais prontas com testes integráveis baseados nas ferramentas (Gradle/Maven).
+- **[3.3.6.5]** O sistema deve exibir falhas primárias nas mensagens agrupadas com trilhas rastreadas via classe base sob subscrições apontadas (StackTrace).
+- **[3.3.6.6]** O sistema deve segmentar suas partes nas rotinas sobre domínios desacoplados e apartados funcionalmente.
+- **[3.3.6.7]** O sistema deve englobar manuais restritos detalhados descrevendo sua arquitetura distribuída.
 
-### 3.3.7 Portabilidade 
+#### 3.3.7 Requisitos Ambientais (Portabilidade e Ecossistema):
 Todos os seguintes requisitos se aplicam à pluralidade e conformação com infraestruturas em ambientes heterogêneos de mercado:
-- 3.3.7.1 - O sistema deve ancorar as execuções suportadas com a dependência prévia atrelada ao núcleo JVM em ramificação base 11 ou graus sucessivos para Windows 10/11, Ubuntu Linux 20/22.04 e ramificações base Intel x64 ou série M do macOS12+.
-- 3.3.7.2 - O sistema deve exigir prerrogativas ou trâmites focados contendo os papéis administrativos exclusivamente no rito de instalação inaugural abstendo as cobranças na sua condução cotidiana e usual nas empresas normais.
-- 3.3.7.3 - O sistema deve acoplar a matriz de compilações atrelando dependências nos empacotadores dedicados na linha Jpackage sem obrigar download periférico via pacotes avulsos nos formatos suportados `.msi/.exe`, pacotes nativos do debian/redhat ou pacotes maçã `.dmg`.
-- 3.3.7.4 - O sistema deve possuir todo repertório redacional ajustado nos dicionários normatizados para as cadeias do idioma português de matiz brasileiro (pt-BR).
-- 3.3.7.5 - O sistema deve conferir garantia no resultado gráfico compatibilizando espelhos nos suítes LibreOffice/Excel ou provedores Adobe DC.
+- **[3.3.7.1]** O sistema deve ancorar as execuções com dependência atrelada ao núcleo JVM 11+ para Windows 10/11, Ubuntu Linux 20/22.04 e macOS 12+ (Intel/M-series).
+- **[3.3.7.3]** O sistema deve acoplar a matriz de compilações atrelando dependências na linha Jpackage sem obrigar download periférico via pacotes avulsos nos formatos .msi/.exe, debian/redhat ou .dmg.
+- **[3.3.7.4]** O sistema deve possuir todo repertório redacional ajustado nos dicionários normatizados para o idioma português do Brasil (pt-BR).
+- **[3.3.7.5]** O sistema deve conferir garantia no resultado gráfico compatibilizando espelhos nos suítes LibreOffice/Excel ou provedores Adobe DC.
 
-### 3.3.8 Conformidade Legal e Regulatória
+### Requisitos Externos
+Abrangem fatores externos ao sistema, como legislação (CLT, LGPD), ética e regulamentações contábeis.
+
+#### 3.3.8 Requisitos Legislativos e Contábeis (Conformidade Legal)
 Todos os seguintes requisitos se aplicam ao embasamento de regras judiciais no processamento interno:
-- 3.3.8.1 - O sistema deve transcrever e seguir sem oscilação ou divergência todas as taxas e margens aprovadas na competência real que transita o evento abstendo projeções baseadas no mês da execução local.
-- 3.3.8.2 - O sistema deve manter intocada toda e qualquer alavanca de reajuste nas apurações saldadas preteritamente com chave virtual ativada, bloqueando manipulações sob balanças contábeis retroativas.
-- 3.3.8.3 - O sistema deve estampar no miolo processual dos contracheques originais expedidos por funcionários ativos, estritamente e na totalidade, todos os regimentos dispostos formalmente no Artigo 464 chancelado via Legislação Central de Trabalho do país vigente (CLT).
-- 3.3.8.4 - O sistema deve eternizar os repositórios finalizados e lacrados do processamento da matriz pelo curso limite travado em quinquênio visando conformidade irrestrita.
-- 3.3.8.5 - O sistema deve possibilitar as readequações provindas via legislação nacional publicizada na margem contínua transcorrida por cinco dias limitados desde sua efetiva ratificação pelo corpo de ofício da união.
-- 3.3.8.6 - O sistema deve apontar na grade da engrenagem do encerramento um sinalizador inconfundível apontando a tabela mestre escolhida na formulação total da remuneração atual de folha.
+- **[3.3.8.1]** O sistema deve transcrever e seguir sem oscilação todas as taxas e margens aprovadas na competência real que transita o evento.
+- **[3.3.8.2]** O sistema deve manter intocada qualquer alavanca de reajuste nas apurações saldadas preteritamente, bloqueando manipulações sob balanças contábeis retroativas.
+- **[3.3.8.3]** O sistema deve estampar nos contracheques originais expedidos estritamente todos os regimentos dispostos no Artigo 464 da CLT.
+- **[3.3.8.4]** O sistema deve eternizar os repositórios finalizados e lacrados pelo curso limite travado em quinquênio (5 anos) visando conformidade irrestrita.
+- **[3.3.8.5]** O sistema deve possibilitar readequações provindas via legislação nacional publicizada na margem contínua transcorrida por cinco dias limitados desde sua efetiva ratificação.
+- **[3.3.8.6]** O sistema deve apontar na grade de encerramento um sinalizador inconfundível apontando a tabela mestre escolhida na formulação total da remuneração atual.
+
+#### 3.3.9 Requisitos Éticos e de Privacidade
+- **[3.3.2.7]** O sistema deve estampar os documentos expostos encriptando o miolo do registro de Cadastro Físico (**_._**.XXX-XX), em conformidade com o tratamento de dados sensíveis
 
 ## 3.4 Requisitos de Dados
 
