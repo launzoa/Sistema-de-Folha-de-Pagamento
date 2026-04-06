@@ -1,529 +1,806 @@
 # 1. Introdução
-### 1.1 Propósito do Documento de Requisitos
-O sistema automatiza o cálculo e a emissão de uma folha de pagamento de funcionários em um contexto empresarial. A folha de pagamento é baseada no regime/contrato CLT. Outros regimes, como não-CLT (PJ, estagiários) estão fora do escopo do sistema, devido as suas condições e requisitos serem menos claros e determinados, variando de contrato a contrato. 
-
-### 1.2 Escopo do Produto
+## 1.1 Propósito do Documento de Requisitos
+Este documento especifica os requisitos de software do sistema SFP, destinado à equipe de desenvolvimento, ao cliente e aos avaliadores do projeto, servindo como contrato técnico e base para testes de validação.
+O sistema automatiza o cálculo e a emissão de folha de pagamento de funcionários contratados sob regime CLT. A folha de pagamento é baseada na Consolidação das Leis do Trabalho, onde as condições e requisitos são claros e determinados para projetar. Outros regimes, como não-CLT (PJ, estagiários) e alterações contratuais especiais do CLT estão fora do escopo do sistema.
+## 1.2 Escopo do Produto
 Para a primeira fase do projeto, o sistema contará com: 
-* **Gestão de cadastros:** Permitirá o cadastro/inclusão, leitura e atualização de dados de funcionários, através de uma interface em comum, mantendo obrigatoriamente um histórico versionado de alterações salariais. A gestão também conta com a entrada e gestão de planilhas.
-* **Histórico das Folhas de Pagamento:** Interface para a visualização das antigas folhas de pagamento referente aos meses anteriores.
-* **Relógio de ponto:** Interface para o cadastramento do horário de trabalho diário de um funcionário de acordo com a Regra de Tolerância de 5 minutos para mais ou para menos em cada batida entrada, almoço, volta do almoço e saída.  
-* **Lançamentos de exceções (mensais):** Interfaces para o lançamento de eventos (variáveis) que impactam o mês corrente, ex: horas extras, bônus, faltas, atrasos, atestados diversos. A entrada de exceção deverá ser feita de forma mensal. Lançamentos de exceções não alteram meses já fechados.
-* **Processamento e fechamento**: Após o processamento, executará o cálculo matemático de transformação, considerando as exceções, proventos e a subtração de descontos (caso existam), registrados para o mês corrente.
-* **Geração de artefatos**: Compilará os dados processados para a emissão visual e exportável do demonstrativo de pagamento individual (Holerite\Contra-Cheque). 
-* **Consulta de Holerites**: Será permitido as consultas referentes ao Holerite de meses anteriores já fechados. 
-* **Gestão de Rubricas fixas e variáveis:** Com base no salário contratual e nas rubricas e/ou exceções, processará a concessão de benefícios fixos (ex: Cesta Básica) e variáveis (ex: Participação nos Lucros e Resultados - PRL).
-* **Provisões e Encargos:** Engloba o cálculo automatizado de provisões trabalhistas essenciais exibidas no fechamento mensal, especificamente a proporcionalidade ou valor integral de **13º Salário**, **férias + ⅓** e o recolhimento do **FGTS (com a multa de 40% embutida ou provisionada).
+* **Gestão de cadastros:** Permitirá a inclusão, leitura e atualização de dados de funcionários, mantendo obrigatoriamente um histórico versionado de alterações salariais. 
+* **Lançamentos de Exceções (mensais):** Interface para o lançamento de eventos variáveis que impactam o mês corrente: horas extras, bônus, faltas, atrasos e atestados. A entrada de exceção é feita de forma mensal. Lançamentos de exceção não alteram meses já fechados.
+* **Histórico das Folhas de Pagamento:** Interface para a visualização de folhas de pagamento referentes a meses anteriores encerrados.
+* **Histórico e Auditoria:** Consulta de folhas de meses anteriores (fechadas) e rastreabilidade total de ações de usuários via Log de Auditoria.
+* **Processamento Lógico:** Após o processamento, executa o cálculo matemático de transformação do salário bruto em salário líquido, aplicando as equações de soma de proventos e subtração de descontos registrados para o mês corrente.
+* **Gestão de Rubricas:** Controle de benefícios fixos (Cesta Básica) e variáveis (PLR) com configuração de incidência tributária (INSS, FGTS, IRRF).
+* **Motor de Provisões e Encargos:** Cálculo automatizado de provisões essenciais exibidas no fechamento mensal: 13º Salário, Férias + ⅓ , IRRF e o recolhimento do FGTS.
+* **Geração de Saídas:** Compila os dados processados para a emissão visual e exportação do demonstrativo de pagamento individual (Holerite) em PDF/A.
 
-### 1.3 Definições, acrônimos e abreviações
+**Fora do escopo desta versão:**
+* Benefícios variáveis com coparticipação (plano de saúde, odontológico); 
+* Relatórios por setor/departamento; 
+* Pagamentos para regimes não-CLT (PJ, estagiários); 
+* Relógio de ponto eletrônico.
+
+## 1.3 Definições, acrônimos e abreviações
 Para garantir a compreensão uniforme deste documento por leitores de diferentes áreas (técnicas e de negócios), os seguintes acrônimos e termos legislativos são definidos:
 * **CLT:** Consolidação das Leis do Trabalho. Legislação brasileira que regulamenta as relações de trabalho e dita as regras de remuneração aplicáveis a este sistema.
 * **FGTS:** Fundo de Garantia do Tempo de Serviço.
-* **PLR:** Participação nos Lucros e Resultados. Também referenciada como PRL em alguns contextos. Não integra a base de cálculo de INSS, FGTS ou férias (Lei nº 10.101/2000).
+* **PLR:** Participação nos Lucros e Resultados. 
 * **13º Salário:** Gratificação natalina compulsória prevista na Lei nº 4.090/1962.
 
+Os demais termos técnicos e operacionais utilizados — como: Competência, Folha Aberta, Folha Fechada, Valor-Dia, Valor-Hora, Rubrica, Provento, Desconto, Holerite, INSS, PLR e outros — estão definidos de forma completa no Apêndice 4.3 — Glossário Expandido.
+
 ## 1.4 Referências
-* As informações referentes ao regime CLT foram retiradas do documento: Consolidação das Leis do Trabalho - CLT e normas correlatas. Originária da Constituição da República Federativa do Brasil
+- Consolidação das Leis do Trabalho — CLT e normas correlatas. Originária da Constituição da República Federativa do Brasil.
 
 ## 1.5 Estruturação do Documento de Requisitos 
-Este documento segue o padrão IEEE 830 (Software Requirements Specification) adaptado ao contexto do projeto SFP-CLT. Está organizado em quatro seções principais e um índice, conforme descrito abaixo:
+Este documento segue o padrão IEEE 830 (Software Requirements Specification) adaptado ao contexto do projeto SFP.
+* **Seção 1 — Introdução:** Apresenta o propósito, escopo, glossário, referências e esta descrição estrutural.
+* **Seção 2 — Descrição Geral:** Descreve o sistema em alto nível: perspectiva de produto, funcionalidades, perfis de usuário, restrições gerais e premissas.
+* **Seção 3 — Requisitos Específicos:** Núcleo do documento. Subdivide-se em:
+	- **3.1 Requisitos de Interface com o Usuário (GUI):** Define os padrões visuais e comportamentais de todas as telas do sistema.
+	- **3.2 Requisitos Funcionais:** Especifica o comportamento funcional por módulo. Cada requisito é rastreável a uma regra de negócio (RN-XX).
+	- **3.3 Requisitos Não Funcionais:** Estabelece restrições de qualidade nas dimensões de desempenho, segurança, confiabilidade, usabilidade, disponibilidade, manutenibilidade, portabilidade e conformidade legal.
+	- **3.4 Requisitos de Dados:** Define o modelo relacional de dados, as regras de integridade referencial e as políticas de segurança e retenção de dados.
+- **Seção 4 — Apêndices:** Material de referência complementar, incluindo tabela de rubricas (4.1), fórmulas de cálculo (4.2), glossário expandido (4.3), matriz de rastreabilidade (4.4) e tabela consolidada de regras de negócio RN-01 a RN-15 (4.5).
+- **Seção 5 — Índice:** Lista estruturada de todas as seções e subseções.
 
-**Seção 1 — Introdução:** Apresenta o propósito do documento, o escopo do produto, o glossário de termos e acrônimos, as referências utilizadas e esta descrição estrutural.
-
-**Seção 2 — Descrição Geral:** Descreve o sistema em alto nível: sua perspectiva de produto, principais funcionalidades, perfis de usuário, restrições gerais e premissas que condicionam o desenvolvimento.
-
-**Seção 3 — Requisitos Específicos:** Núcleo do documento. Subdivide-se em:
-- **3.1 Requisitos de Interface com o Usuário (GUI):** Define os padrões visuais e comportamentais de todas as telas do sistema, incluindo login, navegação, cadastros, lançamentos, processamento, holerite e histórico.
-- **3.2 Requisitos Funcionais:** Especifica o comportamento funcional do sistema agrupado por módulo: cadastros, apuração de frequência, processamento de proventos e descontos, encargos e provisões, saídas e auditoria. Cada requisito é rastreável a uma regra de negócio (RN-XX).
-- **3.3 Requisitos Não Funcionais:** Estabelece restrições de qualidade mensuráveis nas dimensões de desempenho, segurança, confiabilidade, usabilidade, disponibilidade, manutenibilidade, portabilidade e conformidade legal.
-- **3.4 Requisitos de Dados:** Define o modelo relacional de dados, as regras de integridade referencial e as políticas de segurança e retenção de dados.
-
-**Seção 4 — Apêndices:** Material de referência complementar que suporta a Seção 3, incluindo a tabela completa de rubricas padrão (4.1), os modelos de fórmulas de cálculo com exemplos numéricos (4.2), o glossário expandido (4.3), a matriz de rastreabilidade entre requisitos, módulos e telas (4.4) e a tabela consolidada de regras de negócio RN-01 a RN-15 (4.5).
-
-**Seção 5 — Índice:** Lista estruturada de todas as seções e subseções do documento com suas respectivas numerações, para navegação rápida.
 
 **Convenções adotadas neste documento:**
-- Requisitos funcionais são identificados no formato **X.Y.Z.N**, onde X.Y.Z indica a seção e N é o número sequencial do requisito dentro dela.
-- Regras de negócio são referenciadas pelo código **[RN-XX]** e detalhadas nos Apêndices (seção 4.5).
-- Fórmulas de cálculo são identificadas pelo código **[F-XX]** e detalhadas na seção 4.2.
-- Itens marcados com `*****` ou `VER` indicam pontos ainda em aberto, pendentes de decisão pela equipe.
+- Requisitos funcionais: formato **X.Y.Z.N** (seção + número sequencial).
+- Regras de negócio: código **[RN-XX]**, detalhadas no Apêndice 4.5.
+- Fórmulas de cálculo: código **[F-XX]**, detalhadas na seção 4.2.  
+- Casos de uso: código **UC-XX**, conforme tabela em UC_Revisao.md.
 
 # 2. Descrição Geral
+## 2.1 - Perspectiva do Produto
+O sistema é uma aplicação desktop standalone desenvolvida em Java, voltada ao departamento de Recursos Humanos (RH) ou contabilidade.
+- **Interface:** Java Desktop (biblioteca Swing).
+- **Hardware:** A aplicação é executada localmente na máquina do usuário, conectando-se a um banco de dados que pode estar na mesma máquina (instalação local) ou em servidor na rede interna da empresa.
 
-### 2.1 - Perspectiva do Produto
-* O sistema é uma aplicação desktop standalone desenvolvida em Java, voltada para o escritório independentes ou para departamentos inclusos na empresa (recursos humanos ou contabilidade). 
-- A interface do sistema é desenvolvida através do Java Desktop (biblioteca Swing). 
-- A aplicação deve ser executada localmente na máquina do usuário, conectada a um banco de dados, podendo, ou não, estar na mesma máquina (instalação local) ou em algum servidor na rede interna da empresa (com a integração sendo responsável pela empresa).   
-
-### 2.2 Funcionalidades do Produto
+## 2.2 Funcionalidades do Produto
 As principais funções esperadas pelo sistema contam com:
-- **Cálculo automático**: O processamento do salário bruto em salário líquido.
-- **Gestão de ponto/exceções**: Gestão do relógio de ponto dos funcionários, contendo as horas extras de trabalho, faltas e atrasos.
-- **Provisões trabalhistas**: Cálculo mensal de proventos e exceções.
+- **Cálculo Automático**: O processamento do salário bruto em salário líquido.
+- **Gestão de Exceções**: Registro mensal de horas extras, faltas, atrasos e atestados.
+- **Provisões Trabalhistas**: Cálculo mensal de proventos trabalhistas, ex: cálculo mensal de reserva para 13º e Férias + ⅓.
 - **Emissão de documentos**: Geração do Holerite e, respectivamente, a emissão do documento como um arquivo PDF.
+- **Auditoria:** Log de alterações salariais e operações sensíveis para conformidade legal.
 
-### 2.3 Características do Usuário
-O sistema tem como usuário principal os analista de escritórios de recursos humanos (RH) e/ou departamento pessoal (DP), integrados ou não na empresa, que já possuem o conhecimento das regras da CLT, mas que estão buscando agilidade tanto no cálculo, quanto no processamento manual. 
+## 2.3 Características do Usuário
+- **Analista de RH / Departamento Pessoal:** Usuário principal. Possui conhecimento das regras da CLT e busca agilidade no cálculo.
+- **Administrador do Sistema:** Responsável por cadastrar usuários, gerenciar permissões, rubricas e parâmetros fiscais.
 
-### 2.4 Restrições Gerais
-* **Legislação**: O sistema deve seguir estritamente a tabela vigente da CLT (2024/2025/2026).
-* **Segurança**: Dados salariais são protegidos pela LGPD (Lei Geral de Proteção de Dados). O acesso deve ser restrito por login e senha.
+## 2.4 Restrições Gerais
+* **Legislação**: O sistema deve seguir estritamente a tabela vigente da CLT (2025/2026).
+* **Segurança**: Dados salariais são protegidos pela LGPD (Lei Geral de Proteção de Dados - Lei nº 13.709/2018). O acesso deve ser restrito por login e senha.
 * **Conformidade**: O sistema não permite a alteração de folhas de meses já encerrados para garantir a integridade contábil.
 * **Tecnologia**: O sistema deve ser desenvolvido integralmente em Java (versão 11 ou superior), sem dependência de navegador web ou servidor de aplicação externo para sua operação.
 
-### 2.5 Suposições e Dependências
-É esperado que o usuário possua acesso a um computador suficientemente capaz de executar o sistema e de manter o banco de dados do sistema. Se espera que o usuário tenha noção prévia (mínima) a respeito das leis trabalhistas do contrato CLT e de tributos de exceções (FGTS, etc.).
-
-O sistema depende estritamente do cadastramento mensal de "exceções" (faltas/extras) antes do fechamento da folha, assim como uma conexão estável com o banco de dados.  
-
-Ao emitir a folha de pagamento, assume-se que o usuário esteja em prol da verdade, não se sujeitando a emissão de contratos fantasmas (que não existam), falsa verdade, ou qualquer tipo de divergência em desacordo com a lei.
+## 2.5 Suposições e Dependências
+- Supõe-se que o usuário possua acesso estável à rede local para conexão com o banco de dados.
+- Espera-se que o usuário esteja acessando o sistema por meio de um computador que atenda os requisitos mínimos de: Processador Intel i3 4160; 4GB de memória RAM, Placa de vídeo NVIDIA Geforce GTX 750; 100GB de armazenamento.
+- O sistema depende da alimentação mensal das exceções (faltas/extras) antes do fechamento da folha.
 
 # 3. Requisitos Específicos
 
 ## 3.1 Requisitos de Interface com o Usuário (GUI)
 
 ### 3.1.1 Padrões Gerais da Interface
-Todos os seguintes requisitos se aplicam a todas as telas do sistema.
-* 3.1.1.1 - O sistema deve possuir uma interface gráfica.
-* 3.1.1.2 - Todas as telas devem exibir, no cabeçalho, o nome do sistema : "SFP-CLT".
-* 3.1.1.3 - Todas as telas devem exibir, no cabeçalho, o nome do usuário.
-* 3.1.1.4 - A paleta de cores, tipografia e espaçamento devem ser padronizados e consistentes em todas as telas da aplicação, seguindo um guia de estilo definido pré-definido pelo sistema (paleta de cores, tipografia e espaçamento).
-* 3.1.1.5 - Todos os formulários devem indicar visualmente os campos obrigatórios, utilizando marcador de asterisco ( * ) em vermelho ao lado do rótulo.
-* 3.1.1.6 - O sistema deve exibir mensagem de confirmação com opções de "Confirmar" e "Cancelar", antes de executar qualquer operação irreversível.
-* 3.1.1.7 - O sistema deve exibir mensagens de erro em linguagem clara e objetiva, sem códigos de exceção Java expostos ao usuário.
-* 3.1.1.8 - Campos monetários devem ser formatados automaticamente com separador de milhar (ponto) e duas casas decimais (ex: R$ 3.500,00).
-* 3.1.1.9 - Campos de data devem utilizar máscara DD/MM/AAAA e validar se a data informada é uma data calendário válida.
-* 3.1.1.10 - O sistema deve manter a resolução mínima de tela de 1280 x 720 pixels como referência de layout.
-* 3.1.1.11 - A interface deve permitir acesso às funcionalidades do sistema.
+Os seguintes requisitos aplicam-se a todas as telas do sistema:
+- **3.1.1.1** — O sistema deve possuir uma interface gráfica desenvolvida com a biblioteca Java Swing.
+- **3.1.1.2** — Todas as telas devem exibir, na barra lateral (sidebar), o nome do sistema: **"SFP"**.
+- **3.1.1.3** — Todas as telas devem exibir, no cabeçalho superior, o nome do usuário autenticado.
+- **3.1.1.4** — Todas as telas devem exibir, no cabeçalho superior, o perfil de acesso ativo (ex.: "Admin", "Usuário").
+- **3.1.1.5** — A paleta de cores, tipografia e espaçamento devem ser padronizados e consistentes em toda a aplicação.
+- **3.1.1.6** — Todos os formulários devem indicar visualmente os campos obrigatórios com marcador de asterisco (\*) em vermelho ao lado do rótulo.
+- **3.1.1.7** — O sistema deve exibir mensagem de confirmação (diálogo modal com botões "Confirmar" e "Cancelar") antes de executar qualquer operação irreversível.
+- **3.1.1.8** — O sistema deve exibir mensagens de erro em linguagem clara e objetiva, sem códigos de exceção Java expostos ao usuário.
+- **3.1.1.9** — Campos monetários devem ser formatados automaticamente com separador de milhar (ponto) e duas casas decimais (ex.: R$ 3.500,00).
+- **3.1.1.10** — Campos de CPF devem aplicar máscara de entrada no formato `000.000.000-00` em tempo real durante a digitação.
+- **3.1.1.11** — Campos de data devem utilizar máscara `DD/MM/AAAA` e validar se a data informada é uma data calendário válida.
+- **3.1.1.12** — O sistema deve manter a resolução mínima de tela de **1280 × 720 pixels** como referência de layout. 
+- **3.1.1.13** — A interface deve permitir acesso a todas as funcionalidades habilitadas para o perfil do usuário autenticado.
 
 ### 3.1.2 Tela de Login e Autenticação
 Todos os seguintes requisitos se aplicam as telas de login e autenticação inicial do sistema: 
-* 3.1.2.1 - O sistema deve apresentar uma tela de login como tela inicial obrigatória, bloqueando o acesso a qualquer outra funcionalidade antes da autenticação do usuário 
-* 3.1.2.2 - A tela de login deve conter o campo "Usuário" com as seguintes especificações:
-	1. O campo deve ser em formato de texto;
-	2. O campo é restringido para no máximo 50 caracteres;
-	3. O preenchimento é obrigatório.
-* 3.1.2.3 - A tela de login deve conter o campo "Senha" contendo as seguintes especificações :
-	1. O campo deve ser em formato de texto;
-	2. O campo não deve ser visível para usuário (ocultado por asteriscos, ex: \*\*\*\*);
-	3. O preenchimento é obrigatório.
-* 3.1.2.4 - A tela de login deve exibir o logotipo ou nome do sistema.
-* 3.1.2.5 - A tela de login deve exibir a versão atual do software.
-* 3.1.2.6 - O sistema deve registrar um histórico (log) de segurança contendo todas as tentativas de acesso (bem-sucedida ou não). O histórico deve conter:
-	1. Nome do usuário;
-	2. Data de entrada;
-	3. Hora de entrada;
-	4. Informar se o acesso foi bem-sucedido ou não.
-* *3.1.2.7* - O campo de senha não deve permitir copiar o conteúdo via atalho de teclado (Ctrl+C) ou menu de contexto.
-* *3.1.2.8* - A sessão do usuário deve ser encerrada automaticamente após 30 minutos de inatividade, redirecionando para a tela de login com mensagem explicativa.
-* 3.1.2.9 - O sistema deve oferecer opção "Sair" acessível em todas as telas para encerramento manual da sessão com segurança.
+* **3.1.2.1** — O sistema deve apresentar a tela de Login como tela inicial obrigatória, bloqueando o acesso a qualquer outra funcionalidade antes da autenticação.  
+- **3.1.2.2** — A tela de Login deve exibir o logotipo ou nome do sistema ("SFP") e a versão atual do software.
+- **3.1.2.3** — A tela de Login deve conter o campo **"Usuário"** com os seguintes requisitos:
+    - **3.1.2.3.1** — Formato texto, máximo de 50 caracteres.
+    - **3.1.2.3.2** — Preenchimento obrigatório.
+- **3.1.2.4** — A tela de Login deve conter o campo **"Senha"** com os seguintes requisitos:
+    - **3.1.2.4.1** — Formato texto, ocultado com asteriscos.
+    - **3.1.2.4.2** — Preenchimento obrigatório.
+    - **3.1.2.4.3** — O campo não deve permitir copiar o conteúdo via atalho de teclado (Ctrl+C) ou menu de contexto.
+- ***3.1.2.5*** — A sessão do usuário deve ser encerrada automaticamente após 30 minutos de inatividade, redirecionando para a tela de Login com mensagem explicativa.
+- **3.1.2.6** — O sistema deve oferecer a opção "Sair" acessível em todas as telas para encerramento manual da sessão.
+- **3.1.2.7** — O sistema deve registrar em log de segurança toda tentativa de acesso (bem-sucedida ou não), contendo: nome de usuário, data, hora e resultado (sucesso/falha).
 
-### 3.1.3 Menu Principal e sua Navegação
-Todos os seguintes requisitos se aplicam as telas para o menu principal e sua navegação:
-* 3.1.3.1 - Após autenticação bem-sucedida, o sistema deve exibir um menu principal com acesso a todos os módulos habilitados para o perfil do usuário logado.
-* 3.1.3.2 - O menu principal deve conter as seguintes entradas: 
-	1. Cadastros de funcionários;
-	2. Planilha para o relógio de ponto dos funcionários;
-	3. Lançamento de exceções; 
-	4. Emissão da folha de pagamento do mês atual; 
-	5. Histórico;
-	6. Sair.
-* 3.1.3.3 - Itens de menu restritos ao perfil de Administrador devem ser desabilitados para os usuários.
-* 3.1.3.4 - O menu deve apresentar um indicador visual do módulo atualmente ativo (item selecionado destacado).
-* 3.1.3.5 - O sistema deve exibir um dashboard, de forma resumida, abrangendo: 
-	1. O mês de competência corrente; 
-	2. A quantidade de funcionários ativos cadastrados; 
-	3. O status da folha do mês corrente ("Aberta" ou "Fechada").
+### 3.1.3 Menu Principal e Navegação (Dashboard)
+Todos os seguintes requisitos se aplicam as telas para o menu principal e navegação:
+- **3.1.3.1** — Após autenticação bem-sucedida, o sistema deve exibir o Dashboard como tela padrão, com a barra lateral (sidebar) de navegação persistente.
+- **3.1.3.2** — A barra lateral deve ser organizada em três grupos de menu, exibidos conforme o perfil do usuário:
+    - **PRINCIPAL:** Dashboard, Funcionários, Rubricas.
+    - **OPERAÇÃO:** Lançamentos de Exceção, Folha do Mês, Holerite, Histórico.
+    - **ADMINISTRAÇÃO** _(somente perfil Admin):_ Empresa, Usuários, Log de Auditoria.
+- **3.1.3.3** — Itens de menu restritos ao perfil Administrador devem estar ocultos ou desabilitados para o perfil de Analista.
+- **3.1.3.4** — O menu deve apresentar indicador visual do módulo atualmente ativo (item com realce de cor de fundo diferenciado).
+- **3.1.3.5** — O Dashboard deve exibir, de forma resumida, os seguintes cartões de informação:
+    - **3.1.3.5.1** — Competência corrente (mês e ano).
+    - **3.1.3.5.2** — Quantidade de funcionários ativos cadastrados.
+    - **3.1.3.5.3** — Status da folha do mês corrente ("Aberta" ou "Fechada").
+    - **3.1.3.5.4** — Total Bruto da folha do mês corrente.
+- ***3.1.3.6*** — O Dashboard deve exibir um painel de avisos do sistema, com alertas de anomalias de processamento e prazo de lançamentos.
+- **3.1.3.7** — O Dashboard deve exibir uma prévia tabular da folha corrente (funcionário, cargo, salário base, status) e um resumo de provisões trabalhistas do mês (FGTS, 13º, Férias).
 
-### 3.1.4 Tela de Cadastro de Funcionários
-Todos os seguintes requisitos se aplicam as telas de cadastro dos funcionários:
-* 3.1.4.1 - O sistema deve apresentar tela de cadastro de funcionários com os seguintes campos obrigatórios: 
-	1. Nome completo do funcionário, com o tipo do campo sendo texto e contendo no máximo 150 caracteres; 
-	2. CPF (máscara 000.000.000-00, único no sistema); 
-	3. Data de Nascimento (DD/MM/AAAA);
-	4. Data de Admissão (DD/MM/AAAA);
-	5. Cargo, com tipo texto de no máximo 100 caracteres;
-	6. Salário Base (valor monetário, mínimo R$ 1.518,00 conforme piso CLT 2025).
-* 3.1.4.2 - O sistema deve apresentar os seguintes campos opcionais para cada funcionário:  
-	1. Número de Dependentes (inteiro ≥ 0)
-	2. Banco e Conta para depósito salarial.
-* 3.1.4.3 - O campo CPF deve ser validado pelo algoritmo de dígitos verificadores da Receita Federal. O sistema deve rejeitar CPFs com todos os dígitos iguais.
-* 3.1.4.4 - O sistema deve impedir o cadastro de dois funcionários com o mesmo CPF, exibindo mensagem de erro específica.
-* 3.1.4.5 - A tela de listagem de funcionários deve apresentar tabela com colunas: 
-	1. Nome;
-	2. CPF (parcialmente ocultado: \*\*\*XXX-XX);
-	3. Cargo;
-	4. Salário Base;
-	5. Status (Ativo/Inativo).
-* 3.1.4.6 - A listagem deve permitir busca por CPF.
-* 3.1.4.7 - O sistema deve permitir inativar um funcionário (demissão), registrando a data de desligamento. 
-* 3.1.4.8 - Funcionários inativos não devem participar do processamento da folha de meses posteriores à data de desligamento.
-* 3.1.4.9 - O sistema não deve permitir a exclusão permanente de registros de funcionários, apenas a inativação, para preservar o histórico de folhas passadas.
-
+### 3.1.4 Tela de Gerenciamento de Funcionários
+Todos os seguintes requisitos se aplicam as telas de gerenciamento dos funcionários:
+- **3.1.4.1** — O sistema deve apresentar uma tela de listagem de funcionários com campo de busca por nome ou CPF e botão **"+ Novo Funcionário"**.
+- **3.1.4.2** — A listagem deve exibir tabela com as colunas: ícone de avatar, Nome Completo, CPF (parcialmente ocultado: `***.XXX.XXX-**`), Cargo, Data de Admissão, Salário Base, Status (Ativo/Inativo) e coluna de Ações.
+- **3.1.4.3** — Registros de funcionários inativos devem ser visualmente diferenciados na tabela (ex.: linha com cor de fundo e texto atenuados).
+- **3.1.4.4** — O sistema deve apresentar formulário de cadastro/edição de funcionário com os seguintes campos obrigatórios:
+    - **3.1.4.4.1** — Nome Completo (texto, máx. 150 caracteres).
+    - **3.1.4.4.2** — CPF (máscara `000.000.000-00`, único no sistema).
+    - **3.1.4.4.3** — Data de Nascimento (DD/MM/AAAA).
+    - **3.1.4.4.4** — Data de Admissão (DD/MM/AAAA).
+    - **3.1.4.4.5** — Cargo (texto, máx. 100 caracteres).      
+    - **3.1.4.4.6** — Salário Base (valor monetário, mínimo R$ 1.621,00 conforme piso CLT 2026).
+    - **3.1.4.4.7** — Banco e Conta-corrente para depósito salarial.
+- **3.1.4.5** — Os seguintes campos são opcionais: Número de Dependentes (inteiro ≥ 0), e-mail institucional.
+- **3.1.4.6** — O campo CPF deve ser validado pelo algoritmo de dígitos verificadores da Receita Federal. O sistema deve rejeitar CPFs inválidos, ex: CPFs com todos os dígitos iguais.
+- **3.1.4.7** — O sistema deve impedir o cadastro de dois funcionários com o mesmo CPF, exibindo mensagem de erro específica.
+- **3.1.4.8** — O sistema deve permitir inativar um funcionário (demissão), registrando obrigatoriamente a data de desligamento. A exclusão permanente não é permitida.
+- **3.1.4.9** — O sistema deve exibir o tempo de empresa (anos e meses completos) calculado automaticamente com base na data de admissão.
+- **3.1.4.10** — A tela de edição deve exibir o histórico de alterações salariais do funcionário (salário anterior, novo salário, data e usuário responsável).
 
 ### 3.1.5 Tela de Cadastro da Empresa
 Todos os seguintes requisitos se aplicam a tela de cadastro da empresa:
-- 3.1.5.1 - O sistema deve apresentar tela de configuração dos dados da empresa com os seguintes campos obrigatórios: 
-	1. Razão Social (texto); 
-	2. CNPJ (máscara 00.000.000/0000-00);
-	3. Endereço completo e Responsável Legal (nome).
-- 3.1.5.2 - O CNPJ deve ser validado pelo algoritmo de dígitos verificadores da Receita Federal.
-- 3.1.5.3 - Alterações nos parâmetros fiscais da empresa devem exigir confirmação com diálogo modal e devem ser registradas em log de auditoria com o usuário e data.
+- **3.1.5.1** — O sistema deve apresentar tela de configuração dos dados da empresa com os seguintes campos obrigatórios:
+    - **3.1.5.1.1** — Razão Social (texto, máx. 150 caracteres).
+    - **3.1.5.1.2** — CNPJ (máscara `00.000.000/0000-00`).
+    - **3.1.5.1.3** — Endereço completo (logradouro, número, complemento, bairro, cidade, UF, CEP).
+    - **3.1.5.1.4** — Nome do Responsável Legal.
+- **3.1.5.2** — O CNPJ deve ser validado pelo algoritmo oficial de dígitos verificadores da Receita Federal. O sistema deve rejeitar CNPJs com todos os dígitos iguais.
+- **3.1.5.3** — A tela deve exibir e permitir a edição dos parâmetros fiscais utilizados nos cálculos da folha:
+    - **3.1.5.3.1** — Alíquota de FGTS (padrão: 8,00%).
+    - **3.1.5.3.2** — Horas mensais contratuais (padrão: 220h).
+    - **3.1.5.3.3** — Valor mensal da Cesta Básica (R$, podendo ser zero).
+    - **3.1.5.3.4** — Percentual de adicional de hora extra padrão (50%) e especial (100%).        
+- **3.1.5.4** — Alterações nos parâmetros fiscais devem exigir confirmação via diálogo modal e devem ser registradas em log de auditoria com usuário e data.
 
-### 3.1.6 Tela de Lançamentos de Exceção Mensais
+### 3.1.6 Tela de Gerenciamento de Rubricas
+Todos os seguintes requisitos se aplicam a tela de gerenciamento de rubricas:
+- **3.1.6.1** — O sistema deve apresentar tela de gerenciamento de rubricas com tabela exibindo as colunas: Código, Descrição, Natureza (Provento / Desconto), Tipo (Fixo / Variável) e flags de Incidência (INSS, FGTS, IRRF).
+- **3.1.6.2** — A tabela deve diferenciar visualmente rubricas padrão (não editáveis) de rubricas personalizadas da empresa.
+- **3.1.6.3** — O sistema deve disponibilizar botão **"+ Nova Rubrica"** para criação de rubricas personalizadas (código ≥ 500), acessível somente ao perfil Administrador.
+- **3.1.6.4** — O formulário de criação/edição de rubrica deve conter: Código (numérico, 3 dígitos), Descrição (texto, máx. 100 caracteres), Natureza, Tipo e checkboxes de Incidência.
+- **3.1.6.5** — As rubricas de código 001 a 005 devem ser exibidas como somente leitura, sem botão de exclusão ou edição de campos sensíveis.
+
+### 3.1.7 Tela de Lançamentos de Exceção Mensais
 Todos os seguintes requisitos se aplicam a tela de lançamento de exceções mensais:
-- 3.1.6.1 - O sistema deve apresentar tela de lançamentos mensais, acessível somente quando a folha do mês corrente estiver com status "Aberta".
-- 3.1.6.2 - A tela deve exibir o mês e ano de competência corrente de forma destacada, impedindo ambiguidade sobre o período de referência dos lançamentos.
-- 3.1.6.3 - O sistema deve permitir selecionar um funcionário ativo por meio de campo de busca antes de registrar qualquer lançamento.
-- 3.1.6.4 - Para cada funcionário selecionado, o sistema deve permitir o registro dos seguintes tipos de evento:
-	1. **Horas Extras:** Quantidade de horas extras, escrito em minutos (ex.: 80) e data de ocorrência. O sistema deve calcular e exibir o valor monetário.
-	2. **Faltas Injustificadas:** Quantidade de dias inteiros ou fração (em horas). O sistema deve calcular e exibir o desconto correspondente em tempo real.
-	3. **Atrasos:** Quantidade de minutos e data de ocorrência. O sistema deve calcular o desconto proporcional em tempo real.
-	4. **Atestado Médico:** Data de início, data de fim e arquivo digitalizado (PDF). Atestados justificam ausências e neutralizam o desconto de falta.
-	5. **Bônus / Gratificação:** Valor monetário livre e descrição textual (obrigatória, máx. 200 caracteres).
-- 3.1.6.5 - O sistema deve impedir o lançamento de eventos em meses cuja folha já esteja com status "Fechada", exibindo mensagem explicativa ao usuário.
-- 3.1.6.6 - O sistema deve permitir a edição e exclusão de lançamentos do mês corrente enquanto a folha estiver aberta.
-
-### 3.1.7 Tela de Processamento e Fechamento da Folha
-Todos os seguintes requisitos se aplicam a tela de processamento e fechamento da folha de pagamento:
-- 3.1.7.1 - O sistema deve apresentar tela de processamento da folha com listagem de todos os funcionários ativos e seus respectivos status de processamento.
-- 3.1.7.2 - O sistema deve disponibilizar botão "Processar Folha" que executa o cálculo para todos os funcionários ativos de forma sequencial ou paralela.
-- 3.1.7.3 - Após o processamento, o sistema deve exibir resumo tabular contendo, para cada funcionário: 
-	1. Nome; 
-	2. Salário Bruto;
-	3. Total de Proventos; 
-	4. Total de Descontos;
-	5. Salário Líquido;
-	6. Status.
-* 3.1.7.4 - O sistema deve permitir re-processar a folha enquanto estiver com status "Aberta", sobrescrevendo os valores calculados anteriormente após confirmação.
-- 3.1.7.5 - O sistema deve disponibilizar botão "Fechar Folha" que torna o mês de competência imutável.
-- 3.1.7.6 - O botão "Fechar Folha" deve estar desabilitado enquanto existir algum funcionário ativo com status "Pendente" ou "Erro" no processamento.
-- 3.1.7.7 - Após o fechamento, o sistema deve gerar e exibir automaticamente o relatório de provisões do mês, com 13º Salário, Férias + ⅓ e FGTS para cada funcionário.
+* **3.1.7.1** — O sistema deve apresentar a tela de lançamentos mensais acessível somente quando a folha do mês corrente estiver com status **"Aberta"**.  
+- **3.1.7.2** — A tela deve exibir o mês e ano de competência corrente de forma destacada, impedindo ambiguidade sobre o período de referência dos lançamentos.
+- **3.1.7.3** — O sistema deve permitir selecionar um funcionário ativo por meio de campo de busca antes de registrar qualquer lançamento.
+- **3.1.7.4** — Para cada funcionário selecionado, o sistema deve permitir o registro dos seguintes tipos de evento:
+    - **3.1.7.4.1** — **Horas Extras:** quantidade de horas (decimal, ex.: 2,5), tipo (50% ou 100%) e data de ocorrência. O valor monetário deve ser calculado e exibido em tempo real.
+    - **3.1.7.4.2** — **Faltas Injustificadas:** quantidade de dias inteiros ou fração (em horas). O desconto correspondente deve ser calculado e exibido em tempo real.
+    - **3.1.7.4.3** — **Atrasos:** quantidade de minutos e data de ocorrência. O desconto proporcional deve ser calculado e exibido em tempo real.
+    - **3.1.7.4.4** — **Atestado Médico:** data de início, data de fim e opcionalmente arquivo digitalizado (PDF). Atestados justificam ausências e neutralizam o desconto de falta.
+    - **3.1.7.4.5** — **Bônus / Gratificação:** valor monetário livre e descrição textual (obrigatória, máx. 200 caracteres).
+- **3.1.7.5** — O sistema deve impedir o lançamento de eventos em meses cuja folha já esteja com status "Fechada", exibindo mensagem explicativa ao usuário.
+- **3.1.7.6** — O sistema deve permitir a edição e exclusão de lançamentos do mês corrente enquanto a folha estiver aberta.
 
 ### 3.1.8 Tela de Visualização e Emissão de Holerite
 Todos os seguintes requisitos se aplicam a tela de visualização e a emissão da folha de pagamento:
-- 3.1.8.1 - O sistema deve apresentar tela de holerite com seletor de funcionário e seletor de mês/ano de competência. Apenas meses com folha fechada devem estar disponíveis.
-- 3.1.8.2 - O holerite exibido deve conter obrigatoriamente os seguintes campos, em conformidade com o art. 464 da CLT:
-	1. Dados da empresa: Razão Social e CNPJ.
-	2. Dados do funcionário: Nome, CPF (parcialmente ocultado), Cargo, Data de Admissão e PIS/PASEP.
-	3. Mês e ano de competência.
-	4. Tabela de proventos: código da rubrica, descrição, referência e valor.	
-	5. Tabela de descontos: código da rubrica, descrição, referência e valor.
-	6. Totais: Total de Proventos, Total de Descontos e Salário Líquido (em destaque).
-- 3.1.8.3 - Linha de assinatura do colaborador (para versão impressa).
-- 3.1.8.4 - O sistema deve disponibilizar botão "Exportar PDF" que gera o holerite em formato PDF/A.
-- 3.1.8.5 - O sistema deve permitir a visualização de holerites de meses anteriores fechados, sem limite de período para consulta.
-- 3.1.8.6 - O holerite em PDF deve ser gerado sem a linha de assinatura (campo preenchido com "Documento Digital — Dispensa Assinatura") quando exportado eletronicamente.
+- **3.1.8.1** — O sistema deve apresentar a tela de processamento da folha com listagem de todos os funcionários ativos e seus respectivos status de processamento.
+- **3.1.8.2** — O sistema deve disponibilizar o botão **"Processar Folha"** que executa o cálculo para todos os funcionários ativos.
+- **3.1.8.3** — Após o processamento, o sistema deve exibir resumo tabular contendo, para cada funcionário:
+    - **3.1.8.3.1** — Nome.
+    - **3.1.8.3.2** — Salário Bruto.
+    - **3.1.8.3.3** — Total de Proventos.
+    - **3.1.8.3.4** — Total de Descontos.
+    - **3.1.8.3.5** — Salário Líquido.
+    - **3.1.8.3.6** — Status de processamento (Processado / Pendente / Erro).
+- **3.1.8.4** — O sistema deve permitir re-processar a folha enquanto o status for "Aberta", sobrescrevendo os valores calculados anteriormente após confirmação modal.
+- **3.1.8.5** — O sistema deve disponibilizar o botão **"Fechar Folha"** que torna o mês de competência imutável.
+- **3.1.8.6** — O botão "Fechar Folha" deve estar desabilitado enquanto existir algum funcionário com status "Pendente" ou "Erro" no processamento.
+- **3.1.8.7** — Após o fechamento, o sistema deve gerar e exibir automaticamente o relatório de provisões do mês, com 13º Salário, Férias + ⅓ e FGTS por funcionário.
 
-### 3.1.9 Tela de Histórico de Folhas de Pagamento
-- 3.1.9.1 - O sistema deve apresentar tela de histórico com listagem de todas as folhas já processadas, organizadas por mês/ano em ordem cronológica decrescente.
-- 3.1.9.2 - Para cada folha listada, devem ser exibidos: Mês/Ano de Competência, Status, Data de Fechamento, Quantidade de Funcionários Processados e Total Líquido da Folha.
-- 3.1.9.3 - A tela deve permitir filtragem por intervalo de datas (De: Mês/Ano — Até: Mês/Ano).
-- 3.1.9.4 - O sistema deve permitir a seleção de uma folha fechada para visualização detalhada, exibindo o resumo individual de cada funcionário naquela competência.
-	1. O sistema não deve exibir botões de edição ou processamento para folhas com status "Fechada", apenas o botão "Visualizar".
+
+
+### 3.1.9 Tela de Visualização e Emissão de Holerite
+- **3.1.9.1** — O sistema deve apresentar tela de holerite com seletor de funcionário e seletor de mês/ano de competência. Apenas meses com folha fechada devem estar disponíveis para seleção.
+- **3.1.9.2** — O holerite exibido deve conter obrigatoriamente os seguintes campos:
+    - **3.1.9.2.1** — Dados da empresa: Razão Social e CNPJ.
+    - **3.1.9.2.2** — Dados do funcionário: Nome, CPF (parcialmente ocultado), Cargo e Data de Admissão.
+    - **3.1.9.2.3** — Mês e ano de competência.
+    - **3.1.9.2.4** — Tabela de proventos: código da rubrica, descrição, referência e valor.
+    - **3.1.9.2.5** — Tabela de descontos: código da rubrica, descrição, referência e valor.
+    - **3.1.9.2.6** — Totais: Total de Proventos, Total de Descontos e Salário Líquido em destaque.
+    - **3.1.9.2.7** — Linha de assinatura do colaborador (na versão impressa).
+- **3.1.9.3** — O sistema deve disponibilizar botão **"Exportar PDF"** que gera o holerite em formato PDF/A.
+- **3.1.9.4** — O holerite exportado em PDF deve substituir a linha de assinatura pela legenda: _"Documento Digital — Dispensa Assinatura"_.
+- **3.1.9.5** — O sistema deve permitir a visualização de holerites de qualquer mês anterior fechado, sem limite de período para consulta.
+
+### 3.1.10 Tela de Histórico de Folhas de Pagamento
+- **3.1.10.1** — O sistema deve apresentar tela de histórico com listagem de todas as folhas já processadas, organizadas por mês/ano em ordem cronológica decrescente.
+- **3.1.10.2** — Para cada folha listada, devem ser exibidos: Mês/Ano de Competência, Status, Data de Fechamento, Quantidade de Funcionários Processados e Total Líquido da Folha.
+- **3.1.10.3** — A tela deve permitir filtragem por intervalo de datas (De: Mês/Ano — Até: Mês/Ano).
+- **3.1.10.4** — O sistema deve permitir a seleção de uma folha fechada para visualização detalhada, exibindo o resumo individual de cada funcionário naquela competência.
+- **3.1.10.5** — O sistema não deve exibir botões de edição ou reprocessamento para folhas com status "Fechada" — somente o botão "Visualizar".
+
+### 3.1.11 Tela de Gerenciamento de Usuários do Sistema
+- **3.1.11.1** — O sistema deve apresentar tela de gerenciamento de usuários acessível exclusivamente pelo perfil Administrador.
+- **3.1.11.2** — A tela deve exibir tabela com os usuários cadastrados: Nome, Login, Perfil (Admin / Analista de RH) e Status (Ativo / Inativo).
+- **3.1.11.3** — O sistema deve disponibilizar botão **"+ Novo Usuário"** com formulário contendo: Nome completo, Login (máx. 50 caracteres), Perfil e Senha inicial.
+- **3.1.11.4** — O Administrador deve poder inativar um usuário e redefinir sua senha manualmente, com confirmação via diálogo modal em ambas as operações.
+- **3.1.11.5** — Deve existir sempre ao menos um usuário com perfil Administrador ativo. O sistema deve bloquear a inativação do último Administrador.
+
+### 3.1.12 Tela de Log de Auditoria
+- **3.1.12.1** — O sistema deve apresentar tela de log de auditoria acessível exclusivamente pelo perfil Administrador.   
+- **3.1.12.2** — A tela deve exibir tabela com as entradas do log: ID sequencial, Data/Hora, Usuário, Tipo de Operação, Entidade Afetada e Resumo da Mudança.
+- **3.1.12.3** — A tela deve disponibilizar filtros por: período (data inicial e final), usuário e tipo de operação.
+- **3.1.12.4** — O log deve ser exibido em modo somente leitura. Nenhum botão de exclusão ou edição deve estar disponível.
 
 ## 3.2 Requisitos Funcionais
-### 3.2.1 Cadastro da Empresa
-Todos os seguintes requisitos se aplicam ao cadastro e configuração da empresa e seus parâmetros:
-- 3.2.1.1 - O cadastro da empresa deve incluir obrigatoriamente: 
-	- Razão Social (texto com até 150 caracteres);
-	- CNPJ;
-	- Endereço Completo (Logradouro, Número, Complemento, Bairro, Cidade, UF, CEP);
+### 3.2.1 Cadastros e Configurações
+Este módulo engloba os requisitos de registro e manutenção dos dados mestres do sistema: empresa, funcionários, rubricas, usuários e parâmetros fiscais. A integridade dos dados cadastrais é pré-requisito para a correção de todos os cálculos subsequentes.
+
+#### 3.2.1.1 Cadastro da Empresa
+* **3.2.1.1.1 —** O cadastro deve incluir obrigatoriamente:
+	- Razão Social (texto, máx. 150 caracteres).
+	- CNPJ (com validação por dígitos verificadores da Receita Federal).
+	- Endereço completo (logradouro, número, complemento, bairro, cidade, UF, CEP).
 	- Nome do Responsável Legal.
-- 3.2.1.2 - O CNPJ inserido deve ser validado obrigatoriamente pelo algoritmo oficial de dígitos verificadores da Receita Federal.
-- 3.2.1.3 - O sistema deve rejeitar CNPJs com todos os dígitos iguais (ex.: 11.111.111/1111-11), mesmo que o cálculo matemático os valide.
-- 3.2.1.4 - O sistema deve armazenar os seguintes parâmetros fiscais: Alíquota de FGTS (8,00%), Horas mensais contratuais (padrão 220 horas), Adicional de hora extra padrão (50%), Adicional de hora extra especial (100%) e Valor mensal da Cesta Básica (R$).
+- **3.2.1.1.2 —** O sistema deve rejeitar CNPJs com todos os dígitos iguais (ex.: `11.111.111/1111-11`), mesmo que passem na verificação matemática. 
+- **3.2.1.1.3 —** O sistema deve armazenar os seguintes parâmetros fiscais:
+	- Alíquota de FGTS: valor percentual, padrão 8,00%.
+	- Horas mensais contratuais: inteiro positivo, padrão 220 horas (divisor para cálculo do valor-hora).
+	- Percentual de adicional de hora extra padrão (50%), fixo por legislação.
+	- Percentual de adicional de hora extra especial (100%): aplicável a domingos, feriados e período noturno contínuo.
+	- Valor mensal da Cesta Básica (R$, podendo ser zero).
 
-### 3.2.2 Cadastro de Funcionários
-Todos os seguintes requisitos se aplicam ao cadastro, manutenção e inativação de funcionários:
-- 3.2.2.1 - O sistema deve permitir o cadastro, a edição e a inativação de funcionários sob o regime CLT.
-- 3.2.2.2 - O sistema não deve permitir a exclusão permanente de registros de funcionários.
-- 3.2.2.3 - O sistema deve exigir o preenchimento dos seguintes campos obrigatórios: 
-	- Nome Completo; 
+#### 3.2.1.2 Cadastro de Funcionários
+* **3.2.1.2.1 —** O sistema deve permitir o cadastro, a edição e a inativação de funcionários CLT. A exclusão permanente de registros **não é permitida**.
+* **3.2.1.2.2 —** Campos obrigatórios para cadastro:
+	- Nome Completo;
 	- CPF; 
-	- Data de Nascimento;
+	- Data de Nascimento; 
 	- Data de Admissão; 
-	- Cargo;
-	- Salário Base Contratual;
-	- Banco;
-	- Conta-corrente.
-- 3.2.2.4 - O sistema deve apresentar os seguintes campos opcionais: 
-	- Número de Dependentes (inteiro ≥ 0, padrão 0);
-	- E-mail institucional. 
-- 3.2.2.5 - O sistema deve garantir a unicidade do CPF, impedindo que dois funcionários (ativos ou inativos) compartilhem o mesmo documento. 
-- 3.2.2.6 - O Salário Base registrado deve ser maior ou igual ao salário mínimo nacional vigente.
-- 3.2.2.7 - O sistema deve rejeitar inserções de salário base abaixo do piso, exibindo uma mensagem de alerta com o valor mínimo aceitável.
-- 3.2.2.8 - O sistema deve manter um histórico contínuo de alterações salariais, registrando o salário anterior, o novo salário, a data de alteração e o usuário responsável pela mudança.
-- 3.2.2.9 - O sistema deve identificar o mês de admissão para aplicar a proporcionalidade de dias trabalhados na primeira folha processada.
-- 3.2.2.10 - A ação de inativação de um funcionário deve exigir o registro obrigatório da data de desligamento.
-- 3.2.2.11 - O sistema deve exibir no perfil do funcionário o cálculo automatizado do seu tempo de empresa em anos e meses completos.
+	- Cargo; 
+	- Salário Base Contratual; 
+	- Banco; 
+	- Conta-corrente para depósito.
+- **3.2.1.2.3 —** Campos opcionais: Número de Dependentes (inteiro ≥ 0, padrão 0) e e-mail institucional.
+- **3.2.1.2.4 —** O sistema deve garantir unicidade do CPF: nenhum dos funcionários — ativos ou inativos — pode compartilhar o mesmo CPF.
+- **3.2.1.2.5 —** O Salário Base deve ser ≥ ao salário mínimo nacional vigente. O sistema deve rejeitar valores abaixo do piso, exibindo mensagem com o valor mínimo aceitável.
+- **3.2.1.2.6 —** O sistema deve manter histórico completo de alterações salariais. Cada entrada deve registrar: salário anterior, novo salário, data de alteração e usuário responsável.
+- **3.2.1.2.7 —** O sistema deve identificar o mês de admissão de cada funcionário para aplicar cálculo proporcional automaticamente na primeira folha.
+- **3.2.1.2.8 —** A inativação de um funcionário deve registrar obrigatoriamente a data de desligamento.
+- **3.2.1.2.9 —** O sistema deve calcular e exibir automaticamente o tempo de empresa (anos e meses completos) com base na data de admissão.
 
-### 3.2.3 Cadastro de Rubricas
-Todos os seguintes requisitos se aplicam à gestão e categorização de rubricas:
-- 3.2.3.1 - O sistema deve manter uma tabela de rubricas classificando cada entrada como provento ou desconto e como fixa ou variável.
-- 3.2.3.2 - Cada rubrica deve conter as seguintes informações: 
-	- Código numérico único de 3 dígitos;
-	- Natureza (Provento/Desconto);
-	- Tipo (Fixo/Variável);
-	- Incidência (INSS, FGTS, IRRF).
-- 3.2.3.3 - O sistema deve trazer as rubricas padrão pré-cadastradas conforme o Apêndice 4.1.
-- 3.2.3.4 - O sistema deve bloquear a edição de código, natureza, incidência ou a exclusão das rubricas obrigatórias de códigos 001 a 005.
-- 3.2.3.5 - O sistema deve permitir que o Administrador exclua as rubricas padrão de 006 a 008 e 101 a 106, contanto que não estejam vinculadas a folhas já processadas.
-- 3.2.3.6 - O sistema deve permitir que o Administrador cadastre rubricas personalizadas (código ≥ 500) para compor benefícios ou descontos específicos.
+#### 3.2.1.3 Cadastro de Rubricas
+* **3.2.1.3.1 —** O sistema deve manter uma tabela de rubricas que classifica cada valor como provento ou desconto, fixo ou variável.
+* **3.2.1.3.2 —** Cada rubrica deve conter: Código único (numérico, 3 dígitos), Natureza (Provento / Desconto), Tipo (Fixo / Variável) e Incidência (flags: incide INSS, incide FGTS, incide IRRF).
+* **3.2.1.3.3 —** O sistema deve incluir as rubricas padrão pré-cadastradas conforme Apêndice 4.1. As rubricas de códigos 001 a 005 são obrigatórias e não podem ser excluídas nem ter seu código, natureza ou flags de incidência alterados.
+* **3.2.1.3.4 —** As rubricas de códigos 006 a 008 e 101 a 106 podem ser excluídas pelo Administrador, desde que não estejam referenciadas em nenhuma folha já processada.
+* **3.2.1.3.5 —** O Administrador pode criar rubricas personalizadas (código ≥ 500) para benefícios ou descontos específicos da empresa.
 
-### 3.2.4 Cadastro de Usuários do Sistema
-Todos os seguintes requisitos se aplicam ao acesso e perfis dos operadores do sistema:
-- 3.2.4.1 - O sistema deve permitir o cadastro de contas de usuários para acesso à aplicação.
-- 3.2.4.2 - O sistema deve dispor do perfil "Administrador", garantindo acesso total às configurações de parâmetros, além de permitir adicionar ou remover analistas de RH.
-- 3.2.4.3 - O sistema deve dispor do perfil "Analista de RH", garantindo acesso operacional limitado a cadastros, lançamentos, processamento de folhas e emissão de holerites.
-- 3.2.4.4 - O sistema deve garantir que, a todo momento, exista no mínimo um usuário com o perfil Administrador ativo.
-- 3.2.4.5 - O sistema não deve armazenar, nem exibir, senhas em formato de texto plano em nenhuma circunstância.
+#### 3.2.1.4 Cadastro de Usuários do Sistema
+* **3.2.1.4.1 —** O sistema deve permitir o cadastro e gerenciamento de usuários, exclusivamente pelo Administrador.
+* **3.2.1.4.2 —** Os perfis disponíveis são:
+	- **Administrador:** acesso total, incluindo configuração de parâmetros, gestão de usuários, rubricas e log de auditoria.
+	- **Analista de RH:** acesso operacional — cadastros de funcionários, lançamentos, processamento e emissão de holerites.
+- **3.2.1.4.3 —** Deve existir ao menos um usuário com perfil Administrador ativo em todo momento.
+- **3.2.1.4.4 —** Nenhuma senha deve ser armazenada ou exibida em texto plano em qualquer circunstância.
 
-### 3.2.5 Calendário e Dias Úteis
-Todos os seguintes requisitos se aplicam às regras de apuração de dias do mês de competência:
-- 3.2.5.1 - O sistema deve calcular os dias úteis mensais considerando o intervalo de segunda a sexta-feira, excluindo sábados e domingos.
-- 3.2.5.2 - O sistema não deve descontar feriados nacionais automaticamente.
-- 3.2.5.3 - O sistema deve utilizar a totalidade de dias úteis apurados como divisor para obter o valor-dia nos cálculos de descontos de faltas.
+#### 3.2.1.5 Atualização de Parâmetros Legais
+* **3.2.1.5.1 —** O sistema deve permitir ao Administrador atualizar as alíquotas e tabelas legais (faixas de INSS, piso salarial, FGTS) sem necessidade de recompilar o sistema.
+* **3.2.1.5.2 —** As atualizações de parâmetros legais devem ser registradas em log de auditoria com data, hora e usuário responsável.
 
-### 3.2.6 Registro de Faltas Injustificadas
-Todos os seguintes requisitos se aplicam ao processamento de abstenções não justificadas:
-- 3.2.6.1 - O sistema deve permitir lançamentos de faltas em dias inteiros ou em frações de horas atrelados a um funcionário no mês ativo.
-- 3.2.6.2 - O sistema deve calcular o desconto de faltas integrais multiplicando o valor diário pela quantidade de dias ausentes.
-- 3.2.6.3 - O sistema deve calcular o desconto de faltas fracionadas multiplicando o Valor_Hora pela quantidade de horas ausentes.
-- 3.2.6.4 - O sistema deve bloquear o lançamento de faltas que superem a quantidade de dias úteis apurados para o mês de competência.
+### 3.2.2 Apuração de Frequência
+Este módulo define as regras de registro e cálculo dos eventos de frequência que impactam a folha do mês corrente. Todos os lançamentos são mensais, vinculados à competência aberta, e se tornam somente leitura após o fechamento da folha.
 
-### 3.2.7 Registro de Atrasos
-Todos os seguintes requisitos se aplicam ao controle de atrasos no registro de ponto:
-- 3.2.7.1 - O sistema deve permitir o lançamento de atrasos computados em minutos, vinculando-os a uma data do mês corrente.
-- 3.2.7.2 - O sistema deve calcular o impacto financeiro do atraso multiplicando o Valor_Hora pela fração de minutos (Minutos_Atraso ÷ 60).
-- 3.2.7.3 - O sistema deve acumular os lançamentos de atraso de um mesmo funcionário durante o mês, somando todos os minutos.
-- 3.2.7.4 - O sistema deve aplicar a regra de tolerância da CLT e isentar de desconto atrasos limitados a 10 minutos diários, informando visualmente essa isenção.
+#### 3.2.2.1 Calendário e Dias Úteis
+* **3.2.2.1.1 —** O sistema deve calcular, para cada mês de competência, os dias úteis como segunda a sexta-feira, excluindo sábados e domingos.
+	- Feriados nacionais não são descontados automaticamente pelo sistema.
+	- O total de dias úteis é utilizado como denominador no cálculo do Valor-Dia.
 
-### 3.2.8 Descanso Semanal Remunerado (DSR)
-Todos os seguintes requisitos se aplicam às penalidades aplicadas ao DSR:
-- 3.2.8.1 - O sistema deve remover o direito ao DSR da semana correspondente em que ocorrer um lançamento de falta injustificada.
-- 3.2.8.2 - O sistema deve cruzar as datas das faltas cadastradas para definir automaticamente o total de DSRs perdidos no mês.
-- 3.2.8.3 - O sistema deve calcular o valor da perda de DSR multiplicando o Valor_Dia pela quantidade de DSRs revogados.
-- 3.2.8.4 - O sistema deve exibir o total descontado em rubrica própria e destacada no holerite (Código 104 — Desconto DSR).
+#### 3.2.2.2 Registro de Faltas Injustificadas
+* **3.2.2.2.1 —** O sistema deve permitir o lançamento de faltas injustificadas em dias inteiros ou fração de dia (em horas), associadas a um funcionário e ao mês de competência corrente.
+	- Desconto por falta de dia inteiro: `Desconto_Falta = Valor_Dia × Nº_Dias_Faltados`.
+	- Desconto por fração de dia: `Desconto_Fração = Valor_Hora × Nº_Horas_Faltadas`, onde `Valor_Hora = Salário_Base ÷ Horas_Mensais_Contratuais`.
+- **3.2.2.2.2 —** O sistema deve impedir o lançamento de faltas em quantidade superior ao total de dias úteis do mês de competência.
 
-### 3.2.9 Registro de Atestados Médicos
-Todos os seguintes requisitos se aplicam à inserção de atestados para abono de ponto:
-- 3.2.9.1 - O sistema deve permitir a inclusão de atestados apontando a data de início e fim, o tipo da justificativa e, de forma opcional, o código CID.
-- 3.2.9.2 - O sistema deve processar o atestado de modo a impedir o desconto de falta nos dias amparados, assegurando também o direito ao DSR daquela semana.
-- 3.2.9.3 - O sistema deve isentar o desconto por até 15 dias ininterruptos resguardados pelo atestado.
-- 3.2.9.4 - O sistema deve emitir um aviso visual caso o atestado lançado supere o limite de 15 dias corridos consecutivos.
-- 3.2.9.5 - O sistema deve prever a inserção opcional de um arquivo digital (PDF com até 5MB) anexo ao atestado.
+#### 3.2.2.3 Registro de Atrasos
+* **3.2.2.3.1 —** O sistema deve permitir o lançamento de atrasos em minutos, associados a uma data específica dentro do mês de competência corrente.
+	- Desconto proporcional: `Desconto_Atraso = Valor_Hora × (Minutos_Atraso ÷ 60)`.
+- **3.2.2.3.2 —** O sistema deve permitir o lançamento de múltiplos atrasos para o mesmo funcionário no mesmo mês, acumulando o total de minutos.
+- **3.2.2.3.3 —** Atrasos de até 10 minutos diários são tolerados pela CLT (Art. 58, § 1º). O sistema deve identificar atrasos dentro da tolerância e não gerar desconto, exibindo indicador visual ao operador.
 
-### 3.2.10 Registro de Horas Extras
-Todos os seguintes requisitos se aplicam ao lançamento e cálculo de tempo excedente trabalhado:
-- 3.2.10.1 - O sistema deve permitir lançar as horas extras em decimais (ex.: 1,5), exigindo a data e a especificação do adicional (50% ou 100%).
-- 3.2.10.2 - O sistema deve emitir alerta não impeditivo caso o montante de horas extras no mês ultrapasse o limite definido em lei (2h diárias vezes os dias úteis).
-- 3.2.10.3 - O sistema deve realizar e expor instantaneamente o cálculo monetário das horas extras no momento do lançamento.
+#### 3.2.2.4 Descanso Semanal Remunerado (DSR)
+* **3.2.2.4.1 —** O sistema deve calcular o impacto das faltas injustificadas sobre o Descanso Semanal Remunerado (DSR), conforme Lei nº 605/1949. O funcionário perde o DSR de cada semana em que ocorreu falta injustificada.
+* **3.2.2.4.2 —** O sistema deve calcular quantos DSR são afetados com base nas datas das faltas lançadas.
+* **3.2.2.4.3 —** Valor do desconto de DSR: `Desconto_DSR = Valor_Dia × Nº_DSR_Perdidos`.
+* **3.2.2.4.4 —** O total de DSR perdidos deve ser exibido no holerite como rubrica destacada (código 104 — Desconto DSR).
 
-### 3.2.11 Salário Base e Proporcionalidade
-Todos os seguintes requisitos se aplicam aos processos de transformação de proventos:
-- 3.2.11.1 - O sistema deve aplicar o valor total do salário contratual caso o funcionário tenha prestado serviço o mês inteiro.
-- 3.2.11.2 - O sistema deve calcular o salário em proporção aos dias úteis trabalhados caso o funcionário inicie ou seja desligado durante a fluência do mês.
+#### 3.2.2.5 Registro de Atestados Médicos
+* **3.2.2.5.1 —** O sistema deve permitir o registro de atestados médicos que justificam ausências. O atestado deve impedir que os dias cobertos gerem desconto de falta e não deve afetar o DSR da semana correspondente.
+* **3.2.2.5.2 —** Cada atestado deve conter: data de início, data de fim, tipo (médico / odontológico / outro) e CID opcional (texto livre, máx. 10 caracteres).
+* **3.2.2.5.3 —** Os primeiros 15 dias de afastamento por doença são responsabilidade do empregador (CLT Art. 476). O sistema deve:
+	- Neutralizar automaticamente o desconto de falta para todos os dias cobertos por atestado, até o limite de 15 dias corridos consecutivos.
+	- Não afetar o DSR das semanas cobertas pelo atestado dentro desse período.
+	- Exibir alerta ao operador quando o atestado registrado ultrapassar 15 dias corridos consecutivos.
+- **3.2.2.5.4 —** O upload de arquivo digitalizado do atestado (PDF, JPG ou PNG, máx. 5 MB) é suportado nesta versão como campo opcional.
 
-### 3.2.12 Horas Extras — Processamento
-Todos os seguintes requisitos se aplicam à consolidação das horas excedentes na folha:
-- 3.2.12.1 - O sistema deve centralizar todos os registros de hora extra do mês e calcular a conversão monetária separada por faixa (50% e 100%).
-- 3.2.12.2 - O sistema deve incorporar os valores de horas extras ao salário bruto, integrando a base calculável para descontos de INSS e encargos de FGTS.
-- 3.2.12.3 - O sistema deve exibir no holerite as faixas de horas extras de forma dissociada, alocando a rubrica 002 para adicionais de 50% e a 003 para 100%.
+#### 3.2.2.6 Registro de Horas Extras
+* **3.2.2.6.1 —** O sistema deve permitir o lançamento de horas extras por funcionário, com data de ocorrência, quantidade de horas (decimal, ex.: 1,5) e tipo:
+	- **50%** — dias úteis (segunda a sábado).
+	- **100%** — domingos, feriados ou quando determinado por acordo coletivo.
+- **3.2.2.6.2 —** O sistema deve alertar, sem bloquear, quando o total mensal de horas extras de um funcionário ultrapassar o limite legal (2 horas/dia × dias úteis do mês, conforme CLT Art. 59).
+- **3.2.2.6.3 —** O valor bruto de cada hora extra deve ser calculado conforme RN-06 e exibido em tempo real durante o lançamento.
 
-### 3.2.13 Bônus e Gratificações
-Todos os seguintes requisitos se aplicam ao cálculo de valores bonificados no mês:
-- 3.2.13.1 - O sistema deve compilar os bônus incluídos nas exceções e agrupá-los na rubrica 004, somando o montante ao salário bruto mensal.
-- 3.2.13.2 - O sistema deve notificar o usuário administrador caso seja detectada a concessão do bônus ao mesmo funcionário por três meses consecutivos.
+### 3.2.3 Processamento de Proventos
+Este módulo descreve o cálculo de todos os valores de natureza creditícia que compõem o salário bruto do funcionário. O salário bruto é a base de cálculo para os encargos (FGTS) e pode ser a base para descontos (INSS).
 
-### 3.2.14 Cesta Básica
-Todos os seguintes requisitos se aplicam ao controle de concessão da cesta básica:
-- 3.2.14.1 - O sistema deve aplicar o benefício da cesta básica de forma mensal usando o valor fixado nas configurações da empresa (rubrica 005), ignorando-o da base do INSS ou FGTS.
-- 3.2.14.2 - O sistema deve garantir que o valor da cesta básica seja pago de forma íntegra a novos admitidos que entrarem no transcorrer do mês.
+#### 3.2.3.1 Salário Base e Proporcionalidade
+* **3.2.3.1.1 —** O sistema deve calcular o salário base mensal de cada funcionário, aplicando proporcionalidade de dias trabalhados quando aplicável.
+- Para funcionários que trabalharam o mês completo: salário base = salário base contratual.
+- Para funcionários admitidos após o primeiro dia útil ou desligados antes do último: aplicar salário proporcional conforme RN-07.
 
-### 3.2.15 Participação nos Lucros e Resultados (PLR)
-Todos os seguintes requisitos se aplicam à verba da PLR:
-- 3.2.15.1 - O sistema deve isolar o valor variável da PLR, abstendo-se de utilizá-lo como base de incidência para férias, INSS, FGTS e 13º.
-- 3.2.15.2 - O sistema deve gravar o montante bruto livre de impostos sobre a PLR, identificando o repasse no holerite pela rubrica 006.
+#### 3.2.3.2 Horas Extras — Processamento
+* **3.2.3.2.1 —** O sistema deve consolidar todos os lançamentos de horas extras do mês de competência e calcular o total de proventos por tipo de adicional (RN-06).
+* **3.2.3.2.2 —** O valor total de horas extras deve ser somado ao salário base para compor o salário bruto. Horas extras integram a base de incidência de INSS e FGTS.
+* **3.2.3.2.3 —** As horas extras devem ser listadas no holerite separadas por tipo (rubrica 002 para 50% e rubrica 003 para 100%).
 
-### 3.2.16 Composição do Salário Bruto
-- 3.2.16.1 - O sistema deve realizar a totalização das verbas, consolidando o Salário Bruto pela soma de todos os proventos que geram base de cálculo tributária.
+#### 3.2.3.3 Bônus e Gratificações
+* **3.2.3.3.1 —** O sistema deve processar bônus e gratificações eventuais lançados no módulo de exceções, somando-os ao salário bruto do mês de competência (rubrica 004).
+* **3.2.3.3.2 —** O sistema deve sinalizar ao operador quando um mesmo bônus for lançado por 3 meses consecutivos, conforme CLT Art. 457 § 1º.
 
-### 3.2.17 Desconto de INSS
-Todos os seguintes requisitos se aplicam às rotinas da contribuição previdenciária:
-- 3.2.17.1 - O sistema deve calcular o montante de INSS cruzando o salário bruto (subtraído de rubricas isentas) com as faixas progressivas vigentes estipuladas por portaria.
-- 3.2.17.2 - O sistema deve apresentar no demonstrativo do funcionário a quantia abatida, o salário que serviu como base e o reflexo percentual da alíquota alcançada.
+#### 3.2.3.4 Cesta Básica
+* **3.2.3.4.1 —** O sistema deve processar automaticamente o benefício de Cesta Básica com base no valor configurado no cadastro da empresa (rubrica 005 — fixa mensal).
+* **3.2.3.4.2 —** A Cesta Básica não integra a base de cálculo de INSS ou FGTS, por possuir natureza indenizatória.
+* **3.2.3.4.3 —** Funcionários admitidos no meio do mês recebem a Cesta Básica integral.
 
-### 3.2.18 Desconto de Faltas, Atrasos e DSR
-Todos os seguintes requisitos se aplicam aos reflexos financeiros das ausências e atrasos:
-- 3.2.18.1 - O sistema deve agrupar os valores descontáveis gerados pela frequência irregular do funcionário e retê-los do cálculo da folha mensal.
-- 3.2.18.2 - O sistema deve fragmentar cada evento de ausência nas rubricas correspondentes em vez de sumarizar um desconto único no holerite.
+#### 3.2.3.5 Participação nos Lucros e Resultados (PLR)
+* **3.2.3.5.1 —** O sistema deve processar a PLR quando lançada como evento variável, aplicando as regras de incidência específicas.
+* **3.2.3.5.2 —** A PLR não integra a remuneração para efeitos de INSS, FGTS, férias ou 13º salário, conforme Lei nº 10.101/2000, Art. 3º.
+* **3.2.3.5.3 —** A PLR deve ser exibida no holerite como rubrica destacada (código 006) com valor bruto, sem retenção de imposto.
 
-### 3.2.19 Outros Descontos Variáveis
-Todos os seguintes requisitos se aplicam a outras cobranças incidentes no mês:
-- 3.2.19.1 - O sistema deve suportar as exclusões manuais feitas pelo departamento (ex.: adiantamento), solicitando valor, descrição e rubrica cabível.
-- 3.2.19.2 - O sistema deve travar os descontos mensais caso a soma supere os ganhos apurados, barrando a confecção de salários líquidos negativos.
+#### 3.2.3.6 Composição do Salário Bruto
+* **3.2.3.6.1 —** O sistema deve calcular o Salário Bruto como a soma de todos os proventos, conforme RN-08.
 
-### 3.2.20 Composição do Salário Líquido
-- 3.2.20.1 - O sistema deve fechar a equação contábil apontando o Salário Líquido como a diferença exata entre os proventos globais e o saldo de descontos gerais.
+### 3.2.4 Processamento de Descontos
+Este módulo define os descontos que devem ser subtraídos do salário bruto para apuração do salário líquido.
 
-### 3.2.21 Encargos de FGTS
-Todos os seguintes requisitos se aplicam às taxas pagas pela empresa relativas ao fundo de garantia:
-- 3.2.21.1 - O sistema deve extrair 8% da base de recolhimento para definir o FGTS de competência do mês. A base engloba Salário Base, Bônus com incidência e Horas Extras.
-- 3.2.21.2 - O sistema não deve deduzir o encargo de FGTS em hipótese alguma do holerite repassado ao trabalhador.
-- 3.2.21.3 - O sistema deve provisionar e acumular as taxas calculadas todo mês para compor os painéis de auditoria financeira da empresa.
+#### 3.2.4.1 Desconto de INSS
+* **3.2.4.1.1 —** O sistema deve calcular o desconto de INSS aplicando a tabela progressiva vigente sobre a Base de Cálculo INSS (salário bruto excluídas as rubricas não incidentes).
+* **3.2.4.1.2 —** O cálculo deve ser progressivo por faixa (não alíquota única), conforme Portaria MPS vigente para 2025.
+* **3.2.4.1.3 —** O valor calculado do INSS deve ser exibido no holerite com a base de cálculo utilizada e a alíquota efetiva resultante.
 
-### 3.2.22 Provisão de 13º Salário
-Todos os seguintes requisitos se aplicam ao acúmulo da gratificação natalina:
-- 3.2.22.1 - O sistema deve calcular virtualmente a quantia proporcional devida do 13º com base no mês finalizado.
-- 3.2.22.2 - O sistema deve acumular essa fatia mês a mês desde o ingresso do trabalhador, zerando o medidor na entrada de um novo ano-calendário.
-- 3.2.22.3 - O sistema deve projetar em relatório interno da empresa o peso unitário do mês junto ao montante acumulado até o momento.
+#### 3.2.4.3 Desconto de Faltas, Atrasos e DSR
+* **3.2.4.3.1 —** O sistema deve consolidar todos os descontos de frequência (faltas, atrasos, DSR perdido) calculados no módulo 3.2.2 e incluí-los na folha.
+	- Desconto total de frequência = Desconto_Faltas + Desconto_Atrasos + Desconto_DSR.
+	- Cada item deve aparecer como rubrica separada no holerite com código e valor individual.
 
-### 3.2.23 Provisão de Férias e Adicional
-Todos os seguintes requisitos se aplicam à estimativa contábil de férias:
-- 3.2.23.1 - O sistema deve fatiar o acerto de férias e englobar no cômputo o peso extra de ⅓ garantido legalmente.
-- 3.2.23.2 - O sistema deve somar gradativamente os valores provisionados mantendo o ciclo fechado em 12 meses a contar da data em que o funcionário for contratado.
+#### 3.2.4.4 Outros Descontos Variáveis
+* **3.2.4.4.1 —** O sistema deve suportar o lançamento de descontos variáveis adicionais (adiantamentos, deduções autorizadas) vinculados a uma rubrica cadastrada.
+* **3.2.4.4.2 —** O sistema deve impedir que o total de descontos supere o total de proventos, resultando em salário líquido negativo.
 
-### 3.2.24 Relatório de Encargos e Provisões
-Todos os seguintes requisitos se aplicam ao faturamento global gerado pela folha da empresa:
-- 3.2.24.1 - O sistema deve produzir, no encerramento da competência, um mapa destrinchando mês a mês a carga de FGTS, as parcelas do 13º e a reserva de Férias para todos os ativos.
-- 3.2.24.2 - O sistema deve somar integralmente a projeção geral da empresa e exibir a totalidade acumulada desses encargos.
-- 3.2.24.3 - O sistema deve permitir que o gestor transforme os dados em um arquivo PDF final.
+#### 3.2.4.5 Composição do Salário Líquido
+**3.2.4.5.1 —** O sistema deve calcular o Salário Líquido como resultado final do processamento, conforme RN-11.
 
-### 3.2.25 Emissão de Holerite Individual
-Todos os seguintes requisitos se aplicam à documentação expedida em face do colaborador:
-- 3.2.25.1 - O sistema deve estruturar o layout em três seções primárias contemplando: Cabeçalho com dados contratuais e sigilo de CPF; Tabela detalhada de pagamentos/retenções; Totais cruzados acrescidos do campo para assinatura.
-- 3.2.25.2 - O sistema deve converter obrigatoriamente o recibo na arquitetura PDF/A e intitulá-lo sob a máscara de arquivo `HOLERITE[CPF-sem-formatação][AAAAMM].pdf`.
-- 3.2.25.3 - O sistema deve franquear o acesso irrestrito para emissões tardias de meses já finalizados sem promover ou autorizar modificação na memória do documento.
+### 3.2.5 Encargos e Provisões Trabalhistas
+Este módulo define os cálculos dos encargos sobre a folha (FGTS) e das provisões mensais para obrigações trabalhistas futuras. Esses valores não impactam o salário líquido do funcionário.
 
-### 3.2.26 Resumo da Folha de Pagamento
-Todos os seguintes requisitos se aplicam ao documento espelho das finanças processadas:
-- 3.2.26.1 - O sistema deve elaborar a tabela de síntese da folha listando nome, função e a trindade financeira (bruto, desconto e líquido).
-- 3.2.26.2 - O sistema deve somar e grafar as colunas exibindo os gastos universais e preparar o documento para formato viável ao cruzamento com escritórios contábeis.
+#### 3.2.5.1 FGTS — Fundo de Garantia do Tempo de Serviço
+* **3.2.5.1.1 —** O sistema deve calcular o FGTS mensal de cada funcionário com alíquota configurada (padrão 8%) sobre a Base de Cálculo FGTS (Salário Base Proporcional + Horas Extras + Bônus com incidência).
+* **3.2.5.1.2 —** O FGTS é encargo do empregador e não é deduzido do salário líquido do funcionário.
+* **3.2.5.1.3 —** O valor calculado de FGTS deve ser acumulado mensalmente para geração de relatório de encargos.
 
-### 3.2.27 Integração para Remessa Bancária
-Todos os seguintes requisitos se aplicam à listagem demandada por gerências de contas corporativas:
-- 3.2.27.1 - O sistema deve agrupar as informações bancárias (CPF, Banco, Agência, Conta e montante a depositar) e exportar as linhas tabeladas em PDF utilizando criptografia de caracteres UTF-8.
+#### 3.2.5.2 Provisão de 13º Salário
+* **3.2.5.2.1 —** O sistema deve calcular mensalmente a provisão de 13º Salário conforme RN-13, acumulando desde o mês de admissão e reiniciando em janeiro de cada ano.
 
-### 3.2.28 Histórico e Consulta de Processamentos
-Todos os seguintes requisitos se aplicam aos dados armazenados sobre as antigas transações do sistema:
-- 3.2.28.1 - O sistema deve eternizar os ciclos mensais no banco de dados, ignorando a possibilidade de eliminação automática por limite de tempo.
-- 3.2.28.2 - O sistema deve encapsular o retrato exato do trabalhador no instante em que o ciclo se encerrar para impedir que aumentos futuros distorçam as emissões antigas do documento.
-- 3.2.28.3 - O sistema deve filtrar o acesso dos meses arquivados habilitando a busca unificada por intermédio de datas (início e fim) ou focada num colaborador determinado.
+#### 3.2.5.3 Provisão de Férias e Adicional de ⅓
+* **3.2.5.3.1 —** O sistema deve calcular mensalmente a provisão de férias acrescida do adicional constitucional de ⅓ (CLT Art. 129 / CF Art. 7º, XVII), acumulando desde a data de admissão e reiniciando após 12 meses.
 
-### 3.2.29 Histórico de Ações do Administrador 
-Todos os seguintes requisitos se aplicam aos processos rastreáveis pela plataforma:
-- 3.2.29.1 - O sistema deve conter um histórico contendo todas as ações feitas pelo administrador.
-- 3.2.29.2 - O acesso ao histórico de ações do administrador é deve ser permitido apenas ao administrador.
-- 3.2.29.3 - O histórico de ações do administrador deve informar as seguintes informações:
-	- Alterações feitas nos cadastros dos usuários do sistema, ex: remoção de um antigo usuário ou a adição de um novo usuário;
-	- Alterações nas informações críticas da empresa, ex: mudança no endereço da empresa.
+#### 3.2.5.4 Relatório de Encargos e Provisões
+* **3.2.5.4.1 —** O sistema deve gerar, ao fechar a folha, um relatório consolidado contendo: por funcionário — FGTS do mês, Provisão 13º do mês, Provisão Férias + ⅓ do mês e acumulados no ano; e totais gerais da empresa.
+* **3.2.5.4.2 —** O relatório deve ser exportável em PDF.
 
-### 3.2.30 Quadro Consolidado de Regras de Negócio (RN)
-- 3.2.30.1 - O sistema deve manter e respeitar o quadro consolidado com todas as regras de negócio derivadas da legislação para viabilizar rastreabilidade e testes.
+### 3.2.6 Saídas e Auditoria
+#### 3.2.6.1 Holerite Individual
+* **3.2.6.1.1 —** O sistema deve gerar o holerite individual de cada funcionário para cada mês de competência processado, em conformidade com o Art. 464 da CLT. O holerite deve conter:
+	- **Cabeçalho:** Razão Social e CNPJ da empresa, Nome do funcionário, CPF mascarado, Cargo, Data de Admissão e Mês/Ano de competência.
+	- **Corpo:** Tabela de Proventos (código, descrição, referência/quantidade, valor) e Tabela de Descontos.
+	- **Rodapé:** Total Bruto de Proventos, Total de Descontos, Salário Líquido e linha de assinatura.
+- **3.2.6.1.2 —** O arquivo PDF gerado deve ter nomenclatura padronizada: `HOLERITE_[CPF-sem-formatacao]_[AAAAMM].pdf`.
+- **3.2.6.1.3 —** O sistema deve permitir a reimpressão/re-exportação do holerite de qualquer mês fechado, sem alterar nenhum dado.
+
+#### 3.2.6.2 Relatório de Resumo da Folha
+* **3.2.6.2.1 —** O sistema deve gerar, após o fechamento da folha, um relatório mensal contendo: Nome, Cargo, Salário Bruto, Total de Descontos, Salário Líquido e Status, com totais gerais ao final.
+* **3.2.6.2.2 —** O relatório deve ser exportável em PDF (layout formatado).
+
+#### 3.2.6.3 Exportação para Pagamento Bancário
+* **3.2.6.3.1 —** O sistema deve gerar um arquivo de remessa simplificado contendo: CPF, Nome, Banco, Agência, Conta e Valor Líquido, em formato PDF estruturado com codificação UTF-8.
+
+#### 3.2.6.4 Histórico e Consulta de Folhas Anteriores
+* **3.2.6.4.1 —** O sistema deve manter o histórico completo de todas as folhas processadas e fechadas, sem limite de período de retenção.
+* **3.2.6.4.2 —** Folhas fechadas devem ser acessíveis para consulta mesmo que cadastros ou salários tenham sido alterados posteriormente, pois os dados são gravados como snapshot imutável no momento do fechamento (nome, salário base e rubricas utilizadas são gravados junto à folha, não apenas referenciados).
+* **3.2.6.4.3 —** A consulta ao histórico deve permitir filtro por intervalo de competências (mês/ano inicial a mês/ano final) e por funcionário específico.
+
+#### 3.2.6.5 Log de Auditoria
+* **3.2.6.5.1 —** O sistema deve manter um log de auditoria imutável que registra todas as operações de escrita realizadas na aplicação.
+* **3.2.6.5.2 —** Cada entrada do log deve conter: ID sequencial, data e hora, usuário, tipo de operação (ex.: `CADASTRO_FUNCIONARIO`, `FECHAMENTO_FOLHA`, `ALTERACAO_SALARIO`), entidade afetada (tabela + ID do registro) e resumo da mudança (valor anterior e novo valor, quando aplicável).
+* **3.2.6.5.3 —** O log deve ser append-only: nenhum registro pode ser alterado ou excluído por nenhum usuário, incluindo o Administrador.
+* **3.2.6.5.4 —** O sistema deve disponibilizar tela de consulta ao log de auditoria (seção 3.1.12), acessível somente ao Administrador, com filtros por período, usuário e tipo de operação.
+
+### 3.2.7 Quadro Consolidado de Regras de Negócio (RN-01 a RN-15)
+
+| ID RN | Descrição Resumida                                                   | Base Legal                | Módulo |
+| ----- | -------------------------------------------------------------------- | ------------------------- | ------ |
+| RN-01 | Salário Base ≥ Piso Salarial Nacional (R$ 1.518,00 em 2025)          | Decreto 12.302/2024       | 3.2.1  |
+| RN-02 | Valor_Dia = Salário_Base ÷ Dias_Úteis_do_Mês                         | CLT Art. 64               | 3.2.2  |
+| RN-03 | Desconto por falta = Valor_Dia × Qtd_Dias (ou horas × Valor_Hora)    | CLT Art. 131              | 3.2.2  |
+| RN-04 | Desconto por atraso = Valor_Hora × (min ÷ 60); tolerância 10 min/dia | CLT Art. 58 §1º           | 3.2.2  |
+| RN-05 | DSR perdido por falta injustificada: 1 DSR por semana com falta      | Lei 605/1949              | 3.2.2  |
+| RN-06 | HE 50% = VH × 1,5 × h; HE 100% = VH × 2,0 × h                        | CLT Art. 59               | 3.2.2  |
+| RN-07 | Salário Proporcional = (Sal. Base ÷ Dias Úteis) × Dias Trabalhados   | CLT Art. 487              | 3.2.3  |
+| RN-08 | Salário Bruto = Sal. Base Prop. + HE + Bônus (incid.) + Cesta + PLR  | CLT Art. 457              | 3.2.3  |
+| RN-09 | INSS progressivo por faixa (tabela 2025); teto R$ 8.157,41           | Portaria MPS 2025         | 3.2.4  |
+| RN-10 | Salário Líquido ≥ R$ 0,00; desconto não pode superar proventos       | CLT Art. 462              | 3.2.4  |
+| RN-11 | Salário Líquido = Σ Proventos − Σ Descontos                          | CLT Art. 464              | 3.2.4  |
+| RN-12 | FGTS = Base_FGTS × 8%; encargo do empregador                         | Lei 8.036/90 Art. 15      | 3.2.5  |
+| RN-13 | Provisão 13º/mês = Salário_Base ÷ 12                                 | Lei 4.090/62              | 3.2.5  |
+| RN-14 | Provisão Férias/mês = (Sal. Base ÷ 12) × (4/3)                       | CLT Art. 129 / CF Art. 7º | 3.2.5  |
+| RN-15 | Folha fechada é imutável: nenhum dado pode ser alterado              | CLT Art. 464 / LGPD       | 3.2.6  |
+
 
 ## 3.3 Requisitos Não Funcionais
+### 3.3.1 Desempenho
+Os requisitos desta categoria estabelecem limites quantitativos para tempos de resposta e capacidade de processamento, medidos na configuração de hardware mínima especificada em 3.3.1.1.
 
-### Requisitos de Produto
-Especificam o comportamento do software em execução (desempenho, memória, confiabilidade, segurança e usabilidade).
+* **3.3.1.1 —** Configuração de hardware mínima de referência: processador dual-core 2,0 GHz (x64), 4 GB de RAM (2 GB disponíveis para a JVM), Windows 10 e disco SSD ou HDD de leitura sequencial ≥ 100 MB/s.
+* **3.3.1.2 —** O sistema deve processar a folha de pagamento completa:
+	- Até 50 funcionários ativos: no máximo **15 segundos**.
+	- De 51 a 200 funcionários: no máximo **45 segundos**.
+- **3.3.1.3 —** Operações de consulta e leitura devem retornar e renderizar a tela em no máximo **3 segundos**, com até 500 funcionários cadastrados.
+- **3.3.1.4 —** A geração e exportação do PDF de um holerite individual deve ser concluída em no máximo **5 segundos**.
+- **3.3.1.5 —** A inicialização da aplicação deve ocorrer em no máximo **8 segundos** na configuração de hardware de referência.
+- **3.3.1.6 —** O sistema deve suportar o cadastro de até 500 funcionários (ativos e inativos) e o armazenamento de até **60 meses** de histórico de folhas.
 
-#### 3.3.1 Requisitos de Eficiência (Desempenho e Espaço)
-- **[3.3.1.1]** O sistema deve tracionar os cálculos processando uma base de até 50 funcionários sob o limiar temporal máximo de 15 segundos.
-- **[3.3.1.2]** O sistema deve ampliar a janela limite, aceitando processar planilhas preenchidas por até 200 colaboradores em no máximo 45 segundos.
-- **[3.3.1.3]** O sistema deve entregar a listagem na tela após interações de consulta na margem fixa de 3 segundos (suportando teto de 500 registros ativos/inativos).	
-- **[3.3.1.4]** O sistema deve finalizar o tempo total da operação de fechamento e conversão isolada de um recibo PDF em até 5 segundos de espera na máquina de referência.
-- **[3.3.1.5]** O sistema deve inicializar na retaguarda o framework principal e acender na tela o dashboard em um teto restrito a 8 segundos.
-- **[3.3.1.6]** O sistema deve gerenciar uma arquitetura interna propícia para reter simultaneamente 500 perfis salvos e preservar um backlog com até 60 exercícios contábeis.
+|Operação|Limite Máximo|Condição de Medição|
+|---|---|---|
+|Processamento da folha — até 50 funcionários|15 s|Hardware de referência, carga normal|
+|Processamento da folha — 51 a 200 funcionários|45 s|Hardware de referência, carga normal|
+|Consultas e listagens|3 s|Base com até 500 funcionários|
+|Exportação de PDF (holerite individual)|5 s|Arquivo local, disco de referência|
+|Inicialização da aplicação|8 s|Após SO iniciado, hardware de referência|
 
-#### 3.3.2 Requisitos de Segurança 
-Todos os seguintes requisitos se aplicam à política de acesso e tratamento da sensibilidade das informações conforme a Lei Geral de Proteção de Dados:
-- **[3.3.2.1]** O sistema deve blindar a entrada demandando aprovação de senhas em todas as sessões e distribuir funções limitadas a partir da estirpe do perfil do operador.
-- **[3.3.2.2]** O sistema deve derrubar a sessão atual forçando novo reingresso em casos atípicos onde o ambiente permanecer paralisado por meia hora ininterrupta.
-- **[3.3.2.3]** O sistema deve aplicar o congelamento transitório impedindo a conta de submeter chaves por 5 minutos assim que a terceira rejeição seguida for detectada.
-- **[3.3.2.4]** O sistema deve cifrar integralmente o cofre das senhas usando tecnologia bcrypt aplicada sob nível modular 10.
-- **[3.3.2.5]** O sistema deve repelir botões ou e-mails de recuperação da chave, restando o "Reset" do administrador como único protocolo.
-- **[3.3.2.6]** O sistema deve proibir senhas inferiores a 8 dígitos, forçando mescla de letras e números.
-- **[3.3.2.7]** O sistema deve traçar resumos criptográficos na vertente da cadeia SHA-256 e agrupar com o saldo das quantias elaboradas ao selar as auditorias.
-- **[3.3.2.8]** O sistema deve mapear nos trilhos de rastreamento toda requisição de exportação originada da base de finanças alinhada ao relógio (data/hora).
-- **[3.3.2.9]** O sistema deve trabalhar encapsulado retendo no perímetro as tabelas sem escoar tráfego confidencial para provedores web espelhados ou bases externas.
-- **[3.3.2.10]** O sistema deve resguardar as pontes de comunicação do arquivo interno, desautorizando o trâmite em blocos literais.
-- **[3.3.2.11]** O sistema deve criar canal de rastreio em formato "apenas inserção", cimentando de modo imutável falhas contínuas de portas e acessos maliciosos.
+### 3.3.2 Segurança
+Os requisitos desta categoria protegem dados pessoais e salariais, classificados como dados sensíveis pela LGPD (Lei nº 13.709/2018).
 
-#### 3.3.3 Requisitos de Confiabilidade e Disponibilidade:
-Todos os seguintes requisitos se aplicam à robustez das regras, contorno dos imprevistos infraestruturais e integridade contábil das somatórias geradas:
-- **[3.3.3.1]** O sistema deve sustentar todo cálculo matemático com a precisão travada obrigatoriamente em duas dezenas para centavos.
-- **[3.3.3.2]** O sistema deve promover consistência assegurando cálculos de resultado idempotente caso não haja mudança manual de parâmetros da folha anterior ao novo fechamento.
-- **[3.3.3.3]** O sistema deve encapsular o giro de fechamento sobre trilhos da arquitetura transacional (ACID), estornando apenas o lote afetado caso trave a base de determinado trabalhador para não corromper o montante fechado de forma devida.       
-- **[3.3.3.4]** O sistema deve realizar uma verificação (scan) em todo o rol ativo paralisando os fechamentos em caso de anomalias detectadas no momento de partida.   
-- **[3.3.3.5]** O sistema deve estampar aviso indicativo caso os dados de conexão subjacentes se ausentem do radar provisório impossibilitando arranques manuais.
-- **[3.3.3.6]** O sistema deve estar liberado e sem engasgos nas rotinas do expediente comum.
-- **[3.3.3.7]** O sistema deve gerenciar ausências vitais emitindo pop-up de aguardo atrelado a 30 segundos de pausa assim que as conexões subjacentes que mantém a mesa rodando evaporarem, forçando o restabelecimento imediato.       
-- **[3.3.3.8]** O sistema deve identificar e dialogar abertamente quando a impressão local dos PDFs estagnar, ou os clusters acusarem exaustão de armazenamento, sem derrubar ou corromper subitamente as abas da plataforma ativa.
-- **[3.3.3.9]** O sistema deve precaver as manutenções ou perdas repentinas preservando a gaveta dos apontamentos mensais, resgatando a inserção em andamento do usuário no próximo retorno.
+#### 3.3.2.1 Autenticação e Controle de Acesso
+* **3.3.2.1.1 —** O sistema deve exigir autenticação por login e senha em toda sessão, com controle de acesso baseado em perfil (RBAC).
+* **3.3.2.1.2 —** Após 30 minutos de inatividade do usuário, a sessão deve ser encerrada automaticamente e a tela de Login reapresentada.
+* **3.3.2.1.3 —** Após 3 tentativas consecutivas de login com senha incorreta para o mesmo usuário, a conta deve ser bloqueada temporariamente por **5 minutos**. O bloqueio deve ser registrado no log de segurança com timestamp e nome do usuário.
 
-#### 3.3.4 Requisitos de Usabilidade 
-Todos os seguintes requisitos se aplicam aos padrões de interação simplificada aos usuários leigos e fluxos de interfaces contínuas:    
-- **[3.3.4.1]** O sistema deve proporcionar ambientação simples e indutiva propiciando a feitura veloz para operadores sem extensa curva teórica com teto referencial delimitado nas equipes avaliativas contendo 10 perfis a gerar.
-- **[3.3.4.2]** O sistema deve transcrever o teor das irregularidades e dos bugs contornados num idioma acessível dispensando blocos alfanuméricos provindos nas cadeias originais do Java (Exceptions).
-- **[3.3.4.3]** O sistema deve apresentar barricada secundária requisitando chancela por botão de "Confirmar" ou "Cancelar" nos gatilhos imutáveis como supressão e exclusão direta nas engrenagens e reset imposto de conta por autoridade do domínio master.
-- **[3.3.4.4]** O sistema deve garantir flexibilidade total amparando trocas do curso visual exclusivamente nas chaves contíguas originadas no periférico sem restrição compulsória às delimitações do mouse guiando-se pelas premissas tabulares contínuas do formulário nativo.
-- **[3.3.4.5]** O sistema deve sincronizar matrizes padronizadas nas abas distribuídas.
-- **[3.3.4.6]** O sistema deve estampar as credenciais que ditam a seção contínua atrelando o calendário vigente nos cabeçalhos universais ou alocações restritas nos rodapés.
-### Requisitos Organizacionais
-Derivados das políticas da organização, ambiente de operação e processos de desenvolvimento da equipe.
+#### 3.3.2.2 Armazenamento de Credenciais
+* **3.3.2.2.1 —** As senhas de todos os usuários devem ser armazenadas no banco de dados exclusivamente como hash bcrypt, com fator de custo mínimo de 10 (~100 ms de processamento por tentativa na configuração de referência).
+* **3.3.2.2.2 —** Nenhuma senha deve ser armazenada, transmitida ou exibida em texto plano em qualquer circunstância.
+* **3.3.2.2.3 —** O sistema não deve implementar funcionalidade de "recuperar senha" que exiba ou envie a senha atual — apenas redefinição com nova senha via Administrador.
+* **3.3.2.2.4 —** Novas senhas criadas devem atender: mínimo de 8 caracteres, ao menos uma letra maiúscula, ao menos uma letra minúscula e ao menos um dígito numérico.
 
-#### 3.3.5 Requisitos Operacionais 
-- **[3.3.5.1]** O sistema deve empacotar e gravar um clone espelho assinado da base terminada na máscara pré-configurada atrelado compulsória no segundo que precede o veredito final do mês.
-- **[3.3.5.2]** O sistema deve disparar alerta se o diretório configurado pelo backup não for localizado ou não exibir privilégios para liberação da escrita.
-- **[3.3.5.3]** O sistema deve restringir as revisões obrigatórias em programações alocadas exclusivamente na zona desocupada com antecedência obrigatória afixada em 24h.
-- **[3.3.5.4]** O sistema deve organizar a confecção orgânica nos históricos mantendo retenção dos registros de log pelo lapso dos últimos 30 dias (sfpclt-YYYY-MM-DD.log).
-- **[3.3.5.5]** O sistema deve exigir papéis administrativos exclusivamente no rito de instalação inaugural, abstendo essas cobranças na condução cotidiana.
+#### 3.3.2.3 Proteção de Dados Pessoais (LGPD)
+* **3.3.2.3.1 —** O sistema deve tratar dados pessoais e salariais conforme os princípios da LGPD (Lei nº 13.709/2018).
+* **3.3.2.3.2 —** Campos de CPF devem ser exibidos mascarados (`***.***.XXX-**`) em todas as telas de listagem e consulta. O CPF completo é visível somente nas telas de cadastro e edição individual.
+* **3.3.2.3.3 —** Dados de salário devem ser visíveis somente para usuários autenticados com perfil autorizado.
+* **3.3.2.3.4 —** O sistema deve registrar em log de auditoria toda exportação de dados (PDF), identificando o usuário, data, hora e tipo de exportação.
+* **3.3.2.3.5 —** O sistema não deve transmitir dados de funcionários para qualquer servidor externo.
 
-#### 3.3.6 Requisitos de Desenvolvimento (Manutenibilidade)
-Todos os seguintes requisitos se aplicam às boas práticas de arquitetura exigidas na construção técnica:
-- **[3.3.6.1]** O sistema deve separar as responsabilidades programáticas nos blocos obrigatórios conhecidos como Apresentação (View), Negócio (Service) e Persistência (Repository/DAO).
-- **[3.3.6.2]** O sistema deve abstrair bases sensíveis ao calendário governamental, viabilizando atualização anual via operação direta sem necessidade de recompilação.
-- **[3.3.6.3]** O sistema deve englobar pilhas operacionais prontas com testes integráveis baseados nas ferramentas (Gradle/Maven).
-- **[3.3.6.5]** O sistema deve exibir falhas primárias nas mensagens agrupadas com trilhas rastreadas via classe base sob subscrições apontadas (StackTrace).
-- **[3.3.6.6]** O sistema deve segmentar suas partes nas rotinas sobre domínios desacoplados e apartados funcionalmente.
-- **[3.3.6.7]** O sistema deve englobar manuais restritos detalhados descrevendo sua arquitetura distribuída.
+#### 3.3.2.4 Comunicação e Armazenamento Seguro
+* **3.3.2.4.1 —** A comunicação entre a aplicação desktop e o banco de dados deve ser em rede local.
+* **3.3.2.4.2 —** Strings de conexão com o banco de dados não devem ser armazenadas em texto plano em arquivos de configuração.
+* **3.3.2.4.3 —** Arquivos de backup gerados pelo sistema devem ser armazenados em diretório com permissões restritas ao usuário do sistema operacional que executa a aplicação.
 
-#### 3.3.7 Requisitos Ambientais (Portabilidade e Ecossistema):
-Todos os seguintes requisitos se aplicam à pluralidade e conformação com infraestruturas em ambientes heterogêneos de mercado:
-- **[3.3.7.1]** O sistema deve ancorar as execuções com dependência atrelada ao núcleo JVM 11+ para Windows 10/11, Ubuntu Linux 20/22.04 e macOS 12+ (Intel/M-series).
-- **[3.3.7.3]** O sistema deve acoplar a matriz de compilações atrelando dependências na linha Jpackage sem obrigar download periférico via pacotes avulsos nos formatos .msi/.exe, debian/redhat ou .dmg.
-- **[3.3.7.4]** O sistema deve possuir todo repertório redacional ajustado nos dicionários normatizados para o idioma português do Brasil (pt-BR).
-- **[3.3.7.5]** O sistema deve conferir garantia no resultado gráfico compatibilizando espelhos nos suítes LibreOffice/Excel ou provedores Adobe DC.
+#### 3.3.2.5 Registro de Segurança 
+* **3.3.2.5.1 —** O sistema deve manter um log de segurança separado do log de auditoria funcional, registrando: login bem-sucedido ou falho, bloqueio de conta, encerramento de sessão e redefinição de senha.
+* **3.3.2.5.2 —** Cada entrada deve conter: timestamp (data e hora), tipo de evento, nome de usuário informado e identificador da estação de trabalho (endereço IP local).
+* **3.3.2.5.3 —** O log de segurança deve ser somente-inserção (append-only), sem interface de exclusão disponível para nenhum perfil.
 
-### Requisitos Externos
-Abrangem fatores externos ao sistema, como legislação (CLT, LGPD), ética e regulamentações contábeis.
+### 3.3.3 Confiabilidade
+Os requisitos desta categoria garantem que o sistema produza resultados corretos, consistentes e recuperáveis.
 
-#### 3.3.8 Requisitos Legislativos e Contábeis (Conformidade Legal)
-Todos os seguintes requisitos se aplicam ao embasamento de regras judiciais no processamento interno:
-- **[3.3.8.1]** O sistema deve transcrever e seguir sem oscilação todas as taxas e margens aprovadas na competência real que transita o evento.
-- **[3.3.8.2]** O sistema deve manter intocada qualquer alavanca de reajuste nas apurações saldadas preteritamente, bloqueando manipulações sob balanças contábeis retroativas.
-- **[3.3.8.3]** O sistema deve estampar nos contracheques originais expedidos estritamente todos os regimentos dispostos no Artigo 464 da CLT.
-- **[3.3.8.4]** O sistema deve eternizar os repositórios finalizados e lacrados pelo curso limite travado em quinquênio (5 anos) visando conformidade irrestrita.
-- **[3.3.8.5]** O sistema deve possibilitar readequações provindas via legislação nacional publicizada na margem contínua transcorrida por cinco dias limitados desde sua efetiva ratificação.
-- **[3.3.8.6]** O sistema deve apontar na grade de encerramento um sinalizador inconfundível apontando a tabela mestre escolhida na formulação total da remuneração atual.
+* **3.3.3.1 —** Todos os cálculos monetários devem ser realizados internamente com tipo `java.math.BigDecimal`, escala mínima de 4 dígitos, arredondamento `RoundingMode.HALF_UP`. O uso de `double`, `float` ou `int` para valores monetários é proibido.
+* **3.3.3.2 —** O resultado do processamento da folha deve ser idempotente: processar a mesma folha duas vezes com os mesmos dados deve produzir exatamente o mesmo resultado.
+* **3.3.3.3 —** O sistema deve utilizar transações de banco de dados com propriedades ACID para todas as operações de escrita relacionadas ao processamento da folha. Em caso de erro, executar rollback completo dos dados desse funcionário sem afetar os demais.
+* **3.3.3.4 —** Ao final de cada processamento, o sistema deve exibir relatório de resultado discriminando: funcionários processados com sucesso, funcionários com erro (com descrição do motivo) e funcionários não processados.
+* **3.3.3.5 —** O sistema deve validar a integridade dos dados antes de iniciar o processamento, listando todos os problemas em tela de pré-validação e impedindo o processamento até que sejam corrigidos.
+* **3.3.3.6 —** O sistema deve gerar automaticamente um **backup** do banco de dados antes de alterar o status da folha para "Fechada". O arquivo deve seguir a nomenclatura: `SFPCLT_BACKUP_[AAAAMM]_[YYYYMMDD_HHMMSS].sql`. O sistema deve alertar caso o diretório configurado não exista ou não possua permissão de escrita.
+* **3.3.3.7 —** O sistema deve detectar e tratar as seguintes condições de erro de infraestrutura com mensagem clara ao usuário:
+	- Perda de conexão com o banco de dados durante operação: exibir mensagem, aguardar 30 segundos e tentar reconexão automática.
+	- Falta de espaço em disco durante exportação de PDF: exibir mensagem com o caminho de destino.
+	- Falha de impressora durante impressão: exibir mensagem com opção de tentar novamente ou cancelar, sem travar a aplicação.
+* **3.3.3.8 —** Toda operação de fechamento de folha deve ser registrada em log de auditoria com: data/hora de conclusão, usuário responsável, quantidade de funcionários processados e hash SHA-256 do arquivo de backup gerado.
+* **3.3.3.9 —** Em caso de encerramento inesperado da aplicação, os dados de lançamentos em andamento devem ser preservados, com notificação ao usuário no próximo acesso.
 
-#### 3.3.9 Requisitos Éticos e de Privacidade
-- **[3.3.2.7]** O sistema deve estampar os documentos expostos encriptando o miolo do registro de Cadastro Físico (**_._**.XXX-XX), em conformidade com o tratamento de dados sensíveis
+### 3.3.4 Usabilidade
+* **3.3.4.1 —** Um usuário recém-treinado deve ser capaz de executar o ciclo completo de fechamento de uma folha de 10 funcionários em até 20 minutos, sem auxílio e sem cometer erros irreversíveis.
+* **3.3.4.2 —** Mensagens de erro devem ser exibidas próximas ao campo inválido, em linguagem clara, sem termos técnicos ou códigos de exceção Java.
+* **3.3.4.3 —** Operações destrutivas ou irreversíveis devem sempre ser precedidas de diálogo de confirmação modal (ex.: fechamento de folha, exclusão de lançamento, redefinição de senha).
+* **3.3.4.4 —** O sistema deve suportar navegação completa por teclado em todos os formulários (Tab, Enter, Esc, setas), em conformidade com WCAG 2.1 nível A.
+* **3.3.4.5 —** O sistema deve manter consistência visual e comportamental em toda a aplicação: mesmos padrões de cores para status idênticos em todas as telas.
+* **3.3.4.6 —** O sistema deve exibir no cabeçalho de cada tela: nome do usuário logado, perfil de acesso ativo e mês de competência corrente.
+
+### 3.3.5 Disponibilidade
+* **3.3.5.1 —** O sistema deve estar operacional durante todo o horário de expediente da empresa, com tempo de inatividade não planejado inferior a **~171 minutos/mês** (meta de 99,0% de disponibilidade na janela de 286 h/mês).
+* **3.3.5.2 —** Manutenções programadas devem ser comunicadas aos usuários com antecedência de **24 horas** e agendadas preferencialmente fora do horário de expediente.
+* **3.3.5.3 —** Em caso de indisponibilidade do banco de dados, o sistema deve exibir mensagem de erro clara indicando que o banco está inacessível.
+
+### 3.3.6 Manutenibilidade
+* **3.3.6.1 —** O sistema deve separar as responsabilidades em três camadas obrigatórias: Apresentação (View/Swing), Negócio (Service) e Persistência (Repository/DAO).
+* **3.3.6.2 —** O sistema deve abstrair parâmetros sensíveis ao calendário governamental (tabelas INSS, salário mínimo, FGTS), viabilizando atualização anual sem recompilação.
+* **3.3.6.3 —** O projeto deve incluir suíte de testes automatizados integrável via Maven ou Gradle.
+* **3.3.6.4 —** O sistema deve registrar erros no log de aplicação com stack trace completo (`java.util.logging` ou equivalente).
+* **3.3.6.5 —** O código deve estar organizado em pacotes desacoplados por domínio funcional (ex.: `br.com.sfpclt.funcionario`, `br.com.sfpclt.folha`, `br.com.sfpclt.auditoria`).
+
+### 3.3.7 Portabilidade
+* **3.3.7.1 —** O sistema deve executar sobre JVM 11+ nos seguintes sistemas operacionais: Windows 10/11, Ubuntu Linux 20.04/22.04 e macOS 12+ (Intel e M-series).
+* **3.3.7.2 —** O sistema deve ser distribuído com empacotador nativo (`jpackage`) nos formatos `.msi`/`.exe` (Windows), `.deb`/`.rpm` (Linux) e `.dmg` (macOS), sem exigir download avulso de dependências.
+* **3.3.7.3 —** Toda a interface e mensagens devem estar em português do Brasil (pt-BR).
+* **3.3.7.4 —** O PDF de holerite gerado deve ser compatível com LibreOffice Calc/Writer, Microsoft Excel e Adobe Acrobat Reader.
+
+### 3.3.8 Conformidade Legal e Regulatória
+* **3.3.8.1 —** O sistema deve aplicar somente as alíquotas e tabelas aprovadas para a competência real em processamento.
+* **3.3.8.2 —** O sistema deve manter inalteradas as apurações de meses já encerrados, bloqueando qualquer manipulação retroativa.
+* **3.3.8.3 —** O holerite deve conter todas as informações exigidas pelo Art. 464 da CLT.
+* **3.3.8.4 —** Folhas encerradas devem ser retidas por no mínimo 5 anos, em conformidade com o prazo prescricional trabalhista.
+* **3.3.8.5 —** O sistema deve possibilitar a atualização de parâmetros legais em até 5 dias úteis após publicação oficial da nova legislação.
+* **3.3.8.6 —** O relatório de fechamento deve indicar claramente qual tabela de parâmetros legais foi utilizada nos cálculos.
+
+### 3.3.9 Privacidade
+* **3.3.9.1 —** O sistema deve exibir o CPF do funcionário mascarado (`***.XXX.XXX-**`) em todos os documentos e telas de listagem, em conformidade com a LGPD.
 
 ## 3.4 Requisitos de Dados
-
 ### 3.4.1 Modelo de Dados
-Todos os seguintes requisitos se aplicam ao conjunto e arquitetura transacional que salva o estado da plataforma:
-- 3.4.1.1 - O sistema deve englobar motores baseados no rito relacional (MySQL/MariaDB) que amparam blocos textuais extensos para estocar de forma perpétua as instâncias primárias.
-- 3.4.1.2 - O sistema deve estruturar a malha definindo domínios restritos à matriz de Pessoal ("Funcionários").
-- 3.4.1.3 - O sistema deve dispor das referências contratuais atreladas em tabela atípica de ("Salários") compondo cronologias isoladas sob versão atrelada à subidas no cargo.
-- 3.4.1.4 - O sistema deve prever alocações rotativas destinadas na grade das incidências das métricas apontadas mensalmente via tabela nomeada em ("Lançamentos").
-- 3.4.1.5 - O sistema deve reservar os reflexos imutáveis mensais atrelados ao final em depósitos sob o nome ("Holerites").
-- 3.4.1.6 - O sistema deve reter a governança contendo todas as alocações da entrada dos credenciados junto dos papéis concedidos retidos nas abas atreladas a ("Usuários").
+* **3.4.1.1 —** O sistema deve utilizar banco de dados relacional (MySQL ou MariaDB) para armazenamento persistente.
+* **3.4.1.2 —** O esquema de dados deve compreender, no mínimo, as seguintes entidades: `Empresa`, `ParametrosLegais`, `Usuario`, `Funcionario`, `HistoricoSalarial`, `Rubrica`, `FolhaPagamento`, `LancamentoExcecao`, `Holerite`, `RelatorioMensal` e `Auditoria`.
+* **3.4.1.3 —** O sistema deve armazenar o histórico completo de alterações salariais e promoções de cada funcionário.
+* **3.4.1.4 —** A tabela de lançamentos de exceção deve ser vinculada à competência corrente e ao funcionário, tornando-se somente leitura após o fechamento.
+* **3.4.1.5 —** A tabela de holerites deve armazenar os reflexos imutáveis mensais como snapshot, não como referências mutáveis a outras tabelas.
 
 ### 3.4.2 Integridade e Segurança de Dados
-Todos os seguintes requisitos se aplicam à sustentabilidade primária visando proteção sob ataque contínuo e danos ao arquivo físico:
-- 3.4.2.1 - O sistema deve estipular regras no domínio de persistência coibindo falhas nos registros (chaves estrangeiras estritas para não fragmentar as entidades filhas ou perdas de arquivos sem encadeamento retroativo associado).
-- 3.4.2.2 - O sistema deve agrupar protocolos paralelos executáveis engajando coletas diárias copiando as estruturas de segurança para precaver esvaziamento total.
-- 3.4.2.3 - O sistema deve criptografar os conteúdos expostos a sigilo e reserva de lei, disfarçando de modo integral bases indexáveis que identificam o alvo salarial isolado assim como seu CPF nativo gravado perante o SGBD mantenedor do banco relacional.
+* **3.4.2.1 —** O sistema deve garantir integridade referencial dos dados, assegurando que registros históricos ou dependentes (holerites, lançamentos) não sejam perdidos ou corrompidos caso um funcionário seja inativado.
+* **3.4.2.2 —** O sistema deve suportar rotina de backup diário automático para prevenção de perda de dados.
+* **3.4.2.3 —** O sistema deve criptografar, no banco de dados, campos sensíveis identificáveis individualmente, como CPF e dados bancários.
 
-# 4. Apêndices 
+# 4. Apêndices
+
+## 4.1 Tabela de Rubricas Padrão
+
+|Código|Descrição|Natureza|Tipo|Incide INSS|Incide FGTS|Observação|
+|---|---|---|---|---|---|---|
+|001|Salário Base|Provento|Fixo|Sim|Sim|Obrigatória — não editável|
+|002|Hora Extra 50%|Provento|Variável|Sim|Sim|Obrigatória — não editável|
+|003|Hora Extra 100%|Provento|Variável|Sim|Sim|Obrigatória — não editável|
+|004|Bônus / Gratificação|Provento|Variável|Sim|Sim|Obrigatória — não editável|
+|005|Cesta Básica|Provento|Fixo|Não|Não|Obrigatória — não editável|
+|006|PLR|Provento|Variável|Não|Não|Conf. Lei 10.101/2000|
+|007|Adiantamento Salarial|Desconto|Variável|Não|Não|—|
+|008|Outros Descontos|Desconto|Variável|Não|Não|—|
+|101|Desconto INSS|Desconto|Fixo|—|—|Calculado automaticamente|
+|102|Desconto por Falta|Desconto|Variável|Não|Não|—|
+|103|Desconto por Atraso|Desconto|Variável|Não|Não|—|
+|104|Desconto DSR|Desconto|Variável|Não|Não|Vinculado às faltas|
+|105|Desconto Atestado|Desconto|Variável|Não|Não|Zerado pelo atestado|
+|106|Outros Descontos|Desconto|Variável|Não|Não|—|
+
+---
+
+## 4.2 Modelos de Fórmulas de Cálculo
+
+### 4.2.1 Apuração de Frequência
+
+|||
+|---|---|
+|📐 **F-01 — Valor-Dia [RN-02]** Valor_Dia = Salário_Base ÷ Dias_Úteis_do_Mês|📐 **F-02 — Valor-Hora** Valor_Hora = Salário_Base ÷ Horas_Mensais_Contratuais|
+
+|||
+|---|---|
+|📐 **F-03 — Desconto por Falta [RN-03]** Desconto_Dia = Valor_Dia × Nº_Dias_Faltados Desconto_Hora = Valor_Hora × Nº_Horas_Faltadas|📐 **F-04 — Desconto por Atraso [RN-04]** Desconto_Atraso = Valor_Hora × (Minutos ÷ 60) Tolerância: atrasos ≤ 10 min/dia não geram desconto|
+
+||
+|---|
+|📐 **F-05 — DSR Perdido [RN-05]** Desconto_DSR = Valor_Dia × Nº_Semanas_com_Falta|
+
+||
+|---|
+|📐 **F-06 — Hora Extra [RN-06]** HE_50% = Valor_Hora × 1,50 × Qtd_Horas HE_100% = Valor_Hora × 2,00 × Qtd_Horas|
+
+### 4.2.2 Composição do Salário
+
+||
+|---|
+|📐 **F-07 — Salário Proporcional [RN-07]** Salário_Proporcional = (Salário_Base ÷ Dias_Úteis) × Dias_Trabalhados Exemplo: Admissão em 10/03 \| Dias úteis = 21 \| Dias trabalhados = 16 Salário_Proporcional = (4.400,00 ÷ 21) × 16 = R$ 3.352,38|
+
+||
+|---|
+|📐 **F-08 — Salário Bruto [RN-08]** Salário_Bruto = Salário_Base_Prop. + Total_Horas_Extras + Total_Bônus_com_Incidência + Cesta_Básica (NÃO incide INSS/FGTS) + PLR (NÃO incide INSS/FGTS) Base_INSS_FGTS = Sal.Base_Prop. + HE + Bônus_com_Incidência|
+
+||
+|---|
+|📐 **F-09 — Salário Líquido [RN-11]** Salário_Líquido = Σ Proventos − Σ Descontos Σ Proventos = Sal.Base_Prop. + HE + Bônus + Cesta + PLR + DSR Σ Descontos = INSS + Faltas + Atrasos + DSR_Perdido + Outros Restrição legal: Salário_Líquido ≥ R$ 0,00 (CLT Art. 462 [RN-10])|
+
+### 4.2.3 Desconto de INSS — Tabela Progressiva 2025
+
+|Faixa|De (R$)|Até (R$)|Alíquota|Observação|
+|---|---|---|---|---|
+|1ª|0,01|1.518,00|7,5%|—|
+|2ª|1.518,01|2.793,88|9,0%|—|
+|3ª|2.793,89|4.190,83|12,0%|—|
+|4ª|4.190,84|8.157,41|14,0%|—|
+|Teto|8.157,42|—|—|Contribui até o limite de R$ 8.157,41|
+
+||
+|---|
+|✅ **Cálculo INSS progressivo — Base de cálculo R$ 5.000,00** 1ª faixa: R$ 1.518,00 × 7,5% = R$ 113,85 2ª faixa: R$ 1.275,88 × 9,0% = R$ 114,83 3ª faixa: R$ 1.396,95 × 12,0% = R$ 167,63 4ª faixa: R$ 809,17 × 14,0% = R$ 113,28 ───────────────────────────── TOTAL INSS = R$ 509,59 \| Alíquota efetiva: 10,19%|
+
+### 4.2.4 Encargos e Provisões do Empregador
+
+||
+|---|
+|📐 **F-10 — FGTS Mensal [RN-12]** FGTS_Mensal = Base_FGTS × 8% Exemplo: Base FGTS = R$ 3.500,00 FGTS_Mensal = 3.500,00 × 0,08 = R$ 280,00 Obs.: encargo do empregador; NÃO é deduzido do salário do funcionário.|
+
+||
+|---|
+|📐 **F-11 — Provisão Mensal de 13º Salário [RN-13]** Provisão_13_Mês = Salário_Base ÷ 12 Provisão_13_Acumulada = Σ Provisão_13_Mês (janeiro a dezembro) Exemplo: Salário Base = R$ 3.600,00 Provisão_13_Mês = 3.600,00 ÷ 12 = R$ 300,00|
+
+||
+|---|
+|📐 **F-12 — Provisão Mensal de Férias + ⅓ Constitucional [RN-14]** Provisão_Férias_Mês = (Salário_Base ÷ 12) × (4 ÷ 3) Férias_Mês = Salário_Base ÷ 12; Adicional_⅓ = Férias_Mês ÷ 3 Exemplo: Salário Base = R$ 3.600,00 Férias_Mês = R$ 300,00 + Adicional = R$ 100,00 Provisão = R$ 400,00/mês|
+
+---
+
+## 4.3 Glossário Expandido
+
+|Termo / Sigla|Definição|Base Legal / Ref.|
+|---|---|---|
+|Competência|Mês e ano de referência da folha de pagamento.|—|
+|Folha Aberta|Folha do mês corrente cujos lançamentos ainda podem ser editados.|—|
+|Folha Fechada|Folha encerrada e imutável após o fechamento.|CLT Art. 464|
+|Snapshot|Cópia imutável dos dados da folha gravada no fechamento.|—|
+|Admissão Proporcional|Cálculo do salário do mês de entrada, proporcional aos dias trabalhados.|CLT Art. 487|
+|DSR|Descanso Semanal Remunerado. Um dia de descanso por semana pago.|Lei 605/1949|
+|INSS|Instituto Nacional do Seguro Social. Contribuição previdenciária.|Lei 8.212/91|
+|IRRF|Imposto de Renda Retido na Fonte. Fora do escopo do MVP.|Lei 7.713/88|
+|PLR / PRL|Participação nos Lucros e Resultados. Não integra base de encargos.|Lei 10.101/2000|
+|13º Salário|Gratificação natalina obrigatória, paga em novembro e dezembro.|Lei 4.090/1962|
+|Férias + 1/3|30 dias de férias anuais acrescidas de 1/3 de adicional constitucional.|CLT Art. 129 / CF Art. 7º|
+|FGTS|Fundo de Garantia do Tempo de Serviço. Depósito mensal de 8%.|Lei 8.036/1990|
+|Valor-Dia|Salário Base dividido pelo número de dias úteis do mês.|CLT Art. 64|
+|Valor-Hora|Salário Base dividido pelas horas mensais contratuais (padrão 220h).|CLT Art. 58|
+|ACID|Atomicidade, Consistência, Isolamento e Durabilidade (transações de BD).|—|
+|RBAC|Role-Based Access Control. Controle de acesso baseado em perfil.|—|
+|JVM|Java Virtual Machine. Ambiente de execução Java (versão 11+).|—|
+|LGPD|Lei Geral de Proteção de Dados Pessoais.|Lei 13.709/2018|
+|BigDecimal|Tipo Java de precisão arbitrária para cálculos monetários.|—|
+|bcrypt|Algoritmo de hash de senha com custo configurável (mínimo 10).|OWASP / RNF 3.3.2|
+
+---
+
+## 4.4 Matriz de Rastreabilidade — Requisitos × Módulos × Telas
+
+|Req. Funcional|Módulo|Tela GUI|Casos de Uso|Regras de Negócio|
+|---|---|---|---|---|
+|3.2.1.1 — Cadastro da Empresa|Cadastros|3.1.5|UC-02, UC-03|—|
+|3.2.1.2 — Cadastro de Funcionários|Cadastros|3.1.4|UC-06, UC-07|RN-01|
+|3.2.1.3 — Cadastro de Rubricas|Cadastros|3.1.6|UC-08|—|
+|3.2.1.4 — Usuários do Sistema|Cadastros|3.1.11|UC-04, UC-05|—|
+|3.2.1.5 — Parâmetros Legais|Cadastros / Config.|3.1.5|UC-17|—|
+|3.2.2 — Apuração de Frequência|Exceções Mensais|3.1.7|UC-09|RN-02 a RN-06|
+|3.2.3 — Proventos|Processamento|3.1.8|UC-10|RN-07, RN-08|
+|3.2.4 — Descontos|Processamento|3.1.8|UC-10|RN-09, RN-10, RN-11|
+|3.2.5 — Encargos / Provisões|Processamento|3.1.8 (relatório)|UC-11|RN-12, RN-13, RN-14|
+|3.2.6.1 — Holerite|Saídas|3.1.9|UC-12, UC-13|RN-15|
+|3.2.6.2/.3 — Relatórios|Saídas|3.1.9|UC-14|—|
+|3.2.6.4 — Histórico|Auditoria/Saídas|3.1.10|UC-15|RN-15|
+|3.2.6.5 — Log de Auditoria|Auditoria|3.1.12|UC-16|—|
+
+---
+
+## 4.5 Tabela Consolidada de Regras de Negócio (RN-01 a RN-15)
+
+|ID|Descrição|Fórmula / Critério|Base Legal|
+|---|---|---|---|
+|RN-01|Piso salarial|Salário Base ≥ R$ 1.518,00 (2025)|Decreto 12.302/2024|
+|RN-02|Valor-Dia|Salário Base ÷ Dias Úteis|CLT Art. 64|
+|RN-03|Desconto por Falta|Valor_Dia × Quantidade de Dias|CLT Art. 131|
+|RN-04|Desconto por Atraso|Valor_Hora × (min ÷ 60); tolerância 10 min|CLT Art. 58 §1º|
+|RN-05|DSR perdido|Valor_Dia × Nº de semanas com falta|Lei 605/1949|
+|RN-06|Hora extra 50% / 100%|VH × 1,5 × h / VH × 2,0 × h|CLT Art. 59|
+|RN-07|Salário proporcional|(Salário Base ÷ Dias Úteis) × Dias Trabalhados|CLT Art. 487|
+|RN-08|Salário Bruto|Soma dos proventos com incidência|CLT Art. 457|
+|RN-09|INSS progressivo|Tabela 2025 (teto R$ 8.157,41)|Portaria MPS 2025|
+|RN-10|Salário Líquido ≥ R$ 0,00|Soma dos proventos ≥ soma dos descontos|CLT Art. 462|
+|RN-11|Salário Líquido|Soma dos proventos − soma dos descontos|CLT Art. 464|
+|RN-12|FGTS Mensal|Base_FGTS × 8%|Lei 8.036/90 Art. 15|
+|RN-13|Provisão 13º salário / mês|Salário Base ÷ 12|Lei 4.090/1962|
+|RN-14|Provisão Férias + 1/3 / mês|(Salário Base ÷ 12) × (4/3)|CLT Art. 129 / CF Art. 7º|
+|RN-15|Folha fechada imutável|Constraint no BD + regra de negócio|CLT Art. 464 / LGPD|
+
+---
+
+# 5. Índice
+1. Introdução
+    - 1.1 Propósito do Documento de Requisitos
+    - 1.2 Escopo do Produto
+    - 1.3 Definições, Acrônimos e Abreviações
+    - 1.4 Referências
+    - 1.5 Estruturação do Documento de Requisitos
+2. Descrição Geral
+    - 2.1 Perspectiva do Produto
+    - 2.2 Funcionalidades do Produto
+    - 2.3 Características do Usuário
+    - 2.4 Restrições Gerais
+    - 2.5 Suposições e Dependências
+3. Requisitos Específicos
+    - 3.1 Requisitos de Interface com o Usuário (GUI)
+        - 3.1.1 Padrões Gerais da Interface
+        - 3.1.2 Tela de Login e Autenticação
+        - 3.1.3 Menu Principal e Navegação (Dashboard)
+        - 3.1.4 Tela de Gerenciamento de Funcionários
+        - 3.1.5 Tela de Cadastro da Empresa
+        - 3.1.6 Tela de Gerenciamento de Rubricas 
+        - 3.1.7 Tela de Lançamentos de Exceção Mensais
+        - 3.1.8 Tela de Processamento e Fechamento da Folha
+        - 3.1.9 Tela de Visualização e Emissão de Holerite
+        - 3.1.10 Tela de Histórico de Folhas de Pagamento
+        - 3.1.11 Tela de Gerenciamento de Usuários do Sistema 
+        - 3.1.12 Tela de Log de Auditoria
+    - 3.2 Requisitos Funcionais
+        - 3.2.1 Cadastros e Configurações
+            - 3.2.1.1 Cadastro da Empresa
+            - 3.2.1.2 Cadastro de Funcionários
+            - 3.2.1.3 Cadastro de Rubricas
+            - 3.2.1.4 Cadastro de Usuários do Sistema
+            - 3.2.1.5 Atualização de Parâmetros Legais
+        - 3.2.2 Apuração de Frequência
+            - 3.2.2.1 Calendário e Dias Úteis
+            - 3.2.2.2 Registro de Faltas Injustificadas
+            - 3.2.2.3 Registro de Atrasos
+            - 3.2.2.4 Descanso Semanal Remunerado (DSR)
+            - 3.2.2.5 Registro de Atestados Médicos
+            - 3.2.2.6 Registro de Horas Extras
+        - 3.2.3 Processamento de Proventos
+            - 3.2.3.1 Salário Base e Proporcionalidade
+            - 3.2.3.2 Horas Extras — Processamento
+            - 3.2.3.3 Bônus e Gratificações
+            - 3.2.3.4 Cesta Básica
+            - 3.2.3.5 Participação nos Lucros e Resultados (PLR)
+            - 3.2.3.6 Composição do Salário Bruto
+        - 3.2.4 Processamento de Descontos
+        - 3.2.5 Encargos e Provisões do Empregador
+        - 3.2.6 Saídas e Auditoria
+        - 3.2.7 Quadro Consolidado de Regras de Negócio (RN-01 a RN-15)
+    - 3.3 Requisitos Não Funcionais
+        - 3.3.1 Desempenho
+        - 3.3.2 Segurança
+        - 3.3.3 Confiabilidade
+        - 3.3.4 Usabilidade
+        - 3.3.5 Disponibilidade
+        - 3.3.6 Manutenibilidade
+        - 3.3.7 Portabilidade
+        - 3.3.8 Conformidade Legal e Regulatória
+        - 3.3.9 Privacidade
+    - 3.4 Requisitos de Dados
+        - 3.4.1 Modelo de Dados
+        - 3.4.2 Integridade e Segurança de Dados
+4. Apêndices
+    - 4.1 Tabela de Rubricas Padrão
+    - 4.2 Modelos de Fórmulas de Cálculo
+        - 4.2.1 Apuração de Frequência
+        - 4.2.2 Composição do Salário
+        - 4.2.3 Desconto de INSS — Tabela Progressiva 2025
+        - 4.2.4 Encargos e Provisões do Empregador
+    - 4.3 Glossário Expandido
+    - 4.4 Matriz de Rastreabilidade — Requisitos × Módulos × Telas × Casos de Uso
+    - 4.5 Tabela Consolidada de Regras de Negócio (RN-01 a RN-15)
+5. Índice
