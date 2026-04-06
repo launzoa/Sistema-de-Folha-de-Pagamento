@@ -4,7 +4,7 @@
 | **Ação do Ator**    | **Resposta do Sistema**         |
 | ------------------------ | -------------------------------   |
 |1. Inicia quando o administrador precisa atualizar um parâmetro legal.||
-|2. Acessa o sistema efet uando seu login e acessa o módulo de cadastro da empresa.||
+|2. Acessa o sistema efetuando seu login e acessa o módulo de cadastro da empresa.||
 ||3. Verifica se o usuáro se trata de um administrador para poder realizar alterações de parâmetros legais. Exibe os parâmentros atuais usados.|
 |4. Altera os parâmetros conforme desejado.||
 |5. Salva as alterações.||
