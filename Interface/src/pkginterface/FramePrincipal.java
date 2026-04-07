@@ -2,24 +2,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package gui;
+package pkginterface;
 
 /**
  *
- * @author manoe
+ * @author igor.nogueira_unesp
  */
 public class FramePrincipal extends javax.swing.JFrame {
 
     /**
-     * Creates new form Frame_login
+     * Creates new form FramePrincipal
      */
     public FramePrincipal() {
         initComponents();
-        
+        Login panel = new Login();
         setTitle("SFP-CLT");
         setLocationRelativeTo(null);
 
-        Panel_login panel = new Panel_login();
+   
         setContentPane(panel);
     }
 
