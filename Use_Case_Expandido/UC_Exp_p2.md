@@ -3,9 +3,9 @@
 
 | **Ação do Ator**    | **Resposta do Sistema**         |
 | ------------------------ | -------------------------------   |
-|1. Inicia quando o administrador precisa atualizar um parâmetro legal.||
+|1. Inicia quando o usuário precisa atualizar um parâmetro legal.||
 |2. Acessa o sistema efetuando seu login e acessa o módulo de cadastro da empresa.||
-||3. Verifica se o usuáro se trata de um administrador para poder realizar alterações de parâmetros legais. Exibe os parâmentros atuais usados.|
+||3. Verifica se o usuáro possui as credenciais para poder realizar alterações de parâmetros legais. Exibe os parâmentros atuais usados.|
 |4. Altera os parâmetros conforme desejado.||
 |5. Salva as alterações.||
 ||6. Exibe uma mensagem pedindo confirmação.|
@@ -157,7 +157,7 @@
 | **Ação do Ator**    | **Resposta do Sistema**         |
 | ------------------------ | -------------------------------   |
 |1. Inicia acessando o módulo de cadastro e posteriormente o cadastro de rubricas.||
-||2. Verifica se o usuário tem o perfil do administrador para manipular as rubricas.|
+||2. Verifica se o usuário tem as credenciais para manipular as rubricas.|
 ||3.  Exibe a lista de rubricas cadastradas, com código, descrição, natureza, tipo e flags de incidência.|
 |4. Insere ou atualiza os dados referentes a rubrica desejada, como rubrica de proventos ou descontos.||
 ||5. Valida unicidade do código da rubrica e verifica que o código está na faixa permitida para criação (≥ 500). |
