@@ -1,0 +1,30 @@
+@startuml
+title Sequência - UC-13: Exportar Holerites
+
+actor "Operador" as Operador
+participant ":TelaHolerite" as UI
+participant ":HoleriteController" as Controller
+participant "h:Holerite" as Holerite
+participant "LogAuditoria" as Log
+
+Operador -> UI : exportarHoleritePDF(matricula, mes)
+activate UI
+UI -> Controller : exportarPDF(matricula, mes)
+activate Controller
+
+Controller -> Holerite : gerarPDF()
+activate Holerite
+Holerite --> Controller : pdf
+deactivate Holerite
+
+Controller -> Log : registrar(usuario, data, "Exportar Holerite")
+activate Log
+Log --> Controller : ok
+deactivate Log
+
+Controller --> UI : pdf
+deactivate Controller
+UI --> Operador : baixarPDF(pdf)
+deactivate UI
+
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+title Colaboração - UC-02: Cadastro da Empresa
+
+rectangle "Administrador" as Admin
+rectangle ":TelaCadastroEmpresa" as UI
+rectangle ":EmpresaController" as Controller
+rectangle "e:Empresa" as Empresa
+rectangle "LogAuditoria" as Log
+
+Admin -r-> UI : informarDados(cnpj, razaoSocial, endereco, respLegal)
+UI -d-> Controller : 1: cadastrarEmpresa(cnpj, razaoSocial, endereco, respLegal)
+Controller -d-> Empresa : 2: create(cnpj, razaoSocial, endereco, respLegal)
+Controller -d-> Log : 3: registrar(usuario, data, "Cadastro Empresa")
+
+@enduml

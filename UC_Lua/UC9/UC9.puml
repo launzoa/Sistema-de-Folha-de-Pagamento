@@ -1,0 +1,19 @@
+@startuml
+title Colaboração - UC-09: Lançar Exceções Mensais
+
+rectangle "Operador" as Operador
+rectangle ":TelaLancamentos" as UI
+rectangle ":LancamentoController" as Controller
+rectangle "CatalogoFuncionarios" as Catalogo
+rectangle "f:Funcionario" as Funcionario
+rectangle "l:Lancamento" as Lancamento
+rectangle "LogAuditoria" as Log
+
+Operador -r-> UI : registrarExcecao(matricula, rubrica, valor, mes)
+UI -d-> Controller : 1: addLancamento(matricula, rubrica, valor, mes)
+Controller -r-> Catalogo : 2: f = buscar(matricula)
+Controller -d-> Funcionario : 3: l = registrarLancamento(rubrica, valor, mes)
+Funcionario -d-> Lancamento : 4: create(rubrica, valor, mes)
+Controller -d-> Log : 5: registrar(usuario, data, "Lancar Excecao")
+
+@enduml

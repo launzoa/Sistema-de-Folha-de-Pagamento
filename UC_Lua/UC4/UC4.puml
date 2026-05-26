@@ -1,0 +1,17 @@
+@startuml
+title Colaboração - UC-04: Cadastro de Usuários do Sistema
+
+rectangle "Administrador" as Admin
+rectangle ":TelaUsuarios" as UI
+rectangle ":UsuarioController" as Controller
+rectangle "CatalogoUsuarios" as Catalogo
+rectangle "u:Usuario" as Usuario
+rectangle "LogAuditoria" as Log
+
+Admin -r-> UI : informarDadosUsuario(nomeUsuario, senha, perfil)
+UI -d-> Controller : 1: cadastrarUsuario(nomeUsuario, senha, perfil)
+Controller -r-> Catalogo : 2: u = criarUsuario(nomeUsuario, senha, perfil)
+Catalogo -d-> Usuario : 3: create(nomeUsuario, senha, perfil)
+Controller -d-> Log : 4: registrar(usuario, data, "Cadastro Usuario")
+
+@enduml

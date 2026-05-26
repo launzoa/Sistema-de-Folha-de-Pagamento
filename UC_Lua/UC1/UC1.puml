@@ -1,0 +1,17 @@
+@startuml
+title Colaboração - UC-01: Autenticar no sistema
+
+rectangle "Operador" as Operador
+rectangle ":TelaLogin" as UI
+rectangle ":AutenticacaoController" as Controller
+rectangle "CatalogoUsuarios" as Catalogo
+rectangle "u:Usuario" as Usuario
+rectangle "LogSeguranca" as Log
+
+Operador -r-> UI : informarCredenciais(usuario, senha)
+UI -d-> Controller : 1: login(usuario, senha)
+Controller -r-> Catalogo : 2: u = buscar(usuario)
+Controller -d-> Usuario : 3: isValid = validarSenha(senha)
+Controller -d-> Log : 4: registrarAcesso(usuario, data, resultado)
+
+@enduml

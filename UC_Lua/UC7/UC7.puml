@@ -1,0 +1,17 @@
+@startuml
+title Colaboração - UC-07: Atualizar dados de Funcionários
+
+rectangle "Operador" as Operador
+rectangle ":TelaFuncionarios" as UI
+rectangle ":FuncionarioController" as Controller
+rectangle "CatalogoFuncionarios" as Catalogo
+rectangle "f:Funcionario" as Funcionario
+rectangle "LogAuditoria" as Log
+
+Operador -r-> UI : alterarFuncionario(matricula, novosDados, status)
+UI -d-> Controller : 1: atualizarFuncionario(matricula, novosDados, status)
+Controller -r-> Catalogo : 2: f = buscar(matricula)
+Controller -d-> Funcionario : 3: setDados(novosDados, status)
+Controller -d-> Log : 4: registrar(usuario, data, "Atualizar Funcionario")
+
+@enduml
