@@ -1,0 +1,32 @@
+@startuml
+title Sequência - UC-08: Cadastro de Rubricas
+
+actor "Administrador" as Admin
+participant ":TelaRubricas" as UI
+participant ":RubricaController" as Controller
+participant "CatalogoRubricas" as Catalogo
+participant "r:Rubrica" as Rubrica
+participant "LogAuditoria" as Log
+
+Admin -> UI : informarRubrica(tipo, regras, incidencias)
+activate UI
+UI -> Controller : cadastrarRubrica(tipo, regras, incidencias)
+activate Controller
+
+Controller -> Catalogo : criarRubrica(tipo, regras, incidencias)
+activate Catalogo
+Catalogo -> Rubrica ** : create(tipo, regras, incidencias)
+Catalogo --> Controller : r
+deactivate Catalogo
+
+Controller -> Log : registrar(usuario, data, "Cadastro Rubrica")
+activate Log
+Log --> Controller : ok
+deactivate Log
+
+Controller --> UI : confirmacao
+deactivate Controller
+UI --> Admin : exibirSucesso()
+deactivate UI
+
+@enduml

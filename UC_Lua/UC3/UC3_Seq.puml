@@ -1,0 +1,30 @@
+@startuml
+title Sequência - UC-03: Atualizar dados da Empresa
+
+actor "Administrador" as Admin
+participant ":TelaEmpresa" as UI
+participant ":EmpresaController" as Controller
+participant "e:Empresa" as Empresa
+participant "LogAuditoria" as Log
+
+Admin -> UI : informarAtualizacao(cnpj, novosDados)
+activate UI
+UI -> Controller : atualizarEmpresa(cnpj, novosDados)
+activate Controller
+
+Controller -> Empresa : setDados(novosDados)
+activate Empresa
+Empresa --> Controller : ok
+deactivate Empresa
+
+Controller -> Log : registrar(usuario, data, "Atualizar Empresa")
+activate Log
+Log --> Controller : ok
+deactivate Log
+
+Controller --> UI : confirmacao
+deactivate Controller
+UI --> Admin : exibirSucesso()
+deactivate UI
+
+@enduml

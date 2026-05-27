@@ -1,0 +1,36 @@
+@startuml
+title Sequência - UC-01: Autenticar no sistema
+
+actor "Operador" as Operador
+participant ":TelaLogin" as UI
+participant ":AutenticacaoController" as Controller
+participant "CatalogoUsuarios" as Catalogo
+participant "u:Usuario" as Usuario
+participant "LogSeguranca" as Log
+
+Operador -> UI : informarCredenciais(usuario, senha)
+activate UI
+UI -> Controller : login(usuario, senha)
+activate Controller
+
+Controller -> Catalogo : buscar(usuario)
+activate Catalogo
+Catalogo --> Controller : u
+deactivate Catalogo
+
+Controller -> Usuario : validarSenha(senha)
+activate Usuario
+Usuario --> Controller : isValid
+deactivate Usuario
+
+Controller -> Log : registrarAcesso(usuario, data, resultado)
+activate Log
+Log --> Controller : ok
+deactivate Log
+
+Controller --> UI : resultadoLogin
+deactivate Controller
+UI --> Operador : exibirFeedbackVisual()
+deactivate UI
+
+@enduml

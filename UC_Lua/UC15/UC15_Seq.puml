@@ -1,0 +1,37 @@
+@startuml
+title Sequência - UC-15: Consultar Histórico de Folhas
+
+actor "Operador" as Operador
+participant ":TelaHistorico" as UI
+participant ":HistoricoController" as Controller
+participant "CatalogoFolhas" as CatalogoFolhas
+participant "CatalogoFuncionarios" as CatalogoFunc
+participant "f:Funcionario" as Funcionario
+
+Operador -> UI : buscarHistorico(mes, matricula)
+activate UI
+UI -> Controller : consultarHistorico(mes, matricula)
+activate Controller
+
+alt busca geral por mes
+    Controller -> CatalogoFolhas : buscarFolha(mes)
+    activate CatalogoFolhas
+    CatalogoFolhas --> Controller : fp
+    deactivate CatalogoFolhas
+else busca especifica por funcionario
+    Controller -> CatalogoFunc : buscar(matricula)
+    activate CatalogoFunc
+    CatalogoFunc --> Controller : f
+    deactivate CatalogoFunc
+    Controller -> Funcionario : getHistorico(mes)
+    activate Funcionario
+    Funcionario --> Controller : dados
+    deactivate Funcionario
+end
+
+Controller --> UI : resultado
+deactivate Controller
+UI --> Operador : exibirHistorico()
+deactivate UI
+
+@enduml
