@@ -1,0 +1,9 @@
+@startuml
+object ": EventoInicial" as Evento
+object ": TelaProcessamento" as Tela
+object ": ControladorProcessamentoFolha" as Controlador
+
+Evento -- Tela : 1: FechamentodaFolha() >
+
+Tela -- Controlador : 2: FecharFolha() >\n< 3: confirmacao = ConfirmacaoFechamento() : boolean
+@enduml

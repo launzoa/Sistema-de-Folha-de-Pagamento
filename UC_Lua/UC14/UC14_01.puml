@@ -1,0 +1,9 @@
+@startuml
+object ": EventoInicial" as Evento
+object ": TelaRelatorio" as Tela
+object ": ControladorProcessamentoFolha" as Controlador
+
+Evento -- Tela : 1: AcessaProcessamento() >
+
+Tela -- Controlador : 2: Create() >\n< 3: ExibePainel()
+@enduml

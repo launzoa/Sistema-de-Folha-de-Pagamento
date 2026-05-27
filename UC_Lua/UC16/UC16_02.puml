@@ -1,0 +1,9 @@
+@startuml
+object ": EventoInicial" as Evento
+object ": TelaAuditoria" as Tela
+object ": ControladorAuditoria" as Controlador
+
+Evento -- Tela : 1: ConsultaAuditoria(ID : int, timestamp : Datetime, usuer : Usuario, acao : int) >
+
+Tela -- Controlador : 2: BuscaAcao(ID : int, timestamp : Datetime, usuer : Usuario, acao : int) : Auditoria >\n< 3: [resultado != null] ExibeAcoesFiltradas(resultado : Auditoria)
+@enduml

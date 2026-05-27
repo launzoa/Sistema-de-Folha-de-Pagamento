@@ -1,0 +1,12 @@
+@startuml
+object ": EventoInicial" as Evento
+object ": TelaProcessamento" as Tela
+object ": ControladorProcessamentoFolha" as Controlador
+object ": ProcessamentoFolha" as Processamento
+
+Evento -- Tela : 1: AcessaProcessamentoFolha() >
+
+Tela -- Controlador : 2: Criar() >\n< 6: [folha_aberta == True AND tem_funcionario == true] ExibePainel()
+
+Controlador -- Processamento : 3: Create() >\n4: folha_aberta = isAberta() : boolean >\n5: tem_funcionario = possuiFuncionario() : boolean >
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+object ": EventoInicial" as Evento
+object ": TelaHolerite" as Tela
+object ": ControladorHolerite" as Controlador
+object ": Holerite" as Holerite
+
+Evento -- Tela : 1: Exportar(holerite) >
+
+Tela -- Controlador : 2: [holerite != null] GerarDocumento(holerite) >\n< 4: SaveDialog(nomeArquivo : String)
+
+Controlador -- Holerite : 3: arquivo = GerarArquivo(nomeArquivo : String) >
+@enduml
