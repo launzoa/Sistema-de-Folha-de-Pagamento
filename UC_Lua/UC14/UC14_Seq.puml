@@ -1,0 +1,33 @@
+@startuml
+title Sequência - UC-14: Emitir Relatórios Mensais
+
+actor "Operador" as Operador
+participant ":TelaRelatorios" as UI
+participant ":RelatorioController" as Controller
+participant "CatalogoFolhas" as Catalogo
+participant "fp:FolhaPagamento" as Folha
+participant "rel:Relatorio" as Relatorio
+
+Operador -> UI : gerarRelatorioMensal(mes, tipo)
+activate UI
+UI -> Controller : gerarRelatorio(mes, tipo)
+activate Controller
+
+Controller -> Catalogo : buscarFolha(mes)
+activate Catalogo
+Catalogo --> Controller : fp
+deactivate Catalogo
+
+Controller -> Folha : getDadosFolha()
+activate Folha
+Folha --> Controller : dados
+deactivate Folha
+
+Controller -> Relatorio ** : create(dados, tipo)
+
+Controller --> UI : rel
+deactivate Controller
+UI --> Operador : exibirRelatorio(rel)
+deactivate UI
+
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+title Colaboração - UC-13: Exportar Holerites
+
+rectangle "Operador" as Operador
+rectangle ":TelaHolerite" as UI
+rectangle ":HoleriteController" as Controller
+rectangle "h:Holerite" as Holerite
+rectangle "LogAuditoria" as Log
+
+Operador -r-> UI : exportarHoleritePDF(matricula, mes)
+UI -d-> Controller : 1: exportarPDF(matricula, mes)
+Controller -r-> Holerite : 2: pdf = gerarPDF()
+Controller -d-> Log : 3: registrar(usuario, data, "Exportar Holerite")
+
+@enduml

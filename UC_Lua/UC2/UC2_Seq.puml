@@ -1,0 +1,27 @@
+@startuml
+title Sequência - UC-02: Cadastro da Empresa
+
+actor "Administrador" as Admin
+participant ":TelaCadastroEmpresa" as UI
+participant ":EmpresaController" as Controller
+participant "e:Empresa" as Empresa
+participant "LogAuditoria" as Log
+
+Admin -> UI : informarDados(cnpj, razaoSocial, endereco, respLegal)
+activate UI
+UI -> Controller : cadastrarEmpresa(cnpj, razaoSocial, endereco, respLegal)
+activate Controller
+
+Controller -> Empresa ** : create(cnpj, razaoSocial, endereco, respLegal)
+
+Controller -> Log : registrar(usuario, data, "Cadastro Empresa")
+activate Log
+Log --> Controller : ok
+deactivate Log
+
+Controller --> UI : confirmacao
+deactivate Controller
+UI --> Admin : exibirSucesso()
+deactivate UI
+
+@enduml

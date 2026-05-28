@@ -1,0 +1,24 @@
+@startuml
+title Sequência - UC-16: Consultar Log de Auditoria
+
+actor "Administrador" as Admin
+participant ":TelaAuditoria" as UI
+participant ":AuditoriaController" as Controller
+participant "LogAuditoria" as Log
+
+Admin -> UI : buscarLog(periodo, usuario, acao)
+activate UI
+UI -> Controller : consultarLog(periodo, usuario, acao)
+activate Controller
+
+Controller -> Log : buscar(periodo, usuario, acao)
+activate Log
+Log --> Controller : logs
+deactivate Log
+
+Controller --> UI : logs
+deactivate Controller
+UI --> Admin : exibirTabelaLogs(logs)
+deactivate UI
+
+@enduml

@@ -1,0 +1,36 @@
+@startuml
+title Sequência - UC-07: Atualizar dados de Funcionários
+
+actor "Operador" as Operador
+participant ":TelaFuncionarios" as UI
+participant ":FuncionarioController" as Controller
+participant "CatalogoFuncionarios" as Catalogo
+participant "f:Funcionario" as Funcionario
+participant "LogAuditoria" as Log
+
+Operador -> UI : alterarFuncionario(matricula, novosDados, status)
+activate UI
+UI -> Controller : atualizarFuncionario(matricula, novosDados, status)
+activate Controller
+
+Controller -> Catalogo : buscar(matricula)
+activate Catalogo
+Catalogo --> Controller : f
+deactivate Catalogo
+
+Controller -> Funcionario : setDados(novosDados, status)
+activate Funcionario
+Funcionario --> Controller : ok
+deactivate Funcionario
+
+Controller -> Log : registrar(usuario, data, "Atualizar Funcionario")
+activate Log
+Log --> Controller : ok
+deactivate Log
+
+Controller --> UI : confirmacao
+deactivate Controller
+UI --> Operador : exibirSucesso()
+deactivate UI
+
+@enduml

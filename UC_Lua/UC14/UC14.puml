@@ -1,0 +1,17 @@
+@startuml
+title Colaboração - UC-14: Emitir Relatórios Mensais
+
+rectangle "Operador" as Operador
+rectangle ":TelaRelatorios" as UI
+rectangle ":RelatorioController" as Controller
+rectangle "CatalogoFolhas" as Catalogo
+rectangle "fp:FolhaPagamento" as Folha
+rectangle "rel:Relatorio" as Relatorio
+
+Operador -r-> UI : gerarRelatorioMensal(mes, tipo)
+UI -d-> Controller : 1: gerarRelatorio(mes, tipo)
+Controller -r-> Catalogo : 2: fp = buscarFolha(mes)
+Controller -d-> Folha : 3: dados = getDadosFolha()
+Controller -d-> Relatorio : 4: rel = create(dados, tipo)
+
+@enduml

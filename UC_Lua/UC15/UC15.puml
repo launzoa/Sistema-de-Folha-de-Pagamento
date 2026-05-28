@@ -1,0 +1,17 @@
+@startuml
+title Colaboração - UC-15: Consultar Histórico de Folhas
+
+rectangle "Operador" as Operador
+rectangle ":TelaHistorico" as UI
+rectangle ":HistoricoController" as Controller
+rectangle "CatalogoFolhas" as CatalogoFolhas
+rectangle "CatalogoFuncionarios" as CatalogoFunc
+rectangle "f:Funcionario" as Funcionario
+
+Operador -r-> UI : buscarHistorico(mes, matricula)
+UI -d-> Controller : 1: consultarHistorico(mes, matricula)
+Controller -r-> CatalogoFolhas : 2: fp = buscarFolha(mes)
+Controller -d-> CatalogoFunc : 3: f = buscar(matricula)
+Controller -d-> Funcionario : 4: dados = getHistorico(mes)
+
+@enduml

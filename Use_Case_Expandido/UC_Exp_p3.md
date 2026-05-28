@@ -154,8 +154,8 @@
 | **Ação do Ator**    | **Resposta do Sistema**         |
 | ------------------------ | ---------------------------|
 |**A1 - Credenciais Inválidas**||
-|1. Usuário sem credenciais tenta acessar os campos destinados a emrpesa.||
-||2. Desativa os campos relacionados ao cadastro da emprasa para perfis diferentes do usuário bloqueando o acesso.|
+|1. Usuário com perfil diferente do administrador tenta acessar os campos destinados a emrpesa.||
+||2. Desativa os campos relacionados ao cadastro da emprasa para perfis diferentes do administrador bloqueando o acesso.|
 |**A2 — Tentativa de editar rubrica padrão protegida (códigos 001 a 005)**||
 |1. Tentativa de alterar uma rubrica de código 001 a 005.||
 ||2. Bloqueia a edição desses campos e exibe mensagem informando que a rubrica é obrigatória e protegida.|
@@ -204,7 +204,7 @@
 ||2. Constata ausência de funcionários ativos. Exibe mensagem de erro e desabilita o processamento.|
 |**A3 — Salário bruto resulta em líquido negativo**||
 |1. Durante o cálculo, a soma dos descontos supera a soma dos proventos de um funcionário.||
-||2. Interrompe o processamento, identifica o funcionário com o problema e exibe alerta. O usuário deve corrigir os lançamentos antes de reprocessar.|
+||2. Interrompe o processamento, descartando o processamento feito de todos os funcionários anteriores, identifica o funcionário com o problema e exibe alerta. O usuário deve corrigir os lançamentos antes de reprocessar.|
 |**A4 — Usuário cancela após visualizar o resumo**||
 |1. Após ver o resumo (passo 11), o usuário cancela o processamento.||
 ||2. Descarta os resultados. A folha permanece "Aberta". Nenhum dado é persistido.|
@@ -320,11 +320,11 @@
 | **Ação do Ator**    | **Resposta do Sistema**         |
 | ------------------------ | ---------------------------|
 |**A1 - Credenciais Inválidas**||
-|1. Usuário sem credenciais tenta acessar os campos destinados a emrpesa.||
+|1. Usuário com perfil diferente do administrador tenta acessar os campos destinados a emrpesa.||
 ||2. Não exibe o item de menu do log para o perfil RH. O acesso direto é bloqueado.|
-|**A2 — Usuário cancela no diálogo de confirmação**||
+|**A2 — Administrador cancela no diálogo de confirmação**||
 |1. Cancelamento das alterações.||
 ||2. Descarta as alterações. Os parâmetros permanecem com os valores anteriores e nenhum registro é gravado no log.|
-|**A2 — Valores dos parâmetros inválidos**||
+|**A3 — Valores dos parâmetros inválidos**||
 |1. Informa um novo valor de parâmetros fora das normativas estabelecidas, como um piso salarial inferior ao já cadastrado.||
-||2. O sistema exibe alerta informando que o novo valor é inválido, solicitando confirmação explícita do usuário para prosseguir (a redução do piso é incomum e pode indicar erro de digitação, por exemplo).|
+||2. O sistema exibe alerta informando que o novo valor é inválido, solicitando confirmação explícita do administrador para prosseguir (a redução do piso é incomum e pode indicar erro de digitação, por exemplo).|
