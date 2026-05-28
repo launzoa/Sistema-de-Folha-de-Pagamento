@@ -1,0 +1,11 @@
+com/sfp/folha/domain/Holerite.class
+com/sfp/folha/domain/FaixaINSS.class
+com/sfp/folha/application/calculadoras/CalculadoraSalarioProporcional.class
+com/sfp/core/domain/Funcionario.class
+com/sfp/folha/ui/MainController.class
+com/sfp/core/domain/FolhaDePonto.class
+com/sfp/folha/application/calculadoras/CalculadoraHoraExtra.class
+com/sfp/folha/ui/Main.class
+com/sfp/folha/application/ProcessadorDeFolha.class
+com/sfp/folha/domain/RegraDeCalculo.class
+com/sfp/folha/application/calculadoras/CalculadoraINSS.class

@@ -1,0 +1,108 @@
+/* Premium Dark Mode CSS para o JavaFX */
+
+.root {
+    -fx-background-color: #121212;
+    -fx-font-family: "Segoe UI", "Inter", sans-serif;
+}
+
+.title-label {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFFFFF;
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.2), 10, 0, 0, 0);
+}
+
+.form-container {
+    -fx-background-color: #1E1E1E;
+    -fx-padding: 20px;
+    -fx-background-radius: 10px;
+    -fx-border-color: #333333;
+    -fx-border-radius: 10px;
+}
+
+.field-label {
+    -fx-text-fill: #B3B3B3;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.input-field {
+    -fx-background-color: #2D2D2D;
+    -fx-text-fill: #FFFFFF;
+    -fx-prompt-text-fill: #666666;
+    -fx-border-color: #404040;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 8px;
+    -fx-font-size: 14px;
+}
+
+.input-field:focused {
+    -fx-border-color: #4D90FE;
+    -fx-background-color: #333333;
+}
+
+.primary-button {
+    -fx-background-color: linear-gradient(to right, #4D90FE, #3065C0);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-padding: 10px 40px;
+    -fx-background-radius: 20px;
+    -fx-cursor: hand;
+}
+
+.primary-button:hover {
+    -fx-background-color: linear-gradient(to right, #5EA0FF, #4075D0);
+    -fx-effect: dropshadow(three-pass-box, rgba(77, 144, 254, 0.4), 10, 0, 0, 2);
+}
+
+.primary-button:pressed {
+    -fx-background-color: linear-gradient(to right, #3065C0, #2045A0);
+    -fx-translate-y: 2px;
+}
+
+.result-container {
+    -fx-background-color: #1A1C20;
+    -fx-padding: 20px;
+    -fx-background-radius: 10px;
+    -fx-border-color: #2B303B;
+    -fx-border-radius: 10px;
+}
+
+.result-label-title {
+    -fx-text-fill: #A0AABF;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.result-label-title-large {
+    -fx-text-fill: #E0E5F0;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.result-value-green {
+    -fx-text-fill: #4CAF50;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.result-value-red {
+    -fx-text-fill: #F44336;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.result-value-large {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.divider-top {
+    -fx-border-color: transparent transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+    -fx-padding: 10 0 0 0;
+    -fx-border-color: #333333;
+}
