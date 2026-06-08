@@ -1,0 +1,52 @@
+@startuml
+!theme plain
+hide methods 
+hide circle
+hide empty members
+
+class Funcionario {
+    salarioBase
+}
+
+class FolhaDePonto {
+    horaExtra50
+    horaExtra100
+}
+
+class Holerite {
+    funcionario   
+    totalProventos
+    totalDescontos
+    salarioLiquido
+}
+
+class ProcessadorDeFolha {
+}
+
+class RegraDeCalculo {
+
+}
+
+class TabelaINSS {
+    anoVigencia
+    tetoMaximo
+}
+
+class FaixaINSS {
+    piso 
+    teto 
+    aliquota
+}
+
+class NormasTrabalhistas {
+    percentualAcrescimo
+}
+
+Funcionario "1" -- "1" FolhaDePonto : possui >
+ProcessadorDeFolha "1" -- "*" Holerite : gera > 
+ProcessadorDeFolha "1" -- "*" RegraDeCalculo : consulta >
+TabelaINSS "1" -- "1..4" FaixaINSS : possui >
+RegraDeCalculo <|-- TabelaINSS 
+RegraDeCalculo <|-- NormasTrabalhistas 
+
+@enduml

@@ -42,6 +42,8 @@ public class MainController {
         private TextField inputHoras100;
 
         // Metodo que sera disparado ao clicar no botao (onAction no FXML)
+        // @brief: Calcula a folha de pagamento
+        // @return void
         @FXML
         public void calcularFolha() {
                 String salarioStr = inputSalario.getText();

@@ -1,0 +1,15 @@
+@startUML
+' --- Atores ---
+actor "Analista de RH" as RH
+
+
+
+' --- Casos de Uso ---
+rectangle "Sistema de Folha de Pagamento" {
+    usecase "UC01 - Processar Folha de Pagamento" as UC01
+}
+
+
+RH -right-> UC01 
+
+@enduml
