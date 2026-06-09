@@ -1,0 +1,8 @@
+@startuml
+skinparam style strictuml
+
+actor "Analista de RH" as RH
+rectangle "Controlador da Folha" as Controller
+rectangle "Processador da Folha" as Processador
+
+@enduml

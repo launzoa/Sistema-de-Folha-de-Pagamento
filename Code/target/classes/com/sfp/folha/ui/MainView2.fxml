@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import java.net.URL?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.sfp.folha.ui.MainController2" styleClass="dashboard">
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
+
+    <left>
+        <VBox styleClass="sidebar">
+            <HBox styleClass="logo_titulo" maxWidth="Infinity">
+                <ImageView fitWidth="50" fitHeight="50" preserveRatio="true">
+                    <image>
+                        <Image url="@gato.png"/>
+                    </image>
+                </ImageView>
+                <Label text="SFP" styleClass="titles_dash"/>
+            </HBox>
+
+            <Label text="Principal" styleClass="titles_dash"/>
+            <VBox styleClass="menu-items">
+                <Button text="Dashboard" styleClass="menu-button" onAction="#abrirDashboard"/>
+                <Button text="Funcionários" styleClass="menu-button" onAction="#abrirFuncionarios"/>
+                <Button text="Rubricas" styleClass="menu-button" onAction="#abrirRubrica"/>
+            </VBox>
+
+            <Label text="Operação" styleClass="titles_dash"/>
+            <VBox styleClass="menu-items">
+                <Button text="Lançamentos" styleClass="menu-button" onAction="#abrirLancamento"/>
+                <Button text="Folha do Mês" styleClass="menu-button" onAction="#abrirFolhaMes"/>
+                <Button text="Holerite" styleClass="menu-button" onAction="#abrirHolerite"/>
+                <Button text="Histórico" styleClass="menu-button" onAction="#abrirHistorico"/>
+            </VBox>
+
+            <Label text="Administração" styleClass="titles_dash"/>
+            <VBox styleClass="menu-items">
+                <Button text="Usuários" styleClass="menu-button" onAction="#abrirUsuario"/>
+                <Button text="Empresa" styleClass="menu-button" onAction="#abrirEmpresa"/>
+                <Button text="Parâmetros Legais" styleClass="menu-button" onAction="#abrirParametro"/>
+                <Button text="Log" styleClass="menu-button" onAction="#abrirLog"/>
+            </VBox>
+            <Region VBox.vgrow="ALWAYS"/>
+            <VBox styleClass="menu-items">
+                <Button text="Sair" styleClass="exit_button" onAction="#sair"/>
+            </VBox>
+        </VBox>
+    </left>
+
+
+
+    <center>
+        <BorderPane VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+            <top>
+                <HBox styleClass="header">
+                    <Label fx:id="labelTela" text="Dashboard" styleClass="header-title"/>
+                    <HBox HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="labelUsuario" text="usuário" styleClass="header-user"/>
+                </HBox>
+            </top>
+            <center>
+                <AnchorPane fx:id="painelConteudo" styleClass="conteudo"/>
+            </center>
+        </BorderPane>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.sfp.folha.ui.TelaEmpresa" styleClass="conteudo" spacing="20">
+    <stylesheets>
+        <URL value="@style.css"/>
+    </stylesheets>
+
+    <HBox spacing="15" alignment="CENTER_LEFT" styleClass="card_dash">
+        <VBox spacing="5" HBox.hgrow="ALWAYS">
+            <Label text="Selecione a Empresa:" styleClass="holerite-section-title"/>
+            <ComboBox fx:id="comboEmpresas" promptText="Escolha uma empresa..." styleClass="combo_box" maxWidth="Infinity"/>
+        </VBox>
+        
+        <Button text="+ Nova Empresa" styleClass="primary-button" />
+        <Button text="Editar Empresa" styleClass="primary-button" />
+        <Button text="Excluir" styleClass="btn-excluir" />
+    </HBox>
+    <VBox spacing="10" VBox.vgrow="ALWAYS">
+        <Label text="Identificação da Empresa" styleClass="holerite-section-title"/>
+        
+        <!-- Dados da Empresa -->
+        <GridPane styleClass="holerite-dados" hgap="20" vgap="6">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="30"/>
+                <ColumnConstraints percentWidth="30"/>
+                <ColumnConstraints percentWidth="40"/>
+            </columnConstraints>
+
+            <Label text="Razão Social:"       styleClass="holerite-field-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <Label text="CNPJ:"        styleClass="holerite-field-label" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+            <Label text="Responsável Legal:"      styleClass="holerite-field-label" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+
+            <Label fx:id="labelRazaoSocial"  text="—" styleClass="holerite-field-value" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <Label fx:id="labelCNPJ"   text="—" styleClass="holerite-field-value" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            <Label fx:id="labelRespLegal" text="—" styleClass="holerite-field-value" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+
+            <Label text="Email:"     styleClass="holerite-field-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+
+            <Label fx:id="labelEmail"    text="—" styleClass="holerite-field-value" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        </GridPane>     
+    </VBox>
+    <HBox spacing="8" alignment="CENTER_RIGHT">
+        <Button text="+ Adicionar Endereço" styleClass="primary-button" />
+        <Button text="Editar" styleClass="secondary-button" />
+        <Button text="Excluir" styleClass="btn-excluir" />
+    </HBox>
+
+    <VBox HBox.hgrow="ALWAYS" styleClass="card">
+        <Label text="Endereços Vinculados" styleClass="holerite-section-title" HBox.hgrow="ALWAYS"/>
+        <TableView fx:id="tabelaEnderecos" styleClass="tabela_dash" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colCep" text="CEP" prefWidth="100"/>
+                <TableColumn fx:id="colLogradouro" text="Logradouro" prefWidth="180"/>
+                <TableColumn fx:id="colBairro" text="Bairro" prefWidth="120"/>
+                <TableColumn fx:id="colComplemento" text="Complemento" prefWidth="120"/>
+            </columns>
+        </TableView>
+    </VBox>
+</VBox>

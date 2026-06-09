@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.sfp.folha.ui.TelaHistorico" styleClass="conteudo" spacing="20">
+    <stylesheets>
+        <URL value="@style.css"/>
+    </stylesheets>
+
+    <HBox spacing="15" alignment="CENTER_LEFT" styleClass="card_dash">
+        <VBox spacing="5">
+            <Label text="Buscar por Funcionário:" styleClass="lancamento-field"/>
+            <TextField fx:id="txtBuscaNome" promptText="Digite o nome..." prefWidth="250" styleClass="historico_field"/>
+        </VBox>
+
+        <VBox spacing="5">
+            <Label text="Data da Folha:" styleClass="lancamento-field"/>
+            <DatePicker fx:id="dpBuscaData" promptText="Selecione a data" prefWidth="150" styleClass="combo_box"/>
+        </VBox>
+        
+        <Region HBox.hgrow="ALWAYS"/>
+        
+        <VBox alignment="BOTTOM_LEFT">
+            <HBox spacing="10">
+                <Button text="Filtrar" styleClass="primary-button" onAction="#filtrarHistorico"/>
+                <Button text="Limpar" styleClass="secondary-button" onAction="#limparFiltros"/>
+            </HBox>
+        </VBox>
+    </HBox>
+       <VBox styleClass="card" VBox.vgrow="ALWAYS">
+        <TableView fx:id="tabelaHistorico" styleClass="tabela_dash" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colFuncionario" text="Funcionário" prefWidth="150"/>
+                <TableColumn fx:id="colCompetencia" text="Competência" prefWidth="120"/>
+                <TableColumn fx:id="colDtFechamento" text="Data Fechamento" prefWidth="110"/>
+                <TableColumn fx:id="colTotalBruto" text="Total Bruto" prefWidth="110"/>
+                <TableColumn fx:id="colTotalLiquido" text="Total Liquido" prefWidth="70"/>
+                <TableColumn fx:id="colTotalFgts" text="Total FGTS" prefWidth="80"/>
+            </columns>
+        </TableView>
+    </VBox>
+    
+
+
+
+</VBox>
