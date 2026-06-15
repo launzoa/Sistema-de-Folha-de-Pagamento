@@ -23,17 +23,22 @@ public class MainController {
     private Label labelUsuario;
 
     private Usuario userLogado;
-
+    private boolean modoEscuroAtivo = false;
+    
     @FXML
     public void initialize() {
         abrirDashboard();
     }
 
-    public void setUsuario(Usuario usuario) {
+    public void setUsuario(Usuario usuario)
+    {
         this.userLogado = usuario;
-        if (usuario.isPerfil() == true) {
+        if(usuario.isPerfil() == true)
+        {
             labelUsuario.setText(usuario.getNome() + " | Administrador");
-        } else {
+        }
+        else
+        {
             labelUsuario.setText(usuario.getNome() + " | Operador");
         }
     }
@@ -50,22 +55,18 @@ public class MainController {
         labelTela.setText("Funcionários");
     }
 
-    private void mostrarAlertaEmDesenvolvimento(String modulo) {
-        javafx.scene.control.Alert alerta = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
-        alerta.setTitle("Módulo em Desenvolvimento");
-        alerta.setHeaderText(null);
-        alerta.setContentText("O módulo '" + modulo + "' está em fase de desenvolvimento e será disponibilizado nas próximas atualizações.");
-        alerta.showAndWait();
-    }
+
 
     @FXML
     public void abrirRubrica() {
-        mostrarAlertaEmDesenvolvimento("Rubricas");
+        carregarTela("TelaRubrica.fxml");
+        labelTela.setText("Rubricas");
     }
 
     @FXML
     public void abrirLancamento() {
-        mostrarAlertaEmDesenvolvimento("Lançamento de Exceções");
+        carregarTela("TelaLancamento.fxml");
+        labelTela.setText("Lançamento de Excessões");
     }
 
     @FXML
@@ -82,7 +83,8 @@ public class MainController {
 
     @FXML
     public void abrirHistorico() {
-        mostrarAlertaEmDesenvolvimento("Histórico de Folhas");
+        carregarTela("TelaHistorico.fxml");
+        labelTela.setText("Histórico de Folhas");
     }
 
     @FXML
@@ -105,7 +107,8 @@ public class MainController {
 
     @FXML
     public void abrirLog() {
-        mostrarAlertaEmDesenvolvimento("Log de Auditoria");
+        carregarTela("TelaLog.fxml");
+        labelTela.setText("Log de Auditoria"); 
     }
 
     private void carregarTela(String fxml) {
@@ -124,14 +127,55 @@ public class MainController {
 
     @FXML
     public void sair() {
-        try {
+        try
+        {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("TelaLogin.fxml"));
+            Parent rootLogin = loader.load();
             Stage stage = (Stage) painelConteudo.getScene().getWindow();
-            Scene scene = new Scene(loader.load(), 1200, 700);
+            Scene scene = new Scene(rootLogin, 1200, 700);
+            if (GerenciadorTema.modoEscuroAtivo)
+            {
+                rootLogin.getStyleClass().add("dark-mode");
+            }
             stage.setScene(scene);
             stage.setTitle("Sistema de Folha de Pagamento - SFP");
-        } catch (Exception e) {
+        } 
+        catch (Exception e)
+        {
             e.printStackTrace();
+        }  
+    }
+    @FXML
+    public void alterarModo()
+    {
+        try
+        {
+            GerenciadorTema.modoEscuroAtivo = !GerenciadorTema.modoEscuroAtivo;
+            Parent rootNode = painelConteudo.getScene().getRoot();
+
+            if (GerenciadorTema.modoEscuroAtivo)
+            {
+                if(!rootNode.getStyleClass().contains("dark-mode"))
+                {
+                    rootNode.getStyleClass().add("dark-mode");    
+                }
+            }
+            else
+            {
+                rootNode.getStyleClass().removeAll("dark-mode");
+            }
         }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }     
+    }
+    private void mostrarAlertaEmDesenvolvimento(String modulo) 
+    {
+        javafx.scene.control.Alert alerta = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+        alerta.setTitle("Módulo em Desenvolvimento");
+        alerta.setHeaderText(null);
+        alerta.setContentText("O módulo '" + modulo + "' está em fase de desenvolvimento e será disponibilizado nas próximas atualizações.");
+        alerta.showAndWait();
     }
 }

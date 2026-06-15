@@ -16,7 +16,7 @@
         
         <VBox spacing="5">
             <Label text="Filtrar por Usuário:" styleClass="holerite-section-title"/>
-            <TextField fx:id="txtFiltroUsuario" promptText="Digite o login..." prefWidth="200" styleClass="campo-busca"/>
+            <TextField fx:id="txtFiltroUsuario" promptText="Digite o login..." prefWidth="200" styleClass="historico_field"/>
         </VBox>
 
         <VBox spacing="5">

@@ -64,7 +64,65 @@
     -color-danger-bg:       #FEE2E2;
     -color-holerite-purple: #DDD6FE;
 }
+.dark-mode {
+    -fx-background-color: #0A0A0A;
 
+    /* VERDE — Cor primária mantida no modo escuro */
+    -color-primary:         #10B981;
+    -color-primary-dark:    #059669;
+    -color-primary-light:   #34D399;
+    -color-primary-subtle:  #A7F3D0;
+    -color-primary-bg:      #12241C; /* Fundo verde bem escuro/fechado */
+    -color-primary-hover:   #047857;
+
+    /* Neutros escuros (Inversão: agora são os fundos principais) */
+    -color-dark-bg:         #0A0A0A; /* Preto absoluto */
+    -color-dark-surface:    #121212; /* Grafite escuro */
+    -color-dark-surface2:   #1A1A1A;
+    -color-dark-surface3:   #262626;
+    -color-dark-surface4:   #333333;
+    -color-dark-border:     #2D2D2D;
+    -color-dark-border2:    #404040;
+    -color-dark-text:       #FFFFFF; /* Texto principal vira branco */
+    -color-dark-text2:      #F4F4F5;
+    -color-dark-text3:      #D4D4D8;
+    -color-dark-text4:      #A1A1AA;
+    -color-dark-muted:      #71717A;
+
+    /* Neutros claros (Inversão: usados para os conteúdos e tabelas no modo escuro) */
+    -color-white:           #121212; /* O que era branco vira grafite escuro */
+    -color-bg-light:        #0A0A0A; /* O que era fundo claro vira preto */
+    -color-bg-card:         #141414;
+    -color-bg-card2:        #1E1E1E;
+    -color-border-light:    #222222;
+    -color-border-mid:      #2D2D2D;
+    -color-border-gray:     #404040;
+    -color-header-bg:       #1A1A1A;
+    
+    /* Cores de texto dos formulários e tabelas internos */
+    -color-text-dark:       #FAFAFA; /* Texto interno vira branco/claro */
+    -color-text-gray:       #E4E4E7;
+    -color-text-mid:        #D4D4D8;
+    -color-text-mid2:       #A1A1AA;
+    -color-text-mid3:       #71717A;
+    -color-text-mid4:       #52525B;
+    -color-text-muted:      #52525B;
+    
+    /* Botões secundários no modo escuro */
+    -color-button-gray:     #262626;
+    -color-button-hover:    #333333;
+    -color-button-light:    #1A1A1A;
+
+    /* Azul (Ajustado para o fluxo do verde do seu sistema de login) */
+    -color-blue:            #10B981;
+    -color-blue-dark:       #059669;
+    -color-blue-darker:     #047857;
+    -color-blue-light:      #34D399;
+    -color-blue-light2:     #065F46;
+
+    /* Semânticas e Holerite */
+    -color-holerite-purple: #12241C; /* Vira o tom sutil do verde escuro */
+}
 .login-sidebar {
     /* Aplica a superfície escura dedicada para dar contraste com o logo */
     -fx-background-color: -color-dark-surface; 
@@ -402,12 +460,14 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size: 12px;
+    -fx-alignment: CENTER;
 }
 
 /* Linhas */
 .tabela_dash .table-row-cell {
     -fx-background-color: -color-bg-card;
     -fx-border-color: transparent;
+    -fx-cell-size: 35px;
 }
 
 .tabela_dash .table-row-cell:odd {
@@ -429,7 +489,8 @@
 /* Remove linhas de grade */
 .tabela_dash .table-cell {
     -fx-border-color: transparent;
-    -fx-padding: 8px;
+    -fx-padding: 5 0 5 0;
+    -fx-alignment: CENTER;
 }
 
 /* Scroll bar */

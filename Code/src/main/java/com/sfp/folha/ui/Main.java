@@ -31,7 +31,7 @@ public class Main extends Application {
         }
 
         // Define o tamanho inicial da tela
-        primaryStage.setScene(new Scene(root, 650, 600));
+        primaryStage.setScene(new Scene(root, 1200, 700));
         primaryStage.setMinWidth(900);
         primaryStage.setMinHeight(600);
         primaryStage.setResizable(true); // para o Hyprland poder esticar a janela

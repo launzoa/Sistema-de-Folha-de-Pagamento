@@ -14,31 +14,36 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import com.sfp.autenticacao.domain.CatalogoUsuario;
 import com.sfp.core.domain.Usuario;
+import com.sfp.usuario.application.ControladorUsuario;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.GridPane;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 public class TelaUsuario {
-
+    //TODO:
+    //VER SE VAI TER A OPÇÃO DE EXCLUIR USUÁRIO OU SÓ DESATIVA PELO ATRIBUTO STATUS
     @FXML private TableView<Usuario> tabelaUsuario;
-    @FXML private TableColumn<Usuario, String> colLogin;
-    @FXML private TableColumn<Usuario, String> colNome;
-    @FXML private TableColumn<Usuario, Boolean> colPerfil;
-    @FXML private TableColumn<Usuario, Boolean> colStatus;
-    
+    //@FXML private TableColumn colLogin;
+    @FXML private TableColumn colNome;
+    @FXML private TableColumn colPerfil;
+    @FXML private TableColumn colStatus;
+   // @FXML private TableColumn colUltimoAcesso;
+    private ControladorUsuario controladorUsuario = new ControladorUsuario();
     private CatalogoUsuario catalogo = new CatalogoUsuario();
 
     @FXML
     public void initialize() {
         tabelaUsuario.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        
         colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        colLogin.setCellValueFactory(new PropertyValueFactory<>("nome")); // Using nome as login for now
         colPerfil.setCellValueFactory(new PropertyValueFactory<>("perfil"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-        
-        carregarUsuarios();
+
+        atualizarTabela();
     } 
-    
+    //REVER SE ESSA FUNÇÃO ESTA SENDO USADA
     private void carregarUsuarios() {
         List<Usuario> lista = catalogo.buscarTodos();
         ObservableList<Usuario> obsList = FXCollections.observableArrayList(lista);
@@ -47,87 +52,71 @@ public class TelaUsuario {
     
     @FXML
     private void AddUsuario() {
-        exibirDialogoUsuario(null);
+        exibirFormulario(null);
     }
     
     @FXML
     private void editarUsuario() {
-        Usuario user = tabelaUsuario.getSelectionModel().getSelectedItem();
-        if (user != null) {
-            exibirDialogoUsuario(user);
-        } else {
+        Usuario selecionado = tabelaUsuario.getSelectionModel().getSelectedItem();
+        if (selecionado != null) {
+            exibirFormulario(selecionado);
+        } 
+        else 
+        {
             mostrarAlerta("Aviso", "Selecione um usuário para editar.");
         }
     }
     
     @FXML
-    private void excluirUsuario() {
-        Usuario user = tabelaUsuario.getSelectionModel().getSelectedItem();
-        if (user != null) {
-            catalogo.excluir(user.getId());
-            carregarUsuarios();
-        } else {
-            mostrarAlerta("Aviso", "Selecione um usuário para excluir.");
-        }
+    private void excluirUsuario()
+    {
     }
     
-    private void exibirDialogoUsuario(Usuario usuarioEdicao) {
-        Dialog<Usuario> dialog = new Dialog<>();
-        dialog.setTitle(usuarioEdicao == null ? "Novo Usuário" : "Editar Usuário");
-        
-        ButtonType btnSalvar = new ButtonType("Salvar", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(btnSalvar, ButtonType.CANCEL);
-        
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
-        
-        TextField txtNome = new TextField();
-        PasswordField txtSenha = new PasswordField();
-        CheckBox chkAdmin = new CheckBox("Administrador?");
-        CheckBox chkStatus = new CheckBox("Ativo?");
-        chkStatus.setSelected(true);
-        
-        if (usuarioEdicao != null) {
-            txtNome.setText(usuarioEdicao.getNome());
-            txtSenha.setText(usuarioEdicao.getSenha());
-            chkAdmin.setSelected(usuarioEdicao.isPerfil());
-            chkStatus.setSelected(usuarioEdicao.isStatus());
+    private void exibirFormulario(Usuario usuario)
+    {
+        try
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("FormUsuario.fxml"));
+            Parent rootForm = loader.load();
+
+            FormUsuario formController = loader.getController();
+
+            //Se passado usuário avisa que é modo EDIÇÃO
+            if(usuario != null)
+            {
+                formController.prepararEdicao(usuario);
+            }
+
+            //Cria pop-up
+            Stage stage = new Stage();
+            Scene scene = new Scene(rootForm,500,400);
+
+            // >>> SUPREMO CUIDADO COM O MODO ESCURO GLOBLAL: Sincroniza a cor do Pop-up!
+            if(GerenciadorTema.modoEscuroAtivo)
+            {
+                rootForm.getStyleClass().add("dark-mode");
+            }
+
+            stage.setScene(scene);
+            stage.setTitle(usuario == null ? "Novo Usuário" : "Editar Usuário");
+            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL); //Bloqueia a tela de trás enquanto digita
+            stage.showAndWait(); // Trava a execução até fechar o pop-up
+
+            //Se salvou no banco, recarrega a tabela principal atualizada
+            if (formController.isSalvoComSucesso()) {
+                atualizarTabela(); 
+            }
+
+        } 
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
-        
-        grid.add(new Label("Nome (Login):"), 0, 0);
-        grid.add(txtNome, 1, 0);
-        grid.add(new Label("Senha:"), 0, 1);
-        grid.add(txtSenha, 1, 1);
-        grid.add(new Label("Perfil Administrador:"), 0, 2);
-        grid.add(chkAdmin, 1, 2);
-        grid.add(new Label("Status (Ativo):"), 0, 3);
-        grid.add(chkStatus, 1, 3);
-        
-        dialog.getDialogPane().setContent(grid);
-        
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == btnSalvar) {
-                Usuario user = new Usuario();
-                if (usuarioEdicao != null) user.setId(usuarioEdicao.getId());
-                user.setNome(txtNome.getText());
-                user.setSenha(txtSenha.getText());
-                user.setPerfil(chkAdmin.isSelected());
-                user.setStatus(chkStatus.isSelected());
-                return user;
-            }
-            return null;
-        });
-        
-        dialog.showAndWait().ifPresent(resultado -> {
-            if (usuarioEdicao == null) {
-                catalogo.salvar(resultado);
-            } else {
-                catalogo.atualizar(resultado);
-            }
-            carregarUsuarios();
-        });
+    }
+    private void atualizarTabela()
+    {
+        ObservableList<Usuario> lista = FXCollections.observableArrayList(controladorUsuario.listarUsuarios());
+        tabelaUsuario.setItems(lista);
     }
 
     private void mostrarAlerta(String titulo, String msg) {

@@ -104,9 +104,13 @@ public class TelaFuncionario {
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("CadastroFuncionarioView.fxml"));
             javafx.scene.Parent root = loader.load();
             
+            if(GerenciadorTema.modoEscuroAtivo)
+            {
+                    root.getStyleClass().add("dark-mode");
+            }            
+            
             CadastroFuncionarioController controller = loader.getController();
             controller.setFuncionarioEdicao(func);
-            
             javafx.stage.Stage stage = new javafx.stage.Stage();
             stage.setTitle("Editar Funcionário");
             stage.setScene(new javafx.scene.Scene(root));

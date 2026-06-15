@@ -42,6 +42,10 @@ public class TelaParametro{
         try {
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("ParametrosView.fxml"));
             javafx.scene.Parent root = loader.load();
+            if(GerenciadorTema.modoEscuroAtivo)
+            {
+                root.getStyleClass().add("dark-mode");
+            }            
             javafx.stage.Stage stage = new javafx.stage.Stage();
             stage.setTitle("Configurar Parâmetros de INSS");
             stage.setScene(new javafx.scene.Scene(root));

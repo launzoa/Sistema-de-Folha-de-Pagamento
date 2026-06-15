@@ -23,11 +23,9 @@
         <Label text="Usuários do Sistema" styleClass="card_title"/>
         <TableView fx:id="tabelaUsuario" VBox.vgrow="ALWAYS" styleClass="tabela_dash">
             <columns>
-                <TableColumn fx:id="colLogin" text="Login" prefWidth="120"/>
                 <TableColumn fx:id="colNome" text="Nome" prefWidth="220"/>
                 <TableColumn fx:id="colPerfil" text="Perfil" prefWidth="150"/>
                 <TableColumn fx:id="colStatus" text="Status" prefWidth="120"/>
-                <TableColumn fx:id="colUltimoAcesso" text="Último Acesso" prefWidth="160"/>
             </columns>
         </TableView>
     </VBox>

@@ -1,5 +1,6 @@
 package com.sfp.infrastructure.persistence;
 
+import com.sfp.core.ConexaoBD;
 import com.sfp.core.domain.FuncionarioRepository;
 import com.sfp.core.domain.Funcionario;
 
@@ -10,11 +11,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
+//REVER ISSO PARA MUDAR, JA QUE PARA USUÁRIOS E EMPRESA NÃO PRECISEI REFAZER ESSA PARTES DO BANCO
 public class MySQLFuncionarioRepository implements FuncionarioRepository {
-    private String url = "jdbc:mysql://localhost:3306/SFP";
+    private String url = "jdbc:mysql://localhost:3306/sfp";
     private String user = "root";
-    private String password = "admin";
+    private String password = "igor";
 
     @Override
     public void salvar(Funcionario funcionario) {
@@ -22,7 +25,7 @@ public class MySQLFuncionarioRepository implements FuncionarioRepository {
         String sql = "INSERT INTO funcionarios (nome, cpf, cargo, data_admissao, salario_bruto, status) VALUES (?, ?, ?, ?, ?, ?)";
 
         // Conexão com banco de dados mysql
-        try (Connection conn = DriverManager.getConnection(url, user, password)) {
+        try (Connection conn = ConexaoBD.getConnection()) {
             // Prepara statement para inserir dados
             PreparedStatement pstmt = conn.prepareStatement(sql);
 
@@ -43,6 +46,8 @@ public class MySQLFuncionarioRepository implements FuncionarioRepository {
             }
         } catch (SQLException e) { // Caso ocorra um erro no banco de dados, lança uma exceção
             throw new RuntimeException("Erro no Banco de Dados: " + e.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(MySQLFuncionarioRepository.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

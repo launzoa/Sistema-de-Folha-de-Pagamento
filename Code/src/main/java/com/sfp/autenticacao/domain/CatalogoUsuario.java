@@ -12,6 +12,8 @@ package com.sfp.autenticacao.domain;
 import com.sfp.core.ConexaoBD;
 import com.sfp.core.domain.Usuario;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class CatalogoUsuario {
@@ -27,6 +29,7 @@ public class CatalogoUsuario {
            
            if (rs.next())
            {
+               
                Usuario user = new Usuario();
                user.setId(rs.getInt("id"));
                user.setNome(rs.getString("nome"));
@@ -37,12 +40,13 @@ public class CatalogoUsuario {
                
            }
         } 
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
         return null;
     }
-
+    //REVER SE ESSA FUNÇÃO ESTA SENDO USADA
     public java.util.List<Usuario> buscarTodos() {
         java.util.List<Usuario> lista = new java.util.ArrayList<>();
         String sql = "SELECT * FROM usuario";
@@ -62,7 +66,7 @@ public class CatalogoUsuario {
         }
         return lista;
     }
-
+    //REVER SE ESSA FUNÇÃO ESTA SENDO USADA
     public void salvar(Usuario user) {
         String sql = "INSERT INTO usuario (nome, senha, perfil, status) VALUES (?, ?, ?, ?)";
         try(Connection con = ConexaoBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -75,7 +79,7 @@ public class CatalogoUsuario {
             ex.printStackTrace();
         }
     }
-
+    //REVER SE ESSA FUNÇÃO ESTA SENDO USADA
     public void atualizar(Usuario user) {
         String sql = "UPDATE usuario SET nome = ?, senha = ?, perfil = ?, status = ? WHERE id = ?";
         try(Connection con = ConexaoBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -89,7 +93,7 @@ public class CatalogoUsuario {
             ex.printStackTrace();
         }
     }
-
+    //REVER SE ESSA FUNÇÃO ESTA SENDO USADA
     public void excluir(int id) {
         String sql = "DELETE FROM usuario WHERE id = ?";
         try(Connection con = ConexaoBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -98,5 +102,89 @@ public class CatalogoUsuario {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+    public void cadastrarUsuario(String nome, String senha, boolean perfil)
+    {
+        String sql = "INSERT INTO usuario (nome, senha, perfil, status) VALUES (?, ?, ?, ?)";    
+        try (Connection conexao = ConexaoBD.getConnection(); PreparedStatement ps = conexao.prepareStatement(sql)) {
+
+            ps.setString(1, nome);
+            ps.setString(2, senha);
+            ps.setBoolean(3, perfil);
+            ps.setBoolean(4, true);
+
+            ps.executeUpdate();
+
+        } 
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    public void atualizarUsuario(int id, String nome, String senha, boolean status) {
+        String sql = "UPDATE usuario SET nome = ?, senha = ?, status = ? WHERE id = ?";
+
+        try (Connection conexao = ConexaoBD.getConnection(); PreparedStatement ps = conexao.prepareStatement(sql))
+        {
+
+            ps.setString(1, nome);
+            ps.setString(2, senha);
+            ps.setBoolean(3, status);
+            ps.setInt(4, id);
+
+            ps.executeUpdate();
+
+        } 
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }  
+    public void desativarUsuario(int id)
+    {
+        String sql = "UPDATE usuario SET status = false WHERE id = ?";
+
+        try (Connection conexao = ConexaoBD.getConnection(); PreparedStatement ps = conexao.prepareStatement(sql))
+        {
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
+
+        } 
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Usuario> listarUsuarios()
+    {
+        List<Usuario> usuarios = new ArrayList<>();
+        String sql = "SELECT id, nome, senha, perfil, status FROM usuario";
+
+        try (Connection conexao = ConexaoBD.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql); ResultSet rs = stmt.executeQuery())
+        {
+
+            while (rs.next()) {
+                Usuario usuario = new Usuario(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("senha"),
+                        rs.getBoolean("perfil"),
+                        rs.getBoolean("status")
+                );
+
+                usuarios.add(usuario);
+            }
+
+        } 
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return usuarios;
     }
 }

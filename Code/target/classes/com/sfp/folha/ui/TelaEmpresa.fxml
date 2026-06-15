@@ -18,7 +18,7 @@
             <ComboBox fx:id="comboEmpresas" promptText="Escolha uma empresa..." styleClass="combo_box" maxWidth="Infinity"/>
         </VBox>
         
-        <Button text="+ Nova Empresa" styleClass="primary-button" onAction="#novaEmpresa"/>
+        <Button text="+ Nova Empresa" styleClass="primary-button" onAction="#addEmpresa"/>
         <Button text="Editar Empresa" styleClass="primary-button" onAction="#editarEmpresa"/>
         <Button text="Excluir" styleClass="btn-excluir" onAction="#excluirEmpresa"/>
     </HBox>
@@ -47,7 +47,7 @@
         </GridPane>     
     </VBox>
     <HBox spacing="8" alignment="CENTER_RIGHT">
-        <Button text="+ Adicionar Endereço" styleClass="primary-button" onAction="#novoEndereco"/>
+        <Button text="+ Adicionar Endereço" styleClass="primary-button" onAction="#addEndereco"/>
         <Button text="Editar" styleClass="secondary-button" onAction="#editarEndereco"/>
         <Button text="Excluir" styleClass="btn-excluir" onAction="#excluirEndereco"/>
     </HBox>

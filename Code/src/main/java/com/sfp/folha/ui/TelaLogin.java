@@ -32,24 +32,34 @@ public class TelaLogin {
     public void fazerLogin() {
         String nome = inputUsuario.getText();
         String senha = inputSenha.getText();
-
+        
         Usuario user = controlador.autenticar(nome, senha);
-
-        if (user != null) {
-            try {
+        
+        if(user != null)
+        {
+            try
+            {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/sfp/folha/ui/MainView.fxml"));
+                Parent rootLogin = loader.load();
                 Stage stage = (Stage) inputUsuario.getScene().getWindow();
-                Scene scene = new Scene(loader.load(), 1200, 700);
-
+                Scene scene = new Scene(rootLogin, 1200, 700);
+                if(GerenciadorTema.modoEscuroAtivo)
+                {
+                    rootLogin.getStyleClass().add("dark-mode");
+                }
                 MainController mainController = loader.getController();
                 mainController.setUsuario(user);
-
+        
                 stage.setScene(scene);
                 stage.setTitle("SPF - Sistema de Folha de Pagamento");
-            } catch (Exception e) {
+            }
+            catch(Exception e)
+            {
                 e.printStackTrace();
             }
-        } else {
+        }
+        else
+        {
             labelErro.setText("Usario ou senha inválidos. ");
         }
 

@@ -57,6 +57,7 @@
                 <HBox styleClass="header">
                     <Label fx:id="labelTela" text="Dashboard" styleClass="header-title"/>
                     <HBox HBox.hgrow="ALWAYS"/>
+                    <Button text="Alterar Modo" styleClass="primary-button" onAction="#alterarModo"/>
                     <Label fx:id="labelUsuario" text="usuário" styleClass="header-user"/>
                 </HBox>
             </top>
