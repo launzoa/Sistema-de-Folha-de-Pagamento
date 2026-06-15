@@ -9,6 +9,8 @@ package com.sfp.folha.ui;
  * @author manoe
  */
 import com.sfp.core.domain.Usuario;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,12 +24,14 @@ public class MainController2 {
     @FXML private Label labelTela;
     @FXML private Label labelUsuario;
     
-     private Usuario userLogado;
-     
+    private Usuario userLogado;
+    private boolean modoEscuroAtivo = false;
+    
     @FXML
     public void initialize()
     {
         abrirDashboard();
+
     }
     
     public void setUsuario(Usuario usuario)
@@ -142,8 +146,13 @@ public class MainController2 {
         try
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("TelaLogin.fxml"));
+            Parent rootLogin = loader.load();
             Stage stage = (Stage) painelConteudo.getScene().getWindow();
-            Scene scene = new Scene(loader.load(), 1200, 700);
+            Scene scene = new Scene(rootLogin, 1200, 700);
+            if (GerenciadorTema.modoEscuroAtivo)
+            {
+                rootLogin.getStyleClass().add("dark-mode");
+            }
             stage.setScene(scene);
             stage.setTitle("Sistema de Folha de Pagamento - SFP");
         } 
@@ -151,5 +160,31 @@ public class MainController2 {
         {
             e.printStackTrace();
         }        
+    }
+    
+    @FXML
+    public void alterarModo()
+    {
+        try
+        {
+            GerenciadorTema.modoEscuroAtivo = !GerenciadorTema.modoEscuroAtivo;
+            Parent rootNode = painelConteudo.getScene().getRoot();
+
+            if (GerenciadorTema.modoEscuroAtivo)
+            {
+                if(!rootNode.getStyleClass().contains("dark-mode"))
+                {
+                    rootNode.getStyleClass().add("dark-mode");    
+                }
+            }
+            else
+            {
+                rootNode.getStyleClass().removeAll("dark-mode");
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }     
     }
 }

@@ -17,6 +17,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import com.sfp.folha.ui.GerenciadorTema;
 
 public class TelaLogin {
     @FXML private TextField inputUsuario;
@@ -38,9 +39,13 @@ public class TelaLogin {
             try
             {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/sfp/folha/ui/MainView2.fxml"));
+                Parent rootLogin = loader.load();
                 Stage stage = (Stage) inputUsuario.getScene().getWindow();
-                Scene scene = new Scene(loader.load(), 1200, 700);
-                
+                Scene scene = new Scene(rootLogin, 1200, 700);
+                if(GerenciadorTema.modoEscuroAtivo)
+                {
+                    rootLogin.getStyleClass().add("dark-mode");
+                }
                 MainController2 mainController = loader.getController();
                 mainController.setUsuario(user);
         
