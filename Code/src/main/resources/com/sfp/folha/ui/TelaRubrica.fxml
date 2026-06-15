@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.sfp.folha.ui.TelaRubrica" styleClass="conteudo" spacing="20">
+    <stylesheets>
+        <URL value="@style.css"/>
+    </stylesheets>
+
+    <!-- BOTÃO DO TOPO -->
+    <HBox spacing="20" alignment="CENTER_RIGHT">
+        <Button text="+ Nova Rubrica" styleClass="primary-button"/>
+        <Button text="Editar Rubrica" styleClass="primary-button"/>
+    </HBox>
+
+    <!-- TABELA -->
+    <VBox styleClass="card" VBox.vgrow="ALWAYS">
+        <TableView fx:id="tabelaRubrica" styleClass="tabela_dash" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colDescr" text="Descrição" prefWidth="150"/>
+                <TableColumn fx:id="colNat" text="Natureza" prefWidth="120"/>
+                <TableColumn fx:id="colTipo" text="Tipo" prefWidth="110"/>
+                <TableColumn fx:id="colIncINSS" text="Inc. INSS" prefWidth="110"/>
+                <TableColumn fx:id="colIncFGTS" text="Inc. FGTS" prefWidth="80"/>
+                <TableColumn fx:id="colIncIRRF" text="Inc. IRRF" prefWidth="80"/>
+                <TableColumn fx:id="colAcoes" text="Ações" prefWidth="70"/>
+            </columns>
+        </TableView>
+    </VBox>
+
+
+</VBox>

@@ -5,12 +5,16 @@ hide circle
 hide empty members
 
 class Funcionario {
-    salarioBase
+    nome
+    cpf
+    dataAdimissão
+    cargo
+    salarioBruto
 }
 
 class FolhaDePonto {
-    horaExtra50
-    horaExtra100
+    horasExtra50
+    horasExtra100
 }
 
 class Holerite {

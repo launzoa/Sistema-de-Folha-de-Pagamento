@@ -14,15 +14,15 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         // O JavaFX procura o arquivo fxml dentro de src/main/resources respeitando o
         // caminho do pacote
-        URL fxmlLocation = getClass().getResource("MainView.fxml");
+        URL fxmlLocation = getClass().getResource("TelaLogin.fxml");
 
         if (fxmlLocation == null) {
             throw new IllegalStateException(
-                    "Nao foi possivel encontrar o arquivo MainView.fxml. Verifique a pasta resources.");
+                    "Nao foi possivel encontrar o arquivo TelaLogin.fxml. Verifique a pasta resources.");
         }
 
         Parent root = FXMLLoader.load(fxmlLocation);
-        primaryStage.setTitle("Sistema de Folha de Pagamento - SFP");
+        primaryStage.setTitle("SFP - Login");
 
         // Define o icone da janela (Barra de tarefas)
         URL iconLocation = getClass().getResource("gato.png");
@@ -32,6 +32,9 @@ public class Main extends Application {
 
         // Define o tamanho inicial da tela
         primaryStage.setScene(new Scene(root, 650, 600));
+        primaryStage.setMinWidth(900);
+        primaryStage.setMinHeight(600);
+        primaryStage.setResizable(true); // para o Hyprland poder esticar a janela
         primaryStage.show();
     }
 

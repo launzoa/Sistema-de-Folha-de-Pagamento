@@ -29,16 +29,16 @@ public class CalculadoraINSS implements RegraDeCalculo {
     // @return BigDecimal: Desconto do INSS
     @Override
     public BigDecimal calcular(Funcionario funcionario, int diasUteis, int diasTrabalhados) {
-        BigDecimal salarioBruto = funcionario.getSalarioBase();
+        BigDecimal salarioBruto = funcionario.getSalarioBruto();
         BigDecimal aliquota = BigDecimal.ZERO;
         BigDecimal parcela = BigDecimal.ZERO;
         boolean flag = false;
 
         // Busca a faixa do INSS correspondente ao salário bruto
         for (FaixaINSS faixa : this.tabelaINSS) {
-            if (salarioBruto.compareTo(faixa.getValorMaximo()) <= 0) {
+            if (salarioBruto.compareTo(faixa.getTeto()) <= 0) {
                 aliquota = faixa.getAliquota();
-                parcela = faixa.getParcelaADeduzir();
+                parcela = faixa.getParcelaDeduzir();
 
                 flag = true;
                 break;

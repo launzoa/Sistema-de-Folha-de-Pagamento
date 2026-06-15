@@ -1,36 +1,181 @@
 /* Premium Dark Mode CSS para o JavaFX */
 
+/* ===== VARIÁVEIS DE COR ===== */
 .root {
     -fx-background-color: #121212;
     -fx-font-family: "Segoe UI", "Inter", sans-serif;
+ 
+    /* Roxo — cor primária */
+    -color-primary:         #7C3AED;
+    -color-primary-dark:    #5B21B6;
+    -color-primary-light:   #A78BFA;
+    -color-primary-subtle:  #DDD6FE;
+    -color-primary-bg:      #EDE9FE;
+    -color-primary-hover:   #4C1D95;
+ 
+    /* Neutros escuros (login / dark mode) */
+    -color-dark-bg:         #0F0A1E;
+    -color-dark-surface:    #1A1030;
+    -color-dark-surface2:   #160D28;
+    -color-dark-surface3:   #2D1F4E;
+    -color-dark-surface4:   #3D2A6A;
+    -color-dark-border:     #3B2C6E;
+    -color-dark-border2:    #4A3580;
+    -color-dark-text:       #FFFFFF;
+    -color-dark-text2:      #EDE9FE;
+    -color-dark-text3:      #C4B5FD;
+    -color-dark-text4:      #A78BFA;
+    -color-dark-muted:      #6D5EA8;
+ 
+    /* Neutros claros (dashboard / conteúdo) */
+    -color-white:           #FFFFFF;
+    -color-bg-light:        #F5F3FF;
+    -color-bg-card:         #FAF8FF;
+    -color-bg-card2:        #EDE9FE;
+    -color-border-light:    #DDD6FE;
+    -color-border-mid:      #C4B5FD;
+    -color-border-gray:     #8B5CF6;
+    -color-header-bg:       #EDE9FE;
+    -color-text-dark:       #1E1033;
+    -color-text-gray:       #3B2C6E;
+    -color-text-mid:        #4C3A7A;
+    -color-text-mid2:       #5B4A8A;
+    -color-text-mid3:       #6B5A9A;
+    -color-text-mid4:       #7B6AAA;
+    -color-text-muted:      #9D8FBF;
+    -color-button-gray:     #EDE9FE;
+    -color-button-hover:    #DDD6FE;
+    -color-button-light:    #E8E0FF;
+ 
+    /* Azul (botão primário login) */
+    -color-blue:            #7C3AED;
+    -color-blue-dark:       #5B21B6;
+    -color-blue-darker:     #4C1D95;
+    -color-blue-light:      #8B5CF6;
+    -color-blue-light2:     #6D28D9;
+ 
+    /* Semânticas */
+    -color-success:         #10B981;
+    -color-success-dark:    #065F46;
+    -color-success-bg:      #D1FAE5;
+    -color-success-border:  #6EE7B7;
+    -color-danger:          #EF4444;
+    -color-danger-dark:     #B91C1C;
+    -color-danger-bg:       #FEE2E2;
+    -color-holerite-purple: #DDD6FE;
 }
 
+.login-sidebar {
+    /* Aplica a superfície escura dedicada para dar contraste com o logo */
+    -fx-background-color: -color-dark-surface; 
+    -fx-padding: 40px;
+    -fx-alignment: center;
+}
+
+.login-sidebar-title {
+    /* Texto totalmente branco e legível */
+    -fx-text-fill: -color-dark-text;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-alignment: center;
+}
+
+.login-sidebar-subtitle {
+    /* Texto secundário em roxo claro/suave */
+    -fx-text-fill: -color-dark-text3;
+    -fx-font-size: 12px;
+    -fx-text-alignment: center;
+    -fx-max-width: 280px;
+}
+.login-form-container {
+    /* Fundo branco e limpo para destacar os inputs */
+    -fx-background-color: -color-white;
+    -fx-padding: 50px;
+}
+
+.login-form-title {
+    /* Título escuro usando a variável de contraste do conteúdo */
+    -fx-text-fill: -color-text-dark;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.login-form-subtitle {
+    /* Subtítulo em cinza/roxo médio para hierarquia visual */
+    -fx-text-fill: -color-text-mid2;
+    -fx-font-size: 13px;
+}
+.login-form-container .campo-busca {
+    -fx-background-color: -color-white;
+    -fx-text-fill: -color-text-dark;
+    -fx-prompt-text-fill: -color-text-muted;
+    -fx-border-color: -color-border-light;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 13px;
+}
+
+/* Quando o usuário clica para digitar no campo de login */
+.login-form-container .campo-busca:focused {
+    /* Borda muda para o roxo primário ativo do sistema */
+    -fx-border-color: -color-primary;
+    -fx-border-width: 2px;
+    -fx-padding: 7px 11px; /* Compensa o ganho da borda para não mover o input */
+}
+
+/* Labels explicativas de cima dos campos ("Usuário" e "Senha") */
+.login-form-container .field-label {
+    -fx-text-fill: -color-text-gray;
+    -fx-font-weight: bold;
+}
+.login-form-container .primary-button {
+    -fx-background-color: -color-primary;
+    -fx-text-fill: -color-white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20px;
+    -fx-cursor: hand;
+}
+
+/* Efeito Hover do botão baseado na sua paleta de aproximação */
+.login-form-container .primary-button:hover {
+    -fx-background-color: -color-primary-dark;
+}
+
+/* Estado pressionado (Clique ativo) */
+.login-form-container .primary-button:armed {
+    -fx-background-color: -color-primary-hover;
+}
+.login-version-label {
+    -fx-text-fill: -color-text-muted;
+    -fx-font-size: 11px;
+}
 .title-label {
     -fx-font-size: 28px;
     -fx-font-weight: bold;
-    -fx-text-fill: #FFFFFF;
+    -fx-text-fill: -color-dark-text;
     -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.2), 10, 0, 0, 0);
 }
 
 .form-container {
-    -fx-background-color: #1E1E1E;
+    -fx-background-color: -color-dark-surface;
     -fx-padding: 20px;
     -fx-background-radius: 10px;
-    -fx-border-color: #333333;
+    -fx-border-color: -color-dark-surface4;
     -fx-border-radius: 10px;
 }
 
 .field-label {
-    -fx-text-fill: #B3B3B3;
+    -fx-text-fill: -color-dark-text4;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
 
 .input-field {
-    -fx-background-color: #2D2D2D;
-    -fx-text-fill: #FFFFFF;
-    -fx-prompt-text-fill: #666666;
-    -fx-border-color: #404040;
+    -fx-background-color: -color-dark-surface3;
+    -fx-text-fill: -color-dark-text;
+    -fx-prompt-text-fill: -color-dark-muted;
+    -fx-border-color: -color-dark-border2;
     -fx-border-radius: 5px;
     -fx-background-radius: 5px;
     -fx-padding: 8px;
@@ -38,12 +183,12 @@
 }
 
 .input-field:focused {
-    -fx-border-color: #4D90FE;
-    -fx-background-color: #333333;
+    -fx-border-color: -color-blue;
+    -fx-background-color: -color-dark-surface4;
 }
 
 .primary-button {
-    -fx-background-color: linear-gradient(to right, #4D90FE, #3065C0);
+    -fx-background-color: linear-gradient(to right, -color-blue, -color-blue-dark);
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size: 16px;
@@ -53,49 +198,49 @@
 }
 
 .primary-button:hover {
-    -fx-background-color: linear-gradient(to right, #5EA0FF, #4075D0);
+    -fx-background-color: linear-gradient(to right, -color-blue-light, -color-blue-light2);
     -fx-effect: dropshadow(three-pass-box, rgba(77, 144, 254, 0.4), 10, 0, 0, 2);
 }
 
 .primary-button:pressed {
-    -fx-background-color: linear-gradient(to right, #3065C0, #2045A0);
+    -fx-background-color: linear-gradient(to right, -color-blue-dark, -color-blue-darker);
     -fx-translate-y: 2px;
 }
 
 .result-container {
-    -fx-background-color: #1A1C20;
+    -fx-background-color: -color-dark-surface2;
     -fx-padding: 20px;
     -fx-background-radius: 10px;
-    -fx-border-color: #2B303B;
+    -fx-border-color: -color-dark-border;
     -fx-border-radius: 10px;
 }
 
 .result-label-title {
-    -fx-text-fill: #A0AABF;
+    -fx-text-fill: -color-dark-text3;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
 
 .result-label-title-large {
-    -fx-text-fill: #E0E5F0;
+    -fx-text-fill: -color-dark-text2;
     -fx-font-size: 18px;
     -fx-font-weight: bold;
 }
 
 .result-value-green {
-    -fx-text-fill: #4CAF50;
+    -fx-text-fill: -color-success;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
 
 .result-value-red {
-    -fx-text-fill: #F44336;
+    -fx-text-fill: -color-danger;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
 
 .result-value-large {
-    -fx-text-fill: #FFFFFF;
+    -fx-text-fill: -color-dark-text;
     -fx-font-size: 20px;
     -fx-font-weight: bold;
 }
@@ -104,5 +249,441 @@
     -fx-border-color: transparent transparent transparent transparent;
     -fx-border-width: 1 0 0 0;
     -fx-padding: 10 0 0 0;
-    -fx-border-color: #333333;
+    -fx-border-color: -color-dark-surface4;
+}
+
+
+.root_TLogin {
+    -fx-padding: 40; 
+    -fx-alignment: center;
+}
+
+.label_login {
+    -fx-font-size: 22px; 
+    -fx-font-weight: bold;
+}
+
+
+/* ===== PRINCIPAL ===== */
+.sidebar {
+    -fx-background-color: -color-primary;
+    -fx-pref-width: 250px;
+    -fx-padding: 0px 0px 15px 0px;
+    -fx-spacing: 5px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-min-height: 100%;
+}
+.logo_titulo {
+    -fx-background-color: -color-primary-dark;
+    -fx-padding: 10px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 10px;
+    -fx-max-width: Infinity;
+}
+.menu-items {
+    -fx-padding: 0 10px 0 10px;
+    -fx-spacing: 5px;
+}
+.menu-button {
+    -fx-background-color: -color-button-gray;
+    -fx-text-fill: -color-text-dark;
+    -fx-font-size: 13px;
+    -fx-pref-width: 180px;
+    -fx-max-width: Infinity;
+    -fx-alignment: CENTER;
+    -fx-padding: 8px 15px;
+    -fx-background-radius: 3px;
+    -fx-cursor: hand;
+    -fx-translate-x: 0;
+}
+.menu-button:hover {
+    -fx-background-color: -color-button-hover;
+}
+.exit_button {
+    -fx-background-color: -color-button-gray;
+    -fx-text-fill: -color-text-dark;
+    -fx-font-size: 13px;
+    -fx-pref-width: 180px;
+    -fx-background-radius: 3px;
+    -fx-cursor: hand;
+    -fx-alignment: CENTER_LEFT;
+}
+.exit_button:hover {
+    -fx-background-color: -color-button-hover;
+}
+.titles_dash {
+    -fx-text-fill: -color-primary-subtle;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 0px 3px 5px;
+    -fx-alignment: CENTER;       
+    -fx-max-width: Infinity; 
+    -fx-padding: 5px;
+}
+
+.header {
+    -fx-background-color: -color-header-bg;
+    -fx-padding: 8px 15px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 10px;
+    -fx-min-height: 70px;
+    -fx-pref-height: 70px;
+}
+
+.header-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text-dark;
+    -fx-padding: 4px 10px;
+    -fx-background-color: rgba(255,255,255,0.15);
+    -fx-background-radius: 20px;
+}
+
+.header-user {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text-mid;
+    -fx-padding: 4px 10px;
+    -fx-background-color: rgba(255,255,255,0.15);
+    -fx-background-radius: 20px;
+}
+
+.conteudo {
+    -fx-background-color: -color-bg-light;
+    -fx-padding: 20px;
+}
+
+
+/* ===== DASHBOARD ===== */
+.card {
+    -fx-background-color: -color-bg-card2;
+    -fx-padding: 15px;
+    -fx-spacing: 8px;
+    -fx-background-radius: 5px;
+}
+.card_dash {
+    -fx-background-color: -color-white;
+    -fx-padding: 20px;
+    -fx-spacing: 10px;
+    -fx-background-radius: 8px;
+    -fx-border-color: -color-border-light;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 2);
+}
+.card_title {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text-gray;
+}
+
+.card_label{
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-blue;
+}
+
+.tabela_dash {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* Cabeçalho */
+.tabela_dash .column-header-background {
+    -fx-background-color: -color-primary-dark;
+}
+
+.tabela_dash .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.tabela_dash .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+/* Linhas */
+.tabela_dash .table-row-cell {
+    -fx-background-color: -color-bg-card;
+    -fx-border-color: transparent;
+}
+
+.tabela_dash .table-row-cell:odd {
+    -fx-background-color: -color-bg-card2;
+}
+
+.tabela_dash .table-row-cell:hover {
+    -fx-background-color: -color-primary-subtle;
+}
+
+.tabela_dash .table-row-cell:selected {
+    -fx-background-color: -color-primary;
+}
+
+.tabela_dash .table-row-cell:selected .text {
+    -fx-fill: white;
+}
+
+/* Remove linhas de grade */
+.tabela_dash .table-cell {
+    -fx-border-color: transparent;
+    -fx-padding: 8px;
+}
+
+/* Scroll bar */
+.tabela_dash .scroll-bar:vertical {
+    -fx-background-color: -color-border-light;
+}
+
+.tabela_dash .scroll-bar:vertical .thumb {
+    -fx-background-color: -color-primary;
+    -fx-background-radius: 5px;
+}
+
+/* Mensagem "Não há conteúdo" */
+.tabela_dash .placeholder .label {
+    -fx-text-fill: -color-text-muted;
+    -fx-font-style: italic;
+}
+
+.secondary-button {
+    -fx-background-color: -color-button-gray;
+    -fx-text-fill: -color-text-gray;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 20px;
+    -fx-cursor: hand;
+}
+
+.secondary-button:hover {
+    -fx-background-color: -color-button-hover;
+}
+
+/* Combo Box */
+.combo_box {
+    -fx-background-color: -color-white;
+    -fx-border-color: -color-border-gray;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 4px 8px;
+    -fx-cursor: hand;
+    -fx-pref-height: 32px;
+}
+
+.combo_box:focused,
+.combo_box:showing {
+    -fx-border-color: -color-primary;
+    -fx-border-width: 2px;
+}
+
+.combo_box .list-cell {
+    -fx-text-fill: -color-text-gray;
+    -fx-font-size: 13px;
+    -fx-background-color: transparent;
+    -fx-padding: 0px 4px;
+}
+
+.combo_box .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.combo_box .arrow {
+    -fx-background-color: -color-primary;
+}
+.combo-box-popup .list-view {
+    -fx-background-color: -color-white;
+    -fx-border-color: -color-primary;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 8, 0, 0, 3);
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-text-fill: -color-text-gray;
+    -fx-font-size: 13px;
+    -fx-padding: 6px 10px;
+    -fx-background-color: -color-white;
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: -color-primary-bg;
+    -fx-text-fill: -color-primary-hover;
+}
+
+.combo-box-popup .list-view .list-cell:selected {
+    -fx-background-color: -color-primary;
+    -fx-text-fill: white;
+}
+
+.lancamento-field {
+    -fx-font-size: 14px;
+    -fx-text-fill: -color-text-mid3;    
+}
+
+/* ===== Holerite ===== */
+
+.holerite-container {
+    -fx-background-color: -color-white;
+    -fx-border-color: -color-border-mid;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.10), 8, 0, 0, 2);
+}
+
+.holerite-header {
+    -fx-background-color: -color-white;
+    -fx-padding: 14px 18px 10px 18px;
+    -fx-border-color: transparent transparent -color-border-mid transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-radius: 8px 8px 0px 0px;
+}
+
+.holerite-empresa {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A1A1A;
+    -fx-font-family: "Consolas", "Courier New", monospace;
+}
+
+.holerite-empresa-info {
+    -fx-font-size: 12px;
+    -fx-text-fill: -color-text-mid4;
+    -fx-font-family: "Consolas", "Courier New", monospace;
+}
+
+.holerite-dados {
+    -fx-background-color: -color-bg-card;
+    -fx-padding: 12px 18px;
+    -fx-border-color: transparent transparent -color-border-mid transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.holerite-field-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: -color-text-mid4;
+    -fx-font-family: "Consolas", "Courier New", monospace;
+}
+
+.holerite-field-value {
+    -fx-font-size: 13px;
+    -fx-text-fill: -color-text-mid4;
+    -fx-font-family: "Consolas", "Courier New", monospace;
+}
+
+.holerite-section {
+    -fx-padding: 10px 12px;
+    -fx-spacing: 6px;
+}
+
+.holerite-section-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text-gray;
+    -fx-padding: 0 0 4px 2px;
+}
+
+.holerite-footer {
+    -fx-background-color: -color-bg-light;
+    -fx-border-color: -color-border-mid transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+}
+
+.holerite-footer-cell {
+    -fx-padding: 10px 18px;
+    -fx-border-color: transparent -color-border-mid transparent transparent;
+    -fx-border-width: 0 1 0 0;
+}
+
+.holerite-footer-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text-mid2;
+}
+
+.holerite-footer-value-green {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-success-dark;
+}
+
+.holerite-footer-value-red {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-danger-dark;
+}
+
+.holerite-footer-liquido {
+    -fx-background-color: -color-primary;
+    -fx-padding: 12px 18px;
+    -fx-spacing: 8px;
+    -fx-background-radius: 0 0 8px 8px;
+}
+
+.holerite-liquido-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-holerite-purple;
+}
+
+.holerite-liquido-value {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-white;
+}
+
+.historico_field {
+    -fx-background-color: -color-white;
+    -fx-text-fill: -color-text-gray;
+    -fx-prompt-text-fill: -color-text-muted;
+    -fx-border-color: -color-border-gray;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 6px 10px;
+    -fx-font-size: 13px;
+    -fx-pref-height: 32px;  
+}
+.historico_field:focused{
+    -fx-border-color: -color-primary;
+    -fx-border-width: 2px;
+    -fx-padding: 5px 9px;   
+}
+
+/* Remove a borda/quadrado interno do DatePicker */
+.combo_box .date-picker-display-node {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* Garante que ao receber foco, o quadrado interno não apareça */
+.combo_box:focused .date-picker-display-node,
+.combo_box:showing .date-picker-display-node {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* Remove qualquer efeito de linha extra que o JavaFX coloca por padrão */
+.combo_box .text-input {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+/* ===== TELA DE USUÁRIOS ===== */
+.btn-excluir {
+    -fx-background-color: -color-button-light;
+    -fx-text-fill: -color-danger-dark;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 20px;
+    -fx-cursor: hand;
+}
+
+.btn-excluir:hover {
+    -fx-background-color: -color-danger-bg;
 }

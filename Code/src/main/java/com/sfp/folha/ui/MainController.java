@@ -1,104 +1,137 @@
+
 package com.sfp.folha.ui;
 
+/**
+ *
+ * @author manoe
+ */
+import com.sfp.core.domain.Usuario;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import java.math.BigDecimal;
-
-import com.sfp.folha.application.ProcessadorDeFolha;
-import com.sfp.folha.application.ProcessadorDeFolha;
-import com.sfp.folha.application.calculadoras.CalculadoraHoraExtra;
-import com.sfp.folha.application.calculadoras.CalculadoraSalarioProporcional;
-import com.sfp.folha.application.calculadoras.CalculadoraINSS;
-
-import com.sfp.folha.domain.FaixaINSS;
-import com.sfp.folha.domain.Holerite;
-
-import com.sfp.core.domain.Funcionario;
-
-import java.util.Arrays;
-import java.util.List;
+import javafx.stage.Stage;
 
 public class MainController {
+    @FXML
+    private AnchorPane painelConteudo;
+    @FXML
+    private Label labelTela;
+    @FXML
+    private Label labelUsuario;
 
-        // A anotacao @FXML liga a variavel Java ao componente do arquivo FXML pelo
-        // "fx:id"
-        @FXML
-        private TextField inputSalario;
+    private Usuario userLogado;
 
-        @FXML
-        private Label labelProventos;
+    @FXML
+    public void initialize() {
+        abrirDashboard();
+    }
 
-        @FXML
-        private Label labelDescontos;
-
-        @FXML
-        private Label labelLiquido;
-
-        @FXML
-        private TextField inputHoras50;
-
-        @FXML
-        private TextField inputHoras100;
-
-        // Metodo que sera disparado ao clicar no botao (onAction no FXML)
-        // @brief: Calcula a folha de pagamento
-        // @return void
-        @FXML
-        public void calcularFolha() {
-                String salarioStr = inputSalario.getText();
-                BigDecimal salarioBase = new BigDecimal(salarioStr);
-
-                String horas50Str = inputHoras50.getText();
-                if (horas50Str.isEmpty()) {
-                        horas50Str = "0";
-                }
-
-                String horas100Str = inputHoras100.getText();
-                if (horas100Str.isEmpty()) {
-                        horas100Str = "0";
-                }
-
-                Funcionario funcionario = new Funcionario(salarioBase);
-
-                funcionario.getPonto().setHorasExtras50(Double.parseDouble(horas50Str));
-                funcionario.getPonto().setHorasExtras100(Double.parseDouble(horas100Str));
-
-                FaixaINSS faixa1 = new FaixaINSS(new BigDecimal("0.00"), new BigDecimal("1621.00"),
-                                new BigDecimal("0.075"),
-                                new BigDecimal("0.00"));
-                FaixaINSS faixa2 = new FaixaINSS(new BigDecimal("1621.01"), new BigDecimal("2902.84"),
-                                new BigDecimal("0.09"),
-                                new BigDecimal("24.32"));
-                FaixaINSS faixa3 = new FaixaINSS(new BigDecimal("2902.85"), new BigDecimal("4354.27"),
-                                new BigDecimal("0.12"),
-                                new BigDecimal("111.40"));
-                FaixaINSS faixa4 = new FaixaINSS(new BigDecimal("4354.28"), new BigDecimal("8475.55"),
-                                new BigDecimal("0.14"),
-                                new BigDecimal("198.49"));
-                BigDecimal tetoMaximo = new BigDecimal("988.09");
-                CalculadoraINSS calcINSS = new CalculadoraINSS(Arrays.asList(faixa1, faixa2, faixa3, faixa4),
-                                tetoMaximo);
-
-                BigDecimal percentual = new BigDecimal("0.5");
-                BigDecimal percentual100 = new BigDecimal("1.0");
-                BigDecimal divisor = new BigDecimal("220"); // CLT padrao e 220
-                CalculadoraHoraExtra calcHoraExtra50 = new CalculadoraHoraExtra(percentual, divisor, false);
-                CalculadoraHoraExtra calcHoraExtra100 = new CalculadoraHoraExtra(percentual100, divisor, true);
-
-                int diasUteis = 22;
-                int diasTrabalhados = 22;
-                CalculadoraSalarioProporcional calcSalarioProporcional = new CalculadoraSalarioProporcional();
-
-                ProcessadorDeFolha processador = new ProcessadorDeFolha(
-                                Arrays.asList(calcHoraExtra50, calcHoraExtra100, calcSalarioProporcional),
-                                Arrays.asList(calcINSS));
-
-                Holerite holerite = processador.processar(funcionario, diasUteis, diasTrabalhados);
-                System.out.println("Salario liquido calculado: " + holerite);
-
-                labelProventos.setText("R$ " + holerite.getTotalProventos());
-                labelDescontos.setText("R$ " + holerite.getTotalDescontos());
-                labelLiquido.setText("R$ " + holerite.getSalarioLiquido());
+    public void setUsuario(Usuario usuario) {
+        this.userLogado = usuario;
+        if (usuario.isPerfil() == true) {
+            labelUsuario.setText(usuario.getNome() + " | Administrador");
+        } else {
+            labelUsuario.setText(usuario.getNome() + " | Operador");
         }
+    }
+
+    @FXML
+    public void abrirDashboard() {
+        carregarTela("TelaDashboard.fxml");
+        labelTela.setText("Dashboard");
+    }
+
+    @FXML
+    public void abrirFuncionarios() {
+        carregarTela("TelaFuncionario.fxml");
+        labelTela.setText("Funcionários");
+    }
+
+    private void mostrarAlertaEmDesenvolvimento(String modulo) {
+        javafx.scene.control.Alert alerta = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+        alerta.setTitle("Módulo em Desenvolvimento");
+        alerta.setHeaderText(null);
+        alerta.setContentText("O módulo '" + modulo + "' está em fase de desenvolvimento e será disponibilizado nas próximas atualizações.");
+        alerta.showAndWait();
+    }
+
+    @FXML
+    public void abrirRubrica() {
+        mostrarAlertaEmDesenvolvimento("Rubricas");
+    }
+
+    @FXML
+    public void abrirLancamento() {
+        mostrarAlertaEmDesenvolvimento("Lançamento de Exceções");
+    }
+
+    @FXML
+    public void abrirFolhaMes() {
+        carregarTela("TelaFolhaMes.fxml");
+        labelTela.setText("Folha do Mês");
+    }
+
+    @FXML
+    public void abrirHolerite() {
+        carregarTela("TelaHolerite.fxml");
+        labelTela.setText("Holerites");
+    }
+
+    @FXML
+    public void abrirHistorico() {
+        mostrarAlertaEmDesenvolvimento("Histórico de Folhas");
+    }
+
+    @FXML
+    public void abrirUsuario() {
+        carregarTela("TelaUsuario.fxml");
+        labelTela.setText("Usuários");
+    }
+
+    @FXML
+    public void abrirEmpresa() {
+        carregarTela("TelaEmpresa.fxml");
+        labelTela.setText("Empresas");
+    }
+
+    @FXML
+    public void abrirParametro() {
+        carregarTela("TelaParametro.fxml");
+        labelTela.setText("Parâmetros Legais");
+    }
+
+    @FXML
+    public void abrirLog() {
+        mostrarAlertaEmDesenvolvimento("Log de Auditoria");
+    }
+
+    private void carregarTela(String fxml) {
+        try {
+            Parent tela = FXMLLoader.load(getClass().getResource(fxml));
+            painelConteudo.getChildren().setAll(tela);
+            AnchorPane.setTopAnchor(tela, 0.0);
+            AnchorPane.setBottomAnchor(tela, 0.0);
+            AnchorPane.setLeftAnchor(tela, 0.0);
+            AnchorPane.setRightAnchor(tela, 0.0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @FXML
+    public void sair() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("TelaLogin.fxml"));
+            Stage stage = (Stage) painelConteudo.getScene().getWindow();
+            Scene scene = new Scene(loader.load(), 1200, 700);
+            stage.setScene(scene);
+            stage.setTitle("Sistema de Folha de Pagamento - SFP");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

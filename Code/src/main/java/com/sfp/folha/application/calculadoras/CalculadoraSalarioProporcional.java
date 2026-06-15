@@ -16,7 +16,7 @@ public class CalculadoraSalarioProporcional implements RegraDeCalculo {
     // @return BigDecimal: Salário proporcional
     @Override
     public BigDecimal calcular(Funcionario funcionario, int diasUteis, int diasTrabalhados) {
-        BigDecimal salarioBase = funcionario.getSalarioBase();
+        BigDecimal salarioBase = funcionario.getSalarioBruto();
 
         // valor da diária = salário base / dias úteis
         BigDecimal valorDiaria = salarioBase.divide(BigDecimal.valueOf(diasUteis), 2, RoundingMode.HALF_UP);

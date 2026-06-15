@@ -36,3 +36,14 @@ O Analista de RH seleciona o mês e clica em "Processar". O Controller busca os 
 - **O Problema:** Durante a implementação do `Salário Proporcional`, lidamos com divisões monetárias. A divisão do salário base pelos dias úteis pode gerar dízimas infinitas (ex: 1518 / 21 = 72,2857...).
 - **A Decisão:** No Java, é estritamente proibido usar `double` ou `float` para lidar com dinheiro. Padronizamos o uso do `BigDecimal` com construtores baseados em `String` (ex: `new BigDecimal("1518.00")`).
 - **How-To de Divisão:** Toda divisão dentro da nossa engine de regras deverá, obrigatoriamente, especificar a escala (2 casas decimais) e a regra de arredondamento `RoundingMode.HALF_UP` para evitar a quebra da aplicação com `ArithmeticException`.
+
+## A Quarta Decisão (Persistência e Padrão Repository)
+- **O Problema:** Como salvar dados no banco MySQL sem acoplar a nossa regra de negócios ao banco de dados?
+- **A Decisão:** Utilizar o padrão **Repository (Pure Fabrication do GRASP)** aliado ao **Data Access Object (DAO)** utilizando JDBC puro (`java.sql.*`).
+- **How-To:** O domínio define uma Interface (ex: `FaixaINSSRepository`), mas não sabe como ela é implementada. A camada de infraestrutura cria a classe `MySQLFaixaINSSRepository` que realiza a conexão `try-with-resources` e executa as queries. 
+- **Prevenção de Bugs:** Proibimos a prática de "Exception Swallowing" (engolir exceções). Se um `SQLException` ocorre, o repositório relança como `RuntimeException` para que o Controller avise o usuário na tela, ao invés de falhar silenciosamente no terminal.
+
+## A Quinta Decisão (Interface Gráfica com JavaFX)
+- **O Problema:** Como organizar telas, estilos e navegação na aplicação Desktop.
+- **A Decisão:** Utilizar o padrão **MVC** físico, separando a *View* (arquivos FXML em `src/main/resources`) do *Controller* (classes Java que capturam os dados da tela). Adotamos um design em *Dark Mode* padronizado via CSS (`style.css`).
+- **How-To de Navegação:** Ao invés de trocar a cena inteira (o que quebra o fluxo de trabalho de RH), optamos por criar **novas Janelas (`Stage`)** sobrepostas para os formulários de cadastro (ex: `CadastroFuncionarioView.fxml` e `ParametrosView.fxml`). Isso mantém o Motor de Cálculo sempre ativo e em segundo plano.

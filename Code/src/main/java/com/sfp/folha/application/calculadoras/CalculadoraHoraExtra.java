@@ -52,7 +52,7 @@ public class CalculadoraHoraExtra implements RegraDeCalculo {
         }
 
         // valor da hora normal = (salário/divisor)
-        BigDecimal valorHoraNormal = funcionario.getSalarioBase().divide(this.divisorMensal, 2, RoundingMode.HALF_UP);
+        BigDecimal valorHoraNormal = funcionario.getSalarioBruto().divide(this.divisorMensal, 2, RoundingMode.HALF_UP);
         // valor da hora extra = (salário/divisor) * (1 + percentual de acréscimo)
         BigDecimal valorHoraExtra = valorHoraNormal.multiply(BigDecimal.ONE.add(this.percentualAcrescimo));
 

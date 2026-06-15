@@ -3,31 +3,39 @@ package com.sfp.folha.domain;
 import java.math.BigDecimal;
 
 public class FaixaINSS {
-    private BigDecimal valorMinimo;
-    private BigDecimal valorMaximo;
+    private BigDecimal piso;
+    private BigDecimal teto;
     private BigDecimal aliquota;
     private BigDecimal parcelaADeduzir;
 
-    public FaixaINSS(BigDecimal valorMinimo, BigDecimal valorMaximo, BigDecimal aliquota, BigDecimal parcelaADeduzir) {
-        this.valorMinimo = valorMinimo;
-        this.valorMaximo = valorMaximo;
+    public FaixaINSS(BigDecimal piso, BigDecimal teto, BigDecimal aliquota, BigDecimal parcelaADeduzir) {
+        this.piso = piso;
+        this.teto = teto;
         this.aliquota = aliquota;
         this.parcelaADeduzir = parcelaADeduzir;
     }
 
-    public BigDecimal getValorMinimo() {
-        return valorMinimo;
+    // brief: retorna o piso
+    // @return BigDecimal: piso
+    public BigDecimal getPiso() {
+        return piso;
     }
 
-    public BigDecimal getValorMaximo() {
-        return valorMaximo;
+    // brief: retorna o teto
+    // @return BigDecimal: teto
+    public BigDecimal getTeto() {
+        return teto;
     }
 
+    // brief: retorna a aliquota
+    // @return BigDecimal: aliquota
     public BigDecimal getAliquota() {
         return aliquota;
     }
 
-    public BigDecimal getParcelaADeduzir() {
+    // brief: retorna a parcela a deduzir
+    // @return BigDecimal: parcela a deduzir
+    public BigDecimal getParcelaDeduzir() {
         return parcelaADeduzir;
     }
 }

@@ -1,65 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
 <?import java.net.URL?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sfp.folha.ui.MainController" styleClass="root">
-    
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.sfp.folha.ui.MainController" styleClass="dashboard">
     <stylesheets>
         <URL value="@style.css" />
     </stylesheets>
 
-    <padding>
-        <Insets bottom="30.0" left="40.0" right="40.0" top="30.0"/>
-    </padding>
+    <left>
+        <VBox styleClass="sidebar">
+            <HBox styleClass="logo_titulo" maxWidth="Infinity">
+                <ImageView fitWidth="50" fitHeight="50" preserveRatio="true">
+                    <image>
+                        <Image url="@gato.png"/>
+                    </image>
+                </ImageView>
+                <Label text="SFP" styleClass="titles_dash"/>
+            </HBox>
 
-    <!-- Logo do Projeto -->
-    <ImageView fitWidth="120" fitHeight="120" preserveRatio="true">
-        <image>
-            <Image url="@gato.png" />
-        </image>
-    </ImageView>
+            <Label text="Principal" styleClass="titles_dash"/>
+            <VBox styleClass="menu-items">
+                <Button text="Dashboard" styleClass="menu-button" onAction="#abrirDashboard"/>
+                <Button text="Funcionários" styleClass="menu-button" onAction="#abrirFuncionarios"/>
+                <Button text="Rubricas" styleClass="menu-button" onAction="#abrirRubrica"/>
+            </VBox>
 
-    <Label text="Motor de Cálculo SFP" styleClass="title-label" />
+            <Label text="Operação" styleClass="titles_dash"/>
+            <VBox styleClass="menu-items">
+                <Button text="Lançamentos" styleClass="menu-button" onAction="#abrirLancamento"/>
+                <Button text="Folha do Mês" styleClass="menu-button" onAction="#abrirFolhaMes"/>
+                <Button text="Holerite" styleClass="menu-button" onAction="#abrirHolerite"/>
+                <Button text="Histórico" styleClass="menu-button" onAction="#abrirHistorico"/>
+            </VBox>
 
-    <VBox spacing="15.0" styleClass="form-container">
-        <HBox alignment="CENTER_LEFT" spacing="10.0">
-            <Label text="Salário Base (R$):" styleClass="field-label" prefWidth="150"/>
-            <TextField fx:id="inputSalario" promptText="Ex: 1518.00" styleClass="input-field" HBox.hgrow="ALWAYS"/>
-        </HBox>
+            <Label text="Administração" styleClass="titles_dash"/>
+            <VBox styleClass="menu-items">
+                <Button text="Usuários" styleClass="menu-button" onAction="#abrirUsuario"/>
+                <Button text="Empresa" styleClass="menu-button" onAction="#abrirEmpresa"/>
+                <Button text="Parâmetros Legais" styleClass="menu-button" onAction="#abrirParametro"/>
+                <Button text="Log" styleClass="menu-button" onAction="#abrirLog"/>
+            </VBox>
+            <Region VBox.vgrow="ALWAYS"/>
+            <VBox styleClass="menu-items">
+                <Button text="Sair" styleClass="exit_button" onAction="#sair"/>
+            </VBox>
+        </VBox>
+    </left>
 
-        <HBox alignment="CENTER_LEFT" spacing="10.0">
-            <Label text="Horas Extras (50%):" styleClass="field-label" prefWidth="150"/>
-            <TextField fx:id="inputHoras50" promptText="Ex: 10" styleClass="input-field" HBox.hgrow="ALWAYS"/>
-        </HBox>
 
-        <HBox alignment="CENTER_LEFT" spacing="10.0">
-            <Label text="Horas Extras (100%):" styleClass="field-label" prefWidth="150"/>
-            <TextField fx:id="inputHoras100" promptText="Ex: 0" styleClass="input-field" HBox.hgrow="ALWAYS"/>
-        </HBox>
-    </VBox>
 
-    <Button text="PROCESSAR FOLHA" onAction="#calcularFolha" styleClass="primary-button" />
+    <center>
+        <BorderPane VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+            <top>
+                <HBox styleClass="header">
+                    <Label fx:id="labelTela" text="Dashboard" styleClass="header-title"/>
+                    <HBox HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="labelUsuario" text="usuário" styleClass="header-user"/>
+                </HBox>
+            </top>
+            <center>
+                <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+                    <content>
+                        <AnchorPane fx:id="painelConteudo" styleClass="conteudo"/>
+                    </content>
+                </ScrollPane>
+            </center>
+        </BorderPane>
+    </center>
 
-    <VBox alignment="CENTER_LEFT" spacing="10.0" styleClass="result-container">
-        <HBox spacing="10.0">
-            <Label text="Total de Proventos: " styleClass="result-label-title"/>
-            <Label fx:id="labelProventos" text="R$ 0.00" styleClass="result-value-green"/>
-        </HBox>
-        <HBox spacing="10.0">
-            <Label text="Total de Descontos: " styleClass="result-label-title"/>
-            <Label fx:id="labelDescontos" text="R$ 0.00" styleClass="result-value-red"/>
-        </HBox>
-        <HBox spacing="10.0" styleClass="divider-top">
-            <Label text="Salário Líquido Final: " styleClass="result-label-title-large"/>
-            <Label fx:id="labelLiquido" text="R$ 0.00" styleClass="result-value-large"/>
-        </HBox>
-    </VBox>
-</VBox>
+</BorderPane>
