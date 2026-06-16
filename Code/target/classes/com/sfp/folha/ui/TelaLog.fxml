@@ -28,8 +28,8 @@
         
         <VBox alignment="BOTTOM_LEFT">
             <HBox spacing="10">
-                <Button text="Buscar" styleClass="primary-button" />
-                <Button text="Limpar Filtros" styleClass="secondary-button" />
+                <Button text="Buscar" styleClass="primary-button" onAction="#buscar"/>
+                <Button text="Limpar Filtros" styleClass="secondary-button" onAction="#limparFiltros"/>
             </HBox>
         </VBox>
     </HBox>

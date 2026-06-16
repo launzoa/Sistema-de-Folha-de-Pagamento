@@ -4,6 +4,7 @@
  */
 package com.sfp.folha.ui;
 
+import com.sfp.auditoria.application.ServicoAuditoria;
 import com.sfp.core.domain.Empresa;
 import com.sfp.core.domain.EnderecoEmpresa;
 import com.sfp.empresa.application.ControladorEmpresa;
@@ -17,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -30,11 +32,12 @@ import javafx.stage.Stage;
  * @author manoe
  */
 public class TelaEmpresa{
-    @FXML private ComboBox<Empresa> comboEmpresas;
     @FXML private Label labelRazaoSocial;
     @FXML private Label labelCNPJ;
     @FXML private Label labelRespLegal;
     @FXML private Label labelEmail;
+    @FXML private Button btnCadastrar; //COLOCAR OS ID NO FXML
+    @FXML private Button btnEditar;
     
     @FXML private TableView<EnderecoEmpresa> tabelaEnderecos;
     @FXML private TableColumn<EnderecoEmpresa, String> colCep;
@@ -43,6 +46,7 @@ public class TelaEmpresa{
     @FXML private TableColumn<EnderecoEmpresa, String> colComplemento;
 
     private ControladorEmpresa controladorEmpresa = new ControladorEmpresa();
+    private Empresa empresaAtual = null;
     
     @FXML
     public void initialize() {
@@ -52,9 +56,8 @@ public class TelaEmpresa{
         colBairro.setCellValueFactory(new PropertyValueFactory<>("bairro"));
         colComplemento.setCellValueFactory(new PropertyValueFactory<>("complemento"));
 
-        carregarEmpresas();
+        carregarEmpresa();
 
-        comboEmpresas.setOnAction(event -> exibirEmpresaSelecionada());
     }
     
     @FXML
@@ -66,44 +69,35 @@ public class TelaEmpresa{
     @FXML
     private void editarEmpresa() 
     {
-        Empresa empresa = comboEmpresas.getSelectionModel().getSelectedItem();
-
-        if (empresa == null) 
-        {
-            exibirAlerta("Selecione uma empresa para editar.");
-            return;
-        }
-
-        exibirFormularioEmpresa(empresa);
+        exibirFormularioEmpresa(empresaAtual);
     }
     
     @FXML
     private void excluirEmpresa() 
     {
-        Empresa empresa = comboEmpresas.getSelectionModel().getSelectedItem();
-
-        if (empresa == null) 
+        if (empresaAtual == null) 
         {
-            exibirAlerta("Selecione uma empresa para excluir.");
+            exibirAlerta("Não há empresa para ser excluida!");
+            
             return;
         }
 
-        controladorEmpresa.excluirEmpresa(empresa.getCnpj());
-        carregarEmpresas();
+        controladorEmpresa.excluirEmpresa(empresaAtual.getCnpj());
+        ServicoAuditoria.registrar("Exclusão", "Empresa", "CNPJ:" + empresaAtual.getCnpj());
+        carregarEmpresa();
         limparDadosEmpresa();
     }
     
     @FXML
-    private void addEndereco() {
-        Empresa empresa = comboEmpresas.getSelectionModel().getSelectedItem();
-
-        if (empresa == null) 
+    private void addEndereco() 
+    {
+        if (empresaAtual == null) 
         {
-            exibirAlerta("Selecione uma empresa antes de adicionar endereço.");
+            exibirAlerta("Crie uma empresa antes de adicionar endereço.");
             return;
         }
 
-        exibirFormularioEndereco(null, empresa.getCnpj());
+        exibirFormularioEndereco(null, empresaAtual.getCnpj());
     }   
     @FXML
     private void editarEndereco() 
@@ -130,6 +124,7 @@ public class TelaEmpresa{
         }
 
         controladorEmpresa.excluirEndereco(endereco.getId());
+        ServicoAuditoria.registrar("Exclusão", "Endereço Empresa", "CEP:" + endereco.getCep());
         atualizarTabelaEnderecos();
     }
     private void limparDadosEmpresa() 
@@ -138,15 +133,16 @@ public class TelaEmpresa{
         labelCNPJ.setText("-");
         labelRespLegal.setText("-");
         labelEmail.setText("-");
+        btnCadastrar.setVisible(true);
+        btnEditar.setVisible(false);
         tabelaEnderecos.setItems(FXCollections.observableArrayList());
     }
-    private void carregarEmpresas() {
-        ObservableList<Empresa> empresas = FXCollections.observableArrayList(controladorEmpresa.listarEmpresas());
-        comboEmpresas.setItems(empresas);
-
-        if (!empresas.isEmpty()) 
+    private void carregarEmpresa() 
+    {
+        empresaAtual = controladorEmpresa.buscarEmpresa();
+        
+        if (empresaAtual!= null) 
         {
-            comboEmpresas.getSelectionModel().selectFirst();
             exibirEmpresaSelecionada();
         }
         else
@@ -155,10 +151,9 @@ public class TelaEmpresa{
         }
     }
 
-    private void exibirEmpresaSelecionada() {
-        Empresa empresa = comboEmpresas.getSelectionModel().getSelectedItem();
-
-        if (empresa == null) {
+    private void exibirEmpresaSelecionada() 
+    {
+        if (empresaAtual == null) {
             labelRazaoSocial.setText("-");
             labelCNPJ.setText("-");
             labelRespLegal.setText("-");
@@ -167,24 +162,24 @@ public class TelaEmpresa{
             return;
         }
 
-        labelRazaoSocial.setText(empresa.getRazaoSocial());
-        labelCNPJ.setText(empresa.getCnpj());
-        labelRespLegal.setText(empresa.getRespLegal());
-        labelEmail.setText(empresa.getEmail());
-
-        atualizarTabelaEnderecos();
+        labelRazaoSocial.setText(empresaAtual.getRazaoSocial());
+        labelCNPJ.setText(empresaAtual.getCnpj());
+        labelRespLegal.setText(empresaAtual.getRespLegal());
+        labelEmail.setText(empresaAtual.getEmail());
+        btnCadastrar.setVisible(false);
+        btnEditar.setVisible(true);
+        atualizarTabelaEnderecos(); 
     }
 
-    private void atualizarTabelaEnderecos() {
-        Empresa empresa = comboEmpresas.getSelectionModel().getSelectedItem();
-
-        if (empresa == null) 
+    private void atualizarTabelaEnderecos() 
+    {
+        if (empresaAtual == null) 
         {
             tabelaEnderecos.setItems(FXCollections.observableArrayList());
             return;
         }
 
-        ObservableList<EnderecoEmpresa> enderecos = FXCollections.observableArrayList(controladorEmpresa.listarEnderecos(empresa.getCnpj()));
+        ObservableList<EnderecoEmpresa> enderecos = FXCollections.observableArrayList(controladorEmpresa.listarEnderecos(empresaAtual.getCnpj()));
         tabelaEnderecos.setItems(enderecos);
     }
     
@@ -216,7 +211,7 @@ public class TelaEmpresa{
 
             if (formController.isSalvoComSucesso()) 
             {
-                carregarEmpresas();
+                carregarEmpresa();
             }
 
         } 

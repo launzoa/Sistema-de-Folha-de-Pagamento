@@ -28,9 +28,9 @@ public class ControladorEmpresa {
         catalogoEmpresa.excluirEmpresa(cnpj);
    }
 
-   public List<Empresa> listarEmpresas() 
+   public Empresa buscarEmpresa() 
    {
-        return catalogoEmpresa.listarEmpresas();
+        return catalogoEmpresa.buscarEmpresa();
    }
 
    public void cadastrarEndereco(EnderecoEmpresa endereco) 

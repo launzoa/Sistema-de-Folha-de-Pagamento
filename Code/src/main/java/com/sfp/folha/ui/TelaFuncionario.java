@@ -21,6 +21,7 @@ import com.sfp.core.domain.FuncionarioRepository;
 import com.sfp.infrastructure.persistence.MySQLFuncionarioRepository;
 
 import java.util.List;
+import javafx.scene.control.TableCell;
 
 public class TelaFuncionario {
 
@@ -55,7 +56,13 @@ public class TelaFuncionario {
         colAdmissao.setCellValueFactory(new PropertyValueFactory<>("dataAdmissao"));
         colSalario.setCellValueFactory(new PropertyValueFactory<>("salarioBruto"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-
+        colStatus.setCellFactory(col -> new TableCell<Funcionario, Boolean>() {
+            @Override
+            protected void updateItem(Boolean item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : item ? "Ativo" : "Inativo");
+            }
+        });
         // Carrega os dados do banco
         carregarDadosBanco();
     }
@@ -77,9 +84,12 @@ public class TelaFuncionario {
     @FXML
     public void abrirTelaCadastro() {
         try {
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-                    getClass().getResource("CadastroFuncionarioView.fxml"));
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("CadastroFuncionarioView.fxml"));
             javafx.scene.Parent root = loader.load();
+            if(GerenciadorTema.modoEscuroAtivo)
+            {
+                root.getStyleClass().add("dark-mode");
+            }
             javafx.stage.Stage stage = new javafx.stage.Stage();
             stage.setTitle("Cadastrar Novo Funcionário");
             stage.setScene(new javafx.scene.Scene(root));

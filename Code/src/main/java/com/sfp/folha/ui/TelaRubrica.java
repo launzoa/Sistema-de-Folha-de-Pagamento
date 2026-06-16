@@ -4,12 +4,28 @@
  */
 package com.sfp.folha.ui;
 
+import com.sfp.auditoria.application.ServicoAuditoria;
+import com.sfp.core.domain.Rubrica;
+import com.sfp.rubrica.application.ControladorRubrica;
+import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -18,19 +34,183 @@ import javafx.scene.control.TableView;
  */
 public class TelaRubrica{
     
-    @FXML private TableView tabelaRubrica;
-    @FXML private TableColumn colDescr;
-    @FXML private TableColumn colNat;
-    @FXML private TableColumn colTipo;
-    @FXML private TableColumn colIncINSS;
-    @FXML private TableColumn colIncFGTS;
-    @FXML private TableColumn colIncIRRF;
-    @FXML private TableColumn colAcoes;
-
+    @FXML private TextField txtCodigo;
+    
+    @FXML private TableView<Rubrica> tabelaRubrica;
+    @FXML private TableColumn<Rubrica, Integer> colCod;
+    @FXML private TableColumn<Rubrica, String> colDescr;
+    @FXML private TableColumn<Rubrica, String> colNat;
+    @FXML private TableColumn<Rubrica, String> colTipo;
+    @FXML private TableColumn<Rubrica, String> colIncINSS;
+    @FXML private TableColumn<Rubrica, String> colIncFGTS;
+    @FXML private TableColumn<Rubrica, String> colIncIRRF;
+    @FXML private TableColumn<Rubrica, String> colPadrao;
+    @FXML private TableColumn<Rubrica, String> colAtivo;
+    
+    private final ControladorRubrica controlador = new ControladorRubrica();
+    
     @FXML
     public void initialize() {
         tabelaRubrica.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        configurarColunas();
+        carregarTabela(controlador.listarTodasRubricas());
     }  
+    private void configurarColunas() {
+        colCod.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+        colDescr.setCellValueFactory(new PropertyValueFactory<>("descricao"));
+        colNat.setCellValueFactory(new PropertyValueFactory<>("natureza"));
+        colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+        colIncINSS.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getIncideINSSStr()));
+        colIncFGTS.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getIncideFGTSStr()));
+        colIncIRRF.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getIncideIRRFStr()));
+        colPadrao.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getTipoLabel()));
+        colAtivo.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().isAtivo() ? "Ativo" : "Inativo"));
 
+        //Estiliza a linha inteira de rubricas inativas em cinza
+        tabelaRubrica.setRowFactory(tv -> new javafx.scene.control.TableRow<>() {
+            @Override
+            protected void updateItem(Rubrica r, boolean empty) {
+                super.updateItem(r, empty);
+                if (r == null || empty) {
+                    setStyle("");
+                } else {
+                    setStyle(r.isAtivo() ? "" : "-fx-text-fill: grey; -fx-opacity: 0.6;");
+                }
+            }
+        });
+    }
     
+    @FXML
+    public void buscar()
+    {
+        String texto = txtCodigo.getText().trim();
+        if (texto.isEmpty()) 
+        {
+            carregarTabela(controlador.listarTodasRubricas());
+            return;
+        }
+        try 
+        {
+            int codigo = Integer.parseInt(texto);
+            Rubrica r = controlador.buscarRubricaCod(codigo);
+            if (r != null) 
+            {
+                carregarTabela(List.of(r));
+            } 
+            else 
+            {
+                carregarTabela(List.of());
+                mostrarAviso("Nenhuma rubrica encontrada para o código " + codigo);
+            }
+        } catch (NumberFormatException ex) {
+            mostrarAviso("O código deve ser um número inteiro.");
+        }       
+    }
+    @FXML 
+    public void limparFiltros()
+    {
+         txtCodigo.clear();
+        carregarTabela(controlador.listarTodasRubricas());       
+    }
+    
+    @FXML
+    public void addRubrica()
+    {
+        abrirFormulario(null);   
+    }
+    
+    @FXML 
+    public void editarRubrica()
+    {
+        Rubrica selecionada = tabelaRubrica.getSelectionModel().getSelectedItem();
+        if(selecionada == null) 
+        {
+            mostrarAviso("Selecione uma rubrica na tabela para editar.");
+            return;
+        }
+        if(!controlador.podeEditar(selecionada.getCodigo())) 
+        {
+            mostrarAviso("Rubricas padrão (001–005) não podem ser editadas.");
+            return;
+        }
+        if (!selecionada.isAtivo()) {
+            mostrarAviso("Não é possível editar uma rubrica inativa.");
+            return;
+        }
+        abrirFormulario(selecionada);      
+    }
+    
+    @FXML
+    public void desativarRubrica() {
+        Rubrica selecionada = tabelaRubrica.getSelectionModel().getSelectedItem();
+        if(selecionada == null) 
+        {
+            mostrarAviso("Selecione uma rubrica para desativar.");
+            return;
+        }
+        if(!controlador.podeExcluir(selecionada.getCodigo())) 
+        {
+            mostrarAviso("Rubricas padrão (001–005) não podem ser desativadas.");
+            return;
+        }
+        if(!selecionada.isAtivo()) 
+        {
+            mostrarAviso("Esta rubrica já está inativa.");
+            return;
+        }
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Desativar Rubrica");
+        confirm.setHeaderText("Desativar rubrica " + selecionada.getCodigo() + " – " + selecionada.getDescricao() + "?");
+        confirm.setContentText("A rubrica será marcada como inativa.");
+        confirm.showAndWait().ifPresent(btn -> {
+            if (btn == ButtonType.OK) 
+            {
+                controlador.desativarRubrica(selecionada.getCodigo());
+                ServicoAuditoria.registrar("Desativar", "Rubrica", "Código: "+Integer.parseInt(txtCodigo.getText().trim()));
+                carregarTabela(controlador.listarTodasRubricas());
+            }
+        });
+    } 
+    
+    private void abrirFormulario(Rubrica rubrica) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("FormRubrica.fxml"));
+            Parent root = loader.load();
+            
+            if(GerenciadorTema.modoEscuroAtivo)
+            {
+                root.getStyleClass().add("dark-mode");
+            }
+            FormRubrica formController = loader.getController();
+            formController.setControlador(controlador);
+            formController.setRubrica(rubrica);
+
+            Stage stage = new Stage();
+            stage.setTitle(rubrica == null ? "Nova Rubrica" : "Editar Rubrica");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.showAndWait();
+
+            carregarTabela(controlador.listarTodasRubricas());
+
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
+    }
+    
+    private void carregarTabela(List<Rubrica> lista) 
+    {
+        tabelaRubrica.setItems(FXCollections.observableArrayList(lista));
+    }   
+    private void mostrarAviso(String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Atenção");
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
+        alert.showAndWait();
+    }
 }

@@ -5,6 +5,7 @@ package com.sfp.folha.ui;
  *
  * @author manoe
  */
+import com.sfp.auditoria.application.ServicoAuditoria;
 import com.sfp.core.domain.Usuario;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -129,6 +130,7 @@ public class MainController {
     public void sair() {
         try
         {
+            ServicoAuditoria.registrar("Logout", "Sistema", null);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("TelaLogin.fxml"));
             Parent rootLogin = loader.load();
             Stage stage = (Stage) painelConteudo.getScene().getWindow();

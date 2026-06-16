@@ -25,29 +25,24 @@ public class ConexaoBD {
 COLOQUE AQUI OS SQL USADOS 
  USE sfp;
 
-CREATE TABLE IF NOT EXISTS empresa (
-    cnpj VARCHAR(18) NOT NULL PRIMARY KEY,
-    razao_social VARCHAR(120) NOT NULL,
-    email VARCHAR(120) NOT NULL,
-    resp_legal VARCHAR(120) NOT NULL,
-    aliquota_fgts DOUBLE DEFAULT 8.00,
-    horas_mensais INT DEFAULT 220,
-    val_cesta_basic DOUBLE DEFAULT 50.00,
-    perc_hora_extra50 DOUBLE DEFAULT 50.00,
-    perc_hora_extra100 DOUBLE DEFAULT 100.00
+create table if not exists empresa (
+cnpj varchar(18) not null primary key,
+razao_social varchar(120) not null,
+email varchar(120) not null unique,
+resp_legal varchar(120) not null
 );
 
-CREATE TABLE IF NOT EXISTS endereco_empresa (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    cnpj_empresa VARCHAR(18) NOT NULL,
-    cep VARCHAR(10) NOT NULL,
-    logradouro VARCHAR(120) NOT NULL,
-    bairro VARCHAR(80) NOT NULL,
-    complemento VARCHAR(120),
-    FOREIGN KEY (cnpj_empresa) REFERENCES empresa(cnpj)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
-);
+create table if not exists endereco_empresa (
+id int not null auto_increment primary key,
+cnpj_empresa varchar(18) not null,
+cep varchar(10) not null,
+logradouro varchar(120) not null,
+bairro varchar(80) not null,
+complemento varchar(120),
+foreign key (cnpj_empresa) references empresa(cnpj)
+	on delete cascade
+    on update cascade
+); 
 
 CREATE TABLE usuario (
 	id INT auto_increment primary key,
@@ -66,5 +61,42 @@ CREATE TABLE IF NOT EXISTS funcionarios (
     salario_bruto DECIMAL NOT NULL,
     status BOOLEAN DEFAULT TRUE
 ); 
- 
+
+CREATE TABLE auditoria (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    usuario VARCHAR(100) NOT NULL, -- Guardará o nome do usuário
+    perfil VARCHAR(50) NOT NULL,   -- Guardará "Administrador" ou "Operador"
+    acao VARCHAR(100) NOT NULL,
+    entidade VARCHAR(100),
+    detalhes VARCHAR(255)
+);
+
+create table rubrica (
+codigo int not null primary key,
+descricao varchar(100) not null,
+natureza varchar(10) not null, -- Provento ou Desconto
+tipo varchar(10) not null, -- Fixo ou Variável
+incide_inss boolean not null default false,
+incide_fgts boolean not null default false,
+incide_irrf boolean not null default false,
+padrao boolean not null default false, -- true = rubrica padrão
+ativo boolean not null default true
+);
+
+-- Rubricas padrão
+INSERT INTO rubrica VALUES (1,  'Salário Base',          'Provento', 'Fixo',     TRUE,  TRUE,  TRUE, TRUE, TRUE);
+INSERT INTO rubrica VALUES (2,  'Hora Extra 50%',        'Provento', 'Variável', TRUE,  TRUE,  TRUE, TRUE, TRUE);
+INSERT INTO rubrica VALUES (3,  'Hora Extra 100%',       'Provento', 'Variável', TRUE,  TRUE,  TRUE, TRUE, TRUE);
+INSERT INTO rubrica VALUES (4,  'Bônus / Gratificação',  'Provento', 'Variável', TRUE,  TRUE,  FALSE, TRUE, TRUE);
+INSERT INTO rubrica VALUES (5,  'Cesta Básica',          'Provento', 'Fixo',     FALSE, FALSE, FALSE, TRUE, TRUE);
+INSERT INTO rubrica VALUES (6,  'PLR',                   'Provento', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
+INSERT INTO rubrica VALUES (7,  'Adiantamento Salarial', 'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
+INSERT INTO rubrica VALUES (8,  'Outros Proventos',      'Provento', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
+INSERT INTO rubrica VALUES (101,'Desconto INSS',         'Desconto', 'Fixo',     FALSE, FALSE, FALSE, TRUE, TRUE);
+INSERT INTO rubrica VALUES (102,'Desconto por Falta',    'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
+INSERT INTO rubrica VALUES (103,'Desconto por Atraso',   'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
+INSERT INTO rubrica VALUES (104,'Desconto DSR',          'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
+INSERT INTO rubrica VALUES (105,'Desconto Atestado',     'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
+INSERT INTO rubrica VALUES (106,'Outros Descontos',      'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
  **/

@@ -4,6 +4,7 @@
  */
 package com.sfp.folha.ui;
 
+import com.sfp.auditoria.application.ServicoAuditoria;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
@@ -25,11 +26,7 @@ public class FormEmpresa{
     @FXML private TextField txtRazaoSocial;
     @FXML private TextField txtEmail;
     @FXML private TextField txtRespLegal;
-    @FXML private TextField txtAliquotaFGTS;
-    @FXML private TextField txtHorasMensais;
-    @FXML private TextField txtValCestaBasic;
-    @FXML private TextField txtPercHoraExtra50;
-    @FXML private TextField txtPercHoraExtra100;
+
 
     private ControladorEmpresa controladorEmpresa = new ControladorEmpresa();
     private Empresa empresaEdicao = null;
@@ -37,11 +34,7 @@ public class FormEmpresa{
  
     @FXML
     public void initialize() {
-        txtAliquotaFGTS.setText("8.00");
-        txtHorasMensais.setText("220");
-        txtValCestaBasic.setText("0.00");
-        txtPercHoraExtra50.setText("50.00");
-        txtPercHoraExtra100.setText("100.00");
+
     }
     @FXML
     public void salvar() {
@@ -69,31 +62,22 @@ public class FormEmpresa{
         }
 
         try {
-            double aliquotaFGTS = Double.parseDouble(txtAliquotaFGTS.getText().replace(",", "."));
-            int horasMensais = Integer.parseInt(txtHorasMensais.getText());
-            double valCestaBasic = Double.parseDouble(txtValCestaBasic.getText().replace(",", "."));
-            double percHoraExtra50 = Double.parseDouble(txtPercHoraExtra50.getText().replace(",", "."));
-            double percHoraExtra100 = Double.parseDouble(txtPercHoraExtra100.getText().replace(",", "."));
-
             Empresa empresa = new Empresa(
                     cnpj,
                     razaoSocial,
                     email,
-                    respLegal,
-                    aliquotaFGTS,
-                    horasMensais,
-                    valCestaBasic,
-                    percHoraExtra50,
-                    percHoraExtra100
+                    respLegal
             );
 
             if (empresaEdicao == null) 
             {
                 controladorEmpresa.cadastrarEmpresa(empresa);
+                ServicoAuditoria.registrar("Cadastro", "Empresa", "CNPJ: "+empresa.getCnpj());
             } 
             else 
             {
                 controladorEmpresa.atualizarEmpresa(empresa);
+                ServicoAuditoria.registrar("Edição", "Empresa", "CNPJ: "+empresa.getCnpj());
             }
 
             salvoComSucesso = true;
@@ -119,11 +103,6 @@ public class FormEmpresa{
         txtRazaoSocial.setText(empresa.getRazaoSocial());
         txtEmail.setText(empresa.getEmail());
         txtRespLegal.setText(empresa.getRespLegal());
-        txtAliquotaFGTS.setText(String.valueOf(empresa.getAliquotaFGTS()));
-        txtHorasMensais.setText(String.valueOf(empresa.getHorasMensais()));
-        txtValCestaBasic.setText(String.valueOf(empresa.getValCestaBasic()));
-        txtPercHoraExtra50.setText(String.valueOf(empresa.getPercHoraExtra50()));
-        txtPercHoraExtra100.setText(String.valueOf(empresa.getPercHoraExtra100()));
 
         txtCnpj.setDisable(true);
     }

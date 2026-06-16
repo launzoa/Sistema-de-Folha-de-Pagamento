@@ -12,14 +12,9 @@
         <URL value="@style.css"/>
     </stylesheets>
 
-    <HBox spacing="15" alignment="CENTER_LEFT" styleClass="card_dash">
-        <VBox spacing="5" HBox.hgrow="ALWAYS">
-            <Label text="Selecione a Empresa:" styleClass="holerite-section-title"/>
-            <ComboBox fx:id="comboEmpresas" promptText="Escolha uma empresa..." styleClass="combo_box" maxWidth="Infinity"/>
-        </VBox>
-        
-        <Button text="+ Nova Empresa" styleClass="primary-button" onAction="#addEmpresa"/>
-        <Button text="Editar Empresa" styleClass="primary-button" onAction="#editarEmpresa"/>
+    <HBox spacing="15" alignment="CENTER_RIGHT" styleClass="card_dash">
+        <Button fx:id="btnCadastrar" text="+ Cadastrar Empresa" styleClass="primary-button" onAction="#addEmpresa"/>
+        <Button fx:id="btnEditar" text="Editar Empresa" styleClass="primary-button" onAction="#editarEmpresa"/>
         <Button text="Excluir" styleClass="btn-excluir" onAction="#excluirEmpresa"/>
     </HBox>
     <VBox spacing="10" VBox.vgrow="ALWAYS">

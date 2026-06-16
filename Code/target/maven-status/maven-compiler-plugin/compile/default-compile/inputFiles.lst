@@ -1,14 +1,18 @@
+E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\auditoria\application\CatalogoAuditoria.java
+E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\auditoria\application\ControladorAuditoria.java
+E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\auditoria\application\ServicoAuditoria.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\autenticacao\application\ControladorAutenticacao.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\autenticacao\domain\CatalogoUsuario.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\CheckUser.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\core\ConexaoBD.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\core\domain\Empresa.java
-E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\core\domain\EmpresaRepository.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\core\domain\EnderecoEmpresa.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\core\domain\FaixaINSSRepository.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\core\domain\FolhaDePonto.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\core\domain\Funcionario.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\core\domain\FuncionarioRepository.java
+E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\core\domain\RegistroAuditoria.java
+E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\core\domain\Rubrica.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\core\domain\Usuario.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\empresa\application\CatalogoEmpresa.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\empresa\application\ControladorEmpresa.java
@@ -22,6 +26,7 @@ E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\folha\ui\CadastroFuncionarioController.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\folha\ui\FormEmpresa.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\folha\ui\FormEndereco.java
+E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\folha\ui\FormRubrica.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\folha\ui\FormUsuario.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\folha\ui\GerenciadorTema.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\folha\ui\Main.java
@@ -42,6 +47,8 @@ E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\infrastructure\persistence\MySQLFaixaINSSRepository.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\infrastructure\persistence\MySQLFuncionarioRepository.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\InsertAdmin.java
+E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\rubrica\application\CatalogoRubrica.java
+E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\rubrica\application\ControladorRubrica.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\TestDB.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\TestFaixa.java
 E:\5_semestre\ES_1\Github_ATUAL_CODE\Sistema-de-Folha-de-Pagamento\Code\src\main\java\com\sfp\TestFXMLLoad.java

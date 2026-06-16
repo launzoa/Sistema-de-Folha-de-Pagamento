@@ -4,6 +4,7 @@
  */
 package com.sfp.folha.ui;
 
+import com.sfp.auditoria.application.ServicoAuditoria;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
@@ -61,11 +62,13 @@ public class FormEndereco{
         {
             EnderecoEmpresa endereco = new EnderecoEmpresa(0, cnpjEmpresa, cep, logradouro, bairro, complemento);
             controladorEmpresa.cadastrarEndereco(endereco);
+            ServicoAuditoria.registrar("Cadastro", "Endereço Empresa", "ID:" + endereco.getId());
         } 
         else 
         {
             EnderecoEmpresa endereco = new EnderecoEmpresa(enderecoEdicao.getId(), cnpjEmpresa, cep, logradouro, bairro, complemento);
             controladorEmpresa.atualizarEndereco(endereco);
+            ServicoAuditoria.registrar("Edição", "Endereço Empresa", "ID:" + endereco.getId());
         }
 
         salvoComSucesso = true;

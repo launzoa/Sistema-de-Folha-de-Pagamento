@@ -12,6 +12,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author maria
@@ -19,7 +21,7 @@ import java.util.List;
 public class CatalogoEmpresa {
     public void cadastrarEmpresa(Empresa empresa)
     {
-        String sql = "INSERT INTO empresa (cnpj, razao_social, email, resp_legal, aliquota_fgts, horas_mensais, val_cesta_basic, perc_hora_extra50, perc_hora_extra100) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";    
+        String sql = "INSERT INTO empresa (cnpj, razao_social, email, resp_legal) VALUES (?, ?, ?, ?)";    
         try (Connection conexao = ConexaoBD.getConnection(); PreparedStatement ps = conexao.prepareStatement(sql)) 
         {
 
@@ -27,11 +29,6 @@ public class CatalogoEmpresa {
             ps.setString(2, empresa.getRazaoSocial());
             ps.setString(3, empresa.getEmail());
             ps.setString(4, empresa.getRespLegal());
-            ps.setDouble(5, empresa.getAliquotaFGTS());
-            ps.setInt(6, empresa.getHorasMensais());
-            ps.setDouble(7, empresa.getValCestaBasic());
-            ps.setDouble(8, empresa.getPercHoraExtra50());
-            ps.setDouble(9, empresa.getPercHoraExtra100());
 
             ps.executeUpdate();
 
@@ -44,7 +41,7 @@ public class CatalogoEmpresa {
     
     public void atualizarEmpresa(Empresa empresa) 
     {
-        String sql = "UPDATE empresa SET razao_social = ?, email = ?, resp_legal = ?, aliquota_fgts = ?, horas_mensais = ?, val_cesta_basic = ?, perc_hora_extra50 = ?, perc_hora_extra100 = ? WHERE cnpj = ?";
+        String sql = "UPDATE empresa SET razao_social = ?, email = ?, resp_legal = ? WHERE cnpj = ?";
 
         try (Connection conexao = ConexaoBD.getConnection(); PreparedStatement ps = conexao.prepareStatement(sql)) 
         {
@@ -52,12 +49,7 @@ public class CatalogoEmpresa {
             ps.setString(1, empresa.getRazaoSocial());
             ps.setString(2, empresa.getEmail());
             ps.setString(3, empresa.getRespLegal());
-            ps.setDouble(4, empresa.getAliquotaFGTS());
-            ps.setInt(5, empresa.getHorasMensais());
-            ps.setDouble(6, empresa.getValCestaBasic());
-            ps.setDouble(7, empresa.getPercHoraExtra50());
-            ps.setDouble(8, empresa.getPercHoraExtra100());
-            ps.setString(9, empresa.getCnpj());
+            ps.setString(4, empresa.getCnpj());
 
             ps.executeUpdate();
 
@@ -73,7 +65,6 @@ public class CatalogoEmpresa {
 
         try (Connection conexao = ConexaoBD.getConnection(); PreparedStatement ps = conexao.prepareStatement(sql)) 
         {
-
             ps.setString(1, cnpj);
             ps.executeUpdate();
 
@@ -83,39 +74,26 @@ public class CatalogoEmpresa {
             e.printStackTrace();
         }
     }
-    
-    public List<Empresa> listarEmpresas()
+    public Empresa buscarEmpresa()
     {
-        List<Empresa> empresas = new ArrayList<>();
-        String sql = "SELECT * FROM empresa ORDER BY razao_social";
-
-        try (Connection conexao = ConexaoBD.getConnection(); PreparedStatement ps = conexao.prepareStatement(sql); ResultSet rs = ps.executeQuery()) 
+        String sql = "SELECT * FROM empresa LIMIT 1";
+        try(Connection con = ConexaoBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery())
         {
-
-            while (rs.next()) 
+            if(rs.next())
             {
-                Empresa empresa = new Empresa(
+                return new Empresa(
                         rs.getString("cnpj"),
                         rs.getString("razao_social"),
                         rs.getString("email"),
-                        rs.getString("resp_legal"),
-                        rs.getDouble("aliquota_fgts"),
-                        rs.getInt("horas_mensais"),
-                        rs.getDouble("val_cesta_basic"),
-                        rs.getDouble("perc_hora_extra50"),
-                        rs.getDouble("perc_hora_extra100")
+                        rs.getString("resp_legal")
                 );
-
-                empresas.add(empresa);
             }
-
         } 
-        catch (Exception e) 
+        catch (Exception ex) 
         {
-            e.printStackTrace();
+            Logger.getLogger(CatalogoEmpresa.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        return empresas;
+        return null;
     }
     
     public void cadastrarEndereco(EnderecoEmpresa endereco) 

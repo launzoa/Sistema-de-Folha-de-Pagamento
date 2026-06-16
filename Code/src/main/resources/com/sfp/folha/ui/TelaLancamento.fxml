@@ -30,7 +30,7 @@
         <Label text="Selecionar Funcionário" styleClass="card_title"/>
         <HBox spacing="15" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
             <Label text="Funcionário: " styleClass="lancamento-field" minWidth="90"/>
-            <ComboBox fx:id="comboFuncionario" promptText="Selecione..." prefWidth="220" prefHeight="32" styleClass="combo_box"/>
+            <TextField fx:id="txtFuncionario" promptText="Digite o nome..." prefWidth="220" prefHeight="32" styleClass="historico_field"/>
             <Label fx:id="labelInfoFuncionario" text="infosFunc" styleClass="lancamento-field"/>
         </HBox>
     </VBox>

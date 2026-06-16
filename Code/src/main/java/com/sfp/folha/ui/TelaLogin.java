@@ -9,6 +9,7 @@ package com.sfp.folha.ui;
  * @author igor.nogueira_unesp
  */
 
+import com.sfp.auditoria.application.ServicoAuditoria;
 import com.sfp.autenticacao.application.ControladorAutenticacao;
 import com.sfp.core.domain.Usuario;
 import javafx.fxml.FXML;
@@ -39,6 +40,8 @@ public class TelaLogin {
         {
             try
             {
+                ServicoAuditoria.setUsuarioAtual(user);
+                ServicoAuditoria.registrar("Login", "Sistema", null);
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/sfp/folha/ui/MainView.fxml"));
                 Parent rootLogin = loader.load();
                 Stage stage = (Stage) inputUsuario.getScene().getWindow();

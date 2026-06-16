@@ -19,12 +19,6 @@
     <TextField fx:id="txtEmail" promptText="Email" styleClass="historico_field" prefWidth="420"/>
     <TextField fx:id="txtRespLegal" promptText="Responsável Legal" styleClass="historico_field" prefWidth="420"/>
 
-    <TextField fx:id="txtAliquotaFGTS" promptText="Alíquota FGTS" styleClass="historico_field" prefWidth="420"/>
-    <TextField fx:id="txtHorasMensais" promptText="Horas Mensais" styleClass="historico_field" prefWidth="420"/>
-    <TextField fx:id="txtValCestaBasic" promptText="Valor Cesta Básica" styleClass="historico_field" prefWidth="420"/>
-    <TextField fx:id="txtPercHoraExtra50" promptText="Percentual Hora Extra 50" styleClass="historico_field" prefWidth="420"/>
-    <TextField fx:id="txtPercHoraExtra100" promptText="Percentual Hora Extra 100" styleClass="historico_field" prefWidth="420"/>
-
     <HBox alignment="CENTER" spacing="15">
         <Button text="Salvar" onAction="#salvar" styleClass="primary-button"/>
         <Button text="Cancelar" onAction="#cancelar" styleClass="secondary-button"/>

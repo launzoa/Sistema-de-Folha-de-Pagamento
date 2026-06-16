@@ -18,9 +18,9 @@
     <PasswordField fx:id="txtSenha" promptText="Senha" styleClass="input-field"/>
     
     <ComboBox fx:id="comboPerfil" promptText="Selecione o Perfil" styleClass="combo_box"/>
-    <CheckBox fx:id="checkAtivo" text="Usuário Ativo" selected="true" styleClass="field-label"/>
+    <CheckBox fx:id="checkAtivo" text="Usuário Ativo" selected="true" styleClass="check-box"/>
     
-    <HBox alignment="CENTER">
+    <HBox spacing="5" alignment="CENTER">
         <Button text="Salvar" onAction="#salvar" styleClass="primary-button"/>
         <Button text="Cancelar" onAction="#cancelar" styleClass="secondary-button"/>
     </HBox>

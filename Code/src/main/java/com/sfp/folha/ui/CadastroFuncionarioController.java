@@ -1,5 +1,6 @@
 package com.sfp.folha.ui;
 
+import com.sfp.auditoria.application.ServicoAuditoria;
 import java.math.BigDecimal;
 
 import com.sfp.core.domain.Funcionario;
@@ -71,9 +72,11 @@ public class CadastroFuncionarioController {
             if (modoEdicao) {
                 funcionarioRepository.atualizar(funcionario);
                 labelMensagem.setText("Funcionário atualizado com sucesso!");
+                ServicoAuditoria.registrar("Edição", "Funcionário", "CPF: " + funcionario.getCpf());
             } else {
                 funcionarioRepository.salvar(funcionario);
                 labelMensagem.setText("Funcionário cadastrado com sucesso!");
+                ServicoAuditoria.registrar("Cadastro", "Funcionário", "CPF: " + funcionario.getCpf());
             }
             labelMensagem.setStyle("-fx-text-fill: green;");
         } catch (NumberFormatException e) {

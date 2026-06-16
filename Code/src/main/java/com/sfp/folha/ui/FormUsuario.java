@@ -4,6 +4,7 @@
  */
 package com.sfp.folha.ui;
 
+import com.sfp.auditoria.application.ServicoAuditoria;
 import com.sfp.core.domain.Usuario;
 import com.sfp.usuario.application.ControladorUsuario;
 import java.net.URL;
@@ -72,10 +73,12 @@ public class FormUsuario{
         if (usuarioEdicao == null)
         {
             controladorBD.cadastrarUsuario(nome, senha, ehAdmin);
+            ServicoAuditoria.registrar("Cadastro", "Usuário", "Login: " + nome);
         } 
         else
         {
             controladorBD.atualizarUsuario(usuarioEdicao.getId(), nome, senha, ativo);
+            ServicoAuditoria.registrar("Edição", "Usuário", "Login: " + nome);
         }
 
         salvoComSucesso = true;

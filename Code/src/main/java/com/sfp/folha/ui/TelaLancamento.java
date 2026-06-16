@@ -12,6 +12,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 
 /**
  * FXML Controller class
@@ -22,7 +23,7 @@ public class TelaLancamento{
     
     @FXML private Label labelCompetencia;
     @FXML private Label labelStatus;
-    @FXML private ComboBox comboFuncionario;
+    @FXML private TextField txtFuncionario;
     @FXML private Label labelInfoFuncionario;
     
     @FXML private TableView tabelaLancamento;

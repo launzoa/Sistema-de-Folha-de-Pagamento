@@ -27,9 +27,9 @@ public class TelaUsuario {
     //VER SE VAI TER A OPÇÃO DE EXCLUIR USUÁRIO OU SÓ DESATIVA PELO ATRIBUTO STATUS
     @FXML private TableView<Usuario> tabelaUsuario;
     //@FXML private TableColumn colLogin;
-    @FXML private TableColumn colNome;
-    @FXML private TableColumn colPerfil;
-    @FXML private TableColumn colStatus;
+    @FXML private TableColumn  colNome;
+    @FXML private TableColumn<Usuario, Boolean> colPerfil;
+    @FXML private TableColumn<Usuario, Boolean> colStatus;
    // @FXML private TableColumn colUltimoAcesso;
     private ControladorUsuario controladorUsuario = new ControladorUsuario();
     private CatalogoUsuario catalogo = new CatalogoUsuario();
@@ -39,8 +39,22 @@ public class TelaUsuario {
         tabelaUsuario.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         colPerfil.setCellValueFactory(new PropertyValueFactory<>("perfil"));
-        colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        colPerfil.setCellFactory(col -> new TableCell<Usuario, Boolean>() {
+            @Override
+            protected void updateItem(Boolean item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : item ? "Administrador" : "Operador");
+            }
+        });
 
+        colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        colStatus.setCellFactory(col -> new TableCell<Usuario, Boolean>() {
+            @Override
+            protected void updateItem(Boolean item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : item ? "Ativo" : "Inativo");
+            }
+        });
         atualizarTabela();
     } 
     //REVER SE ESSA FUNÇÃO ESTA SENDO USADA
@@ -66,7 +80,7 @@ public class TelaUsuario {
             mostrarAlerta("Aviso", "Selecione um usuário para editar.");
         }
     }
-    
+    //REVER SE SERÁ IMPLEMENTADO
     @FXML
     private void excluirUsuario()
     {
@@ -91,7 +105,7 @@ public class TelaUsuario {
             Stage stage = new Stage();
             Scene scene = new Scene(rootForm,500,400);
 
-            // >>> SUPREMO CUIDADO COM O MODO ESCURO GLOBLAL: Sincroniza a cor do Pop-up!
+            //SUPREMO CUIDADO COM O MODO ESCURO GLOBLAL: Sincroniza a cor do Pop-up!
             if(GerenciadorTema.modoEscuroAtivo)
             {
                 rootForm.getStyleClass().add("dark-mode");
@@ -103,7 +117,8 @@ public class TelaUsuario {
             stage.showAndWait(); // Trava a execução até fechar o pop-up
 
             //Se salvou no banco, recarrega a tabela principal atualizada
-            if (formController.isSalvoComSucesso()) {
+            if (formController.isSalvoComSucesso()) 
+            {
                 atualizarTabela(); 
             }
 

@@ -449,20 +449,27 @@
 /* Cabeçalho */
 .tabela_dash .column-header-background {
     -fx-background-color: -color-primary-dark;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
 }
 
 .tabela_dash .column-header {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
 }
-
+.tabela_dash .column-header:last-visible {
+    -fx-border-color: transparent;
+}
 .tabela_dash .column-header .label {
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size: 12px;
     -fx-alignment: CENTER;
 }
-
+.tabela_dash .filler {
+    -fx-background-color: -color-primary-dark;
+    -fx-border-color: transparent;
+}
 /* Linhas */
 .tabela_dash .table-row-cell {
     -fx-background-color: -color-bg-card;
@@ -496,13 +503,43 @@
 /* Scroll bar */
 .tabela_dash .scroll-bar:vertical {
     -fx-background-color: -color-border-light;
+    -fx-pref-width: 8px; 
+     -fx-background-insets: 0;
+    -fx-padding: 0 0 0 0;
+}
+.tabela_dash .virtual-flow .scroll-bar:vertical {
+    -fx-background-color: -color-border-light;
+    -fx-padding: 0;
+    -fx-background-insets: 0;
 }
 
+.tabela_dash .scroll-bar:vertical .track,
+.tabela_dash .scroll-bar:vertical .track-background {
+    -fx-background-color: -color-border-light;
+    -fx-background-insets: 0;    
+}
+.tabela_dash .scroll-bar:vertical .increment-button,
+.tabela_dash .scroll-bar:vertical .decrement-button,
+.tabela_dash .scroll-bar:vertical .increment-arrow,
+.tabela_dash .scroll-bar:vertical .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-min-height: 0;
+    -fx-max-height: 0;
+    -fx-pref-height: 0;
+    -fx-min-width: 0;
+    -fx-max-width: 0;
+    -fx-pref-width: 0;
+}
 .tabela_dash .scroll-bar:vertical .thumb {
     -fx-background-color: -color-primary;
     -fx-background-radius: 5px;
 }
 
+.tabela_dash .corner {
+    -fx-background-color: -color-primary-dark;
+    -fx-background-insets: 0;
+}
 /* Mensagem "Não há conteúdo" */
 .tabela_dash .placeholder .label {
     -fx-text-fill: -color-text-muted;
@@ -747,4 +784,40 @@
 
 .btn-excluir:hover {
     -fx-background-color: -color-danger-bg;
+}
+
+.check-box {
+    -fx-font-size: 13px;
+    -fx-text-fill: -color-text-gray;
+    -fx-cursor: hand;
+}
+
+.check-box .box {
+    -fx-background-color: -color-white;
+    -fx-border-color: -color-border-gray;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-min-width: 16px;
+    -fx-min-height: 16px;
+}
+
+.check-box:hover .box {
+    -fx-border-color: -color-primary;
+}
+
+.check-box:selected .box {
+    -fx-background-color: -color-primary;
+    -fx-border-color: -color-primary;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: -color-white;
+}
+
+.check-box:focused .box {
+    -fx-effect: dropshadow(three-pass-box, rgba(124,58,237,0.3), 6, 0, 0, 0);
+}
+
+.check-box:disabled {
+    -fx-opacity: 0.5;
 }

@@ -8,26 +8,17 @@ public class Empresa {
     private String razaoSocial;
     private String email;
     private String respLegal;
-    private double aliquotaFgts;
-    private int horasMensais;
-    private double valCestaBasic;
-    private double percHoraExtra50;
-    private double percHoraExtra100;
+
     
     private List<EnderecoEmpresa> enderecos = new ArrayList<>();
 
     public Empresa() {}
 
-    public Empresa(String cnpj, String razaoSocial, String email, String respLegal, double aliquotaFGTS, int horasMensais, double valCestaBasic, double percHoraExtra50, double percHoraExtra100) {
+    public Empresa(String cnpj, String razaoSocial, String email, String respLegal) {
         this.cnpj = cnpj;
         this.razaoSocial = razaoSocial;
         this.email = email;
         this.respLegal = respLegal;
-        this.aliquotaFgts = aliquotaFGTS;
-        this.horasMensais = horasMensais;
-        this.valCestaBasic = valCestaBasic;
-        this.percHoraExtra50 = percHoraExtra50;
-        this.percHoraExtra100 = percHoraExtra100;
     }
 
     public String getCnpj() {
@@ -62,44 +53,12 @@ public class Empresa {
         this.respLegal = respLegal;
     }
 
-    public double getAliquotaFGTS() {
-        return aliquotaFgts;
+    public List<EnderecoEmpresa> getEnderecos() {
+        return enderecos;
     }
 
-    public void setAliquotaFGTS(double aliquotaFGTS) {
-        this.aliquotaFgts = aliquotaFGTS;
-    }
-
-    public int getHorasMensais() {
-        return horasMensais;
-    }
-
-    public void setHorasMensais(int horasMensais) {
-        this.horasMensais = horasMensais;
-    }
-
-    public double getValCestaBasic() {
-        return valCestaBasic;
-    }
-
-    public void setValCestaBasic(double valCestaBasic) {
-        this.valCestaBasic = valCestaBasic;
-    }
-
-    public double getPercHoraExtra50() {
-        return percHoraExtra50;
-    }
-
-    public void setPercHoraExtra50(double percHoraExtra50) {
-        this.percHoraExtra50 = percHoraExtra50;
-    }
-
-    public double getPercHoraExtra100() {
-        return percHoraExtra100;
-    }
-
-    public void setPercHoraExtra100(double percHoraExtra100) {
-        this.percHoraExtra100 = percHoraExtra100;
+    public void setEnderecos(List<EnderecoEmpresa> enderecos) {
+        this.enderecos = enderecos;
     }
 
     @Override
