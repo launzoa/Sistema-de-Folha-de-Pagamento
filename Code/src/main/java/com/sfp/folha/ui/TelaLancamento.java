@@ -6,6 +6,7 @@ package com.sfp.folha.ui;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -23,8 +24,7 @@ public class TelaLancamento{
     
     @FXML private Label labelCompetencia;
     @FXML private Label labelStatus;
-    @FXML private TextField txtFuncionario;
-    @FXML private Label labelInfoFuncionario;
+    @FXML private TextField txtNome;
     
     @FXML private TableView tabelaLancamento;
     @FXML private TableColumn colFunc;
@@ -40,6 +40,19 @@ public class TelaLancamento{
     } 
     
     @FXML
+    public void buscar()
+    {
+        
+    }
+    
+    @FXML
+    public void limparFiltros()
+    {
+        txtNome.clear();
+       // atualizarTabela();     //NAO ESQUECE DE TIRAR ESSE COMENTÁRIO  
+    }
+    
+    @FXML
     public void registrar() {
         //registrar lançamento
     }
@@ -48,14 +61,11 @@ public class TelaLancamento{
     {
         
     }
-    @FXML
-    public void cancelar() {
-        //limpar campos
-    }
-    
     @FXML 
     public void excluirLancamento()
     {
         
     }
+    
+
 }

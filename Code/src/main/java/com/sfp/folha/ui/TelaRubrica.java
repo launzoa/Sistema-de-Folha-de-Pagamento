@@ -109,7 +109,7 @@ public class TelaRubrica{
     @FXML 
     public void limparFiltros()
     {
-         txtCodigo.clear();
+        txtCodigo.clear();
         carregarTabela(controlador.listarTodasRubricas());       
     }
     
@@ -139,40 +139,7 @@ public class TelaRubrica{
         }
         abrirFormulario(selecionada);      
     }
-    
-    @FXML
-    public void desativarRubrica() {
-        Rubrica selecionada = tabelaRubrica.getSelectionModel().getSelectedItem();
-        if(selecionada == null) 
-        {
-            mostrarAviso("Selecione uma rubrica para desativar.");
-            return;
-        }
-        if(!controlador.podeExcluir(selecionada.getCodigo())) 
-        {
-            mostrarAviso("Rubricas padrão (001–005) não podem ser desativadas.");
-            return;
-        }
-        if(!selecionada.isAtivo()) 
-        {
-            mostrarAviso("Esta rubrica já está inativa.");
-            return;
-        }
-
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Desativar Rubrica");
-        confirm.setHeaderText("Desativar rubrica " + selecionada.getCodigo() + " – " + selecionada.getDescricao() + "?");
-        confirm.setContentText("A rubrica será marcada como inativa.");
-        confirm.showAndWait().ifPresent(btn -> {
-            if (btn == ButtonType.OK) 
-            {
-                controlador.desativarRubrica(selecionada.getCodigo());
-                ServicoAuditoria.registrar("Desativar", "Rubrica", "Código: "+Integer.parseInt(txtCodigo.getText().trim()));
-                carregarTabela(controlador.listarTodasRubricas());
-            }
-        });
-    } 
-    
+      
     private void abrirFormulario(Rubrica rubrica) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("FormRubrica.fxml"));

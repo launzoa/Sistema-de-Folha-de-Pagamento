@@ -131,18 +131,4 @@ public class CatalogoRubrica {
         }
         return null;
     }
- 
-    public void desativarRubrica(int codigo) 
-    {
-        String sql = "UPDATE rubrica SET ativo=FALSE WHERE codigo=? AND padrao=FALSE";
-        try(Connection con = ConexaoBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) 
-        {
-            ps.setInt(1, codigo);
-            ps.executeUpdate();
-        } 
-        catch (Exception e) 
-        {
-            e.printStackTrace();
-        }
-    }
 }

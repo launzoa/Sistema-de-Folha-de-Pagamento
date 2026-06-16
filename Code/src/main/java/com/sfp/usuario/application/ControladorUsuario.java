@@ -27,8 +27,18 @@ public class ControladorUsuario {
     public void desativarUsuario(int id) {
         catalogoUsuario.desativarUsuario(id);
     }
-
+    
     public List<Usuario> listarUsuarios() {
         return catalogoUsuario.listarUsuarios();
     }  
+    
+    public Usuario buscarUsuarioSenha(String nome, String senha)
+    {
+        return catalogoUsuario.buscarUsuarioSenha(nome, senha);
+    }
+    
+    public List<Usuario> buscarUsuario(String nome)
+    {
+        return catalogoUsuario.buscarUsuario(nome);
+    }
 }

@@ -26,20 +26,26 @@
     </HBox>
     
     <!-- Selecionar Funcionário -->
-    <VBox styleClass="card" spacing="10" VBox.vgrow="ALWAYS" >
-        <Label text="Selecionar Funcionário" styleClass="card_title"/>
-        <HBox spacing="15" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
-            <Label text="Funcionário: " styleClass="lancamento-field" minWidth="90"/>
-            <TextField fx:id="txtFuncionario" promptText="Digite o nome..." prefWidth="220" prefHeight="32" styleClass="historico_field"/>
-            <Label fx:id="labelInfoFuncionario" text="infosFunc" styleClass="lancamento-field"/>
-        </HBox>
-    </VBox>
+    <HBox spacing="20" alignment="CENTER_LEFT" styleClass="card_dash">
+        <VBox spacing="5">
+            <Label text="Filtrar por Funcionário" styleClass="holerite-section-title"/>
+            <TextField fx:id="txtNome" promptText="Digite o nome..." prefWidth="200" styleClass="historico_field"/>
+        </VBox>
+        
+        <Region HBox.hgrow="ALWAYS"/>
+        
+        <VBox alignment="BOTTOM_LEFT">
+            <HBox spacing="10">
+                <Button text="Buscar" styleClass="primary-button" onAction="#buscar"/>
+                <Button text="Limpar Filtros" styleClass="secondary-button" onAction="#limparFiltros"/>
+            </HBox>
+        </VBox>
+    </HBox>
     <!-- Botões -->
     <HBox spacing="20" alignment="CENTER_RIGHT">
         <Button text="Registrar Lançamento" styleClass="primary-button" onAction="#registrar"/>
         <Button text="Editar Lancamento" styleClass="primary-button" onAction="#editarLancamento"/>
         <Button text="Excluir" styleClass="btn-excluir" onAction="#excluirLancamento"/>
-        <Button text="Cancelar" styleClass="secondary-button" onAction="#cancelar"/>
     </HBox>
     
     <!-- Tabela -->

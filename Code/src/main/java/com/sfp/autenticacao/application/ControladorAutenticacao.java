@@ -16,6 +16,6 @@ public class ControladorAutenticacao {
     private CatalogoUsuario catalogo = new CatalogoUsuario();
 
     public Usuario autenticar(String nome, String senha) {
-        return catalogo.buscarUsuario(nome, senha);
+        return catalogo.buscarUsuarioSenha(nome, senha);
     }
 }

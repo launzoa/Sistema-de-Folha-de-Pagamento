@@ -31,6 +31,8 @@ public class TelaUsuario {
     @FXML private TableColumn<Usuario, Boolean> colPerfil;
     @FXML private TableColumn<Usuario, Boolean> colStatus;
    // @FXML private TableColumn colUltimoAcesso;
+    @FXML private TextField txtNome;
+    
     private ControladorUsuario controladorUsuario = new ControladorUsuario();
     private CatalogoUsuario catalogo = new CatalogoUsuario();
 
@@ -57,13 +59,7 @@ public class TelaUsuario {
         });
         atualizarTabela();
     } 
-    //REVER SE ESSA FUNÇÃO ESTA SENDO USADA
-    private void carregarUsuarios() {
-        List<Usuario> lista = catalogo.buscarTodos();
-        ObservableList<Usuario> obsList = FXCollections.observableArrayList(lista);
-        tabelaUsuario.setItems(obsList);
-    }
-    
+
     @FXML
     private void AddUsuario() {
         exibirFormulario(null);
@@ -80,12 +76,33 @@ public class TelaUsuario {
             mostrarAlerta("Aviso", "Selecione um usuário para editar.");
         }
     }
-    //REVER SE SERÁ IMPLEMENTADO
-    @FXML
-    private void excluirUsuario()
-    {
-    }
     
+    @FXML
+    public void buscar()
+    {
+        String texto = txtNome.getText().trim();
+        if (texto.isEmpty()) 
+        {
+            atualizarTabela();
+            return;
+        }
+        List<Usuario> users = controladorUsuario.buscarUsuario(texto);
+        if (!users.isEmpty()) 
+        {
+            carregarTabela(users);
+        } 
+        else 
+        {
+            carregarTabela(List.of());
+            mostrarAlerta("Aviso", "Nenhum usuário encontrado para o nome" + texto);
+        }      
+    }    
+    @FXML 
+    public void limparFiltros()
+    {
+        txtNome.clear();
+        atualizarTabela();
+    }    
     private void exibirFormulario(Usuario usuario)
     {
         try
@@ -128,6 +145,10 @@ public class TelaUsuario {
             e.printStackTrace();
         }
     }
+    private void carregarTabela(List<Usuario> lista) 
+    {
+        tabelaUsuario.setItems(FXCollections.observableArrayList(lista));
+    } 
     private void atualizarTabela()
     {
         ObservableList<Usuario> lista = FXCollections.observableArrayList(controladorUsuario.listarUsuarios());

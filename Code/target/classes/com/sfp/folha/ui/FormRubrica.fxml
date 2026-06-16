@@ -38,7 +38,10 @@
         <CheckBox fx:id="chkFGTS" text="Incide FGTS" styleClass="check-box"/>
         <CheckBox fx:id="chkIRRF" text="Incide IRRF" styleClass="check-box"/>
     </VBox>
-
+    <VBox spacing="8" styleClass="card_dash">
+        <Label text="Status:" styleClass="holerite-section-title"/>
+        <CheckBox fx:id="chkAtivo" text="Ativo" styleClass="check-box"/>
+    </VBox>
     <HBox spacing="10" alignment="CENTER_RIGHT">
         <Button text="Salvar"   styleClass="primary-button"   onAction="#salvar"/>
         <Button text="Cancelar" styleClass="secondary-button" onAction="#cancelar"/>

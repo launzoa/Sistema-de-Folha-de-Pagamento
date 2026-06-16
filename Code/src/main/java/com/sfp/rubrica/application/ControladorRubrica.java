@@ -44,10 +44,6 @@ public class ControladorRubrica {
         return codigo > 5; //001-005 não podem ser excluídas
     }
     
-    public void desativarRubrica(int codigo) 
-    {
-        catalogo.desativarRubrica(codigo);
-    }
     public boolean podeEditar(int codigo) 
     {
         return codigo > 5; //001-005 são somente leitura

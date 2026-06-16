@@ -32,7 +32,6 @@
     <HBox spacing="20" alignment="CENTER_RIGHT">
         <Button text="+ Nova Rubrica" styleClass="primary-button" onAction="#addRubrica"/>
         <Button text="Editar Rubrica" styleClass="primary-button" onAction="#editarRubrica"/>
-        <Button text="Desativar Rubrica" styleClass="btn-excluir" onAction="#desativarRubrica"/>
     </HBox>
 
     <!-- TABELA -->

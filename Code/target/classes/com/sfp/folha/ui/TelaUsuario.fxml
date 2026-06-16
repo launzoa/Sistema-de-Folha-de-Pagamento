@@ -11,11 +11,25 @@
     <stylesheets>
         <URL value="@style.css"/>
     </stylesheets>
-
+    
+    <HBox spacing="20" alignment="CENTER_LEFT" styleClass="card_dash">
+        <VBox spacing="5">
+            <Label text="Filtrar por Nome:" styleClass="holerite-section-title"/>
+            <TextField fx:id="txtNome" promptText="Digite o Nome..." prefWidth="200" styleClass="historico_field"/>
+        </VBox>
+        
+        <Region HBox.hgrow="ALWAYS"/>
+        
+        <VBox alignment="BOTTOM_LEFT">
+            <HBox spacing="10">
+                <Button text="Buscar" styleClass="primary-button" onAction="#buscar"/>
+                <Button text="Limpar Filtros" styleClass="secondary-button" onAction="#limparFiltros"/>
+            </HBox>
+        </VBox>
+    </HBox>
     <HBox spacing="20" alignment="CENTER_RIGHT">
         <Button text="+ Novo Usuário" styleClass="primary-button" onAction="#AddUsuario"/>
         <Button text="Editar Usuário" styleClass="primary-button" onAction="#editarUsuario"/>
-        <Button text="Excluir" styleClass="btn-excluir" onAction="#excluirUsuario"/>
     </HBox>
     
     <!-- Tabela Usuários -->
