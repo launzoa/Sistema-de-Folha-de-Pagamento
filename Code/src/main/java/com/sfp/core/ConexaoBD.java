@@ -99,4 +99,29 @@ INSERT INTO rubrica VALUES (103,'Desconto por Atraso',   'Desconto', 'Variável'
 INSERT INTO rubrica VALUES (104,'Desconto DSR',          'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
 INSERT INTO rubrica VALUES (105,'Desconto Atestado',     'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
 INSERT INTO rubrica VALUES (106,'Outros Descontos',      'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
- **/
+
+CREATE TABLE lancamento (
+    id              INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_folha        INT NOT NULL,          -- QUANDO (Mês/Ano da folha corrente)
+    cpf_funcionario VARCHAR(14) NOT NULL,   -- QUEM (O funcionário que sofreu o evento)
+    codigo_rubrica  INT NOT NULL,          -- O QUE (O link para a sua tabela de rubricas)
+    
+    -- Dados específicos do momento do lançamento:
+    quantidade      DOUBLE,                -- QUANTO (2.5 horas, 1 dia de falta, 40 minutos de atraso)
+    data_clt        DATE,                  -- Dia exato em que aconteceu
+    valor           DOUBLE,                -- Só usado se for um bônus com valor livre inserido na hora
+    
+    -- Campos exclusivos de atestado (requisito 3.1.7.4.4)
+    data_inicio     DATE,
+    data_fim        DATE,
+    path_pdf        VARCHAR(255),
+
+    -- AS TRÊS CHAVES ESTRANGEIRAS QUE SÃO O CORAÇÃO DA TABELA:
+    FOREIGN KEY (codigo_rubrica) REFERENCES rubrica(codigo),
+    FOREIGN KEY (id_folha) REFERENCES folha_mes(id),       -- Garanta que o nome da tabela/coluna é esse
+    FOREIGN KEY (cpf_funcionario) REFERENCES funcionarios(cpf) -- Garanta que o nome da tabela/coluna é esse
+);
+
+
+
+**/
