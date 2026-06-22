@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<HBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.sfp.autenticacao.ui.TelaLogin" styleClass="conteudo">
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
+    
+    <VBox styleClass="login-sidebar" alignment="CENTER" spacing="25" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+        <ImageView fx:id="imgLogo" fitWidth="130" fitHeight="130" pickOnBounds="true" preserveRatio="true">
+            <Image url="@gato.png"/> 
+        </ImageView>
+        
+        <VBox alignment="CENTER" spacing="8">
+            <Label text="Sistema de Folha de Pagamento" styleClass="login-sidebar-title"/>
+            <Label text="Gestão completa de folha de pagamento com cálculos automatizados e emissão de holerites." 
+                   styleClass="login-sidebar-subtitle" wrapText="true" alignment="CENTER"/>
+        </VBox>
+    </VBox>
+
+    <VBox styleClass="login-form-container" alignment="CENTER" spacing="30" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+        
+        <VBox spacing="5" alignment="CENTER_LEFT" maxWidth="320">
+            <Label text="Entrar no sistema" styleClass="login-form-title"/>
+            <Label text="Informe suas credenciais de acesso" styleClass="login-form-subtitle"/>
+        </VBox>
+
+        <VBox spacing="18" alignment="CENTER" maxWidth="320">
+            <VBox spacing="6" alignment="CENTER_LEFT" maxWidth="Infinity">
+                <Label text="Usuário" styleClass="field-label"/>
+                <TextField fx:id="inputUsuario" promptText="Digite seu usuário" styleClass="campo-busca" maxWidth="Infinity"/>
+            </VBox>
+
+            <VBox spacing="6" alignment="CENTER_LEFT" maxWidth="Infinity">
+                <Label text="Senha" styleClass="field-label"/>
+                <PasswordField fx:id="inputSenha" promptText="Digite sua senha" styleClass="campo-busca" maxWidth="Infinity"/>
+            </VBox>
+        </VBox>
+
+        <VBox alignment="CENTER" maxWidth="320" spacing="15">
+            <Button text="Entrar" onAction="#fazerLogin" styleClass="primary-button"/>
+            <HBox spacing="10" alignment="CENTER">
+                <Button text="Zerar Dados" onAction="#acaoZerarDados" styleClass="secondary-button" style="-fx-border-color: #ff4c4c; -fx-text-fill: #ff4c4c;"/>
+                <Button text="Gerar Teste de Mesa" onAction="#acaoGerarTesteMesa" styleClass="secondary-button"/>
+            </HBox>
+            <Label text="SPF v1.0.0 - 2026" styleClass="login-version-label"/>
+            <Label text="" fx:id="labelErro" styleClass="result-value-red"/>
+        </VBox>
+
+    </VBox>
+</HBox>    
+    
+
+

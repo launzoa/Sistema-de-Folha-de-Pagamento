@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.sfp.rubrica.ui.FormRubrica" styleClass="conteudo" spacing="20" prefWidth="400">
+    <stylesheets>
+        <URL value="@style.css"/>
+    </stylesheets>
+
+    <VBox spacing="5">
+        <Label text="Código:" styleClass="holerite-section-title"/>
+        <TextField fx:id="txtCodigo" promptText="Ex: 006" styleClass="historico_field"/>
+    </VBox>
+
+    <VBox spacing="5">
+        <Label text="Descrição:" styleClass="holerite-section-title"/>
+        <TextField fx:id="txtDescricao" promptText="Ex: Salário Base" styleClass="historico_field"/>
+    </VBox>
+
+    <VBox spacing="5">
+        <Label text="Natureza:" styleClass="holerite-section-title"/>
+        <ComboBox fx:id="cbNatureza" promptText="Selecione..." maxWidth="Infinity" styleClass="historico_field"/>
+    </VBox>
+
+    <VBox spacing="5">
+        <Label text="Tipo:" styleClass="holerite-section-title"/>
+        <ComboBox fx:id="cbTipo" promptText="Selecione..." maxWidth="Infinity" styleClass="historico_field"/>
+    </VBox>
+
+
+
+    <VBox spacing="8" styleClass="card_dash">
+        <Label text="Incidências:" styleClass="holerite-section-title"/>
+        <CheckBox fx:id="chkINSS" text="Incide INSS" styleClass="check-box"/>
+        <CheckBox fx:id="chkFGTS" text="Incide FGTS" styleClass="check-box"/>
+        <CheckBox fx:id="chkIRRF" text="Incide IRRF" styleClass="check-box"/>
+    </VBox>
+    <VBox spacing="8" styleClass="card_dash">
+        <Label text="Status:" styleClass="holerite-section-title"/>
+        <CheckBox fx:id="chkAtivo" text="Ativo" styleClass="check-box"/>
+    </VBox>
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Salvar"   styleClass="primary-button"   onAction="#salvar"/>
+        <Button text="Cancelar" styleClass="secondary-button" onAction="#cancelar"/>
+    </HBox>
+
+</VBox>

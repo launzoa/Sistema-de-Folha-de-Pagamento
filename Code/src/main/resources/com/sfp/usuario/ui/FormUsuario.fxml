@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.sfp.usuario.ui.FormUsuario" styleClass="form-container" spacing="20">
+    <stylesheets>
+        <URL value="@style.css"/>
+    </stylesheets>
+    
+    <Label fx:id="labelTitulo" text="Cadastrar Usuário" styleClass="result-label-title-large"/>
+    
+    <TextField fx:id="txtNome" promptText="Nome de Usuário" styleClass="input-field"/>
+    <PasswordField fx:id="txtSenha" promptText="Senha" styleClass="input-field"/>
+    
+    <ComboBox fx:id="comboPerfil" promptText="Selecione o Perfil" styleClass="combo_box"/>
+    <CheckBox fx:id="checkAtivo" text="Usuário Ativo" selected="true" styleClass="check-box"/>
+    
+    <HBox spacing="5" alignment="CENTER">
+        <Button text="Salvar" onAction="#salvar" styleClass="primary-button"/>
+        <Button text="Cancelar" onAction="#cancelar" styleClass="secondary-button"/>
+    </HBox>
+
+
+</VBox>

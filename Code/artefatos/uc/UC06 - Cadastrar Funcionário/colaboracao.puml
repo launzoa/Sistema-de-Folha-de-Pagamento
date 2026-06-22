@@ -1,0 +1,15 @@
+@startuml 
+skinparam style strictuml
+
+actor "Analista de RH" as RH
+rectangle "Controlador do Cadastro de Funcionário" as Controller
+rectangle "Funcionário" as Funcionario
+rectangle "Funcionário Repositório" as RepoFuncionario
+
+RH -> Controller : 1. Solicita cadastro de funcionário
+Controller -> Funcionario : 2. <<create>> (nome, cpf, salario, cargo, data_admissao, data_admissao, status)
+Controller -> RepoFuncionario : 3. salvar(funcionario).
+RepoFuncionario --> Controller : 3.1 true (sucesso)
+Controller --> RH: 4. Exibe mensagem de sucesso.
+
+@enduml

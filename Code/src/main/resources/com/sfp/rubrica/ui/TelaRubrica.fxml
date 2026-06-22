@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.sfp.rubrica.ui.TelaRubrica" styleClass="conteudo">
+    <stylesheets>
+        <URL value="@style.css"/>
+    </stylesheets>
+
+    <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS" styleClass="tab-pane">
+        
+        <!-- ABA 1: RUBRICAS -->
+        <Tab text="Rubricas Cadastradas">
+            <VBox spacing="20" style="-fx-padding: 20px;">
+                <HBox spacing="20" alignment="CENTER_LEFT" styleClass="card_dash">
+                    <VBox spacing="5">
+                        <Label text="Filtrar por Rubrica:" styleClass="holerite-section-title"/>
+                        <ComboBox fx:id="comboRubrica" promptText="Selecione a rubrica..." prefWidth="250" styleClass="combo_box"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <VBox alignment="BOTTOM_LEFT">
+                        <HBox spacing="10">
+                            <Button text="Buscar" styleClass="primary-button" onAction="#buscar"/>
+                            <Button text="Limpar Filtros" styleClass="secondary-button" onAction="#limparFiltros"/>
+                        </HBox>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="20" alignment="CENTER_RIGHT">
+                    <Button text="+ Nova Rubrica" styleClass="primary-button" onAction="#addRubrica"/>
+                    <Button text="Editar Rubrica" styleClass="primary-button" onAction="#editarRubrica"/>
+                </HBox>
+
+                <VBox styleClass="card" VBox.vgrow="ALWAYS">
+                    <TableView fx:id="tabelaRubrica" styleClass="tabela_dash" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colCod" text="Código" prefWidth="70"/>
+                            <TableColumn fx:id="colDescr" text="Descrição" prefWidth="150"/>
+                            <TableColumn fx:id="colNat" text="Natureza" prefWidth="120"/>
+                            <TableColumn fx:id="colTipo" text="Tipo" prefWidth="100"/>
+                            <TableColumn fx:id="colIncINSS" text="Inc. INSS" prefWidth="70"/>
+                            <TableColumn fx:id="colIncFGTS" text="Inc. FGTS" prefWidth="70"/>
+                            <TableColumn fx:id="colIncIRRF" text="Inc. IRRF" prefWidth="70"/>
+                            <TableColumn fx:id="colPadrao" text="Padrão" prefWidth="70"/>
+                            <TableColumn fx:id="colAtivo" text="Ativo" prefWidth="70"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </VBox>
+        </Tab>
+
+        <!-- ABA 2: PARÂMETROS LEGAIS -->
+        <Tab text="Parâmetros Legais Governamentais">
+            <VBox spacing="20" style="-fx-padding: 20px;">
+                <HBox spacing="20" VBox.vgrow="ALWAYS">
+                    
+                    <!-- INSS -->
+                    <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="card">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="Tabela de Contribuição - INSS" styleClass="holerite-section-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                        </HBox>
+                        
+                        <TableView fx:id="tabelaINSS" styleClass="tabela_dash" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="colInssPiso" text="Piso (R$)" prefWidth="120"/>
+                                <TableColumn fx:id="colInssTeto" text="Teto (R$)" prefWidth="120"/>
+                                <TableColumn fx:id="colInssAliquota" text="Alíquota (%)" prefWidth="100"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+
+                    <!-- IRRF -->
+                    <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="card">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="Tabela de Retenção - IRRF" styleClass="holerite-section-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                        </HBox>
+
+                        <TableView fx:id="tabelaIRRF" styleClass="tabela_dash" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="colIrrfPiso" text="Piso (R$)" prefWidth="120"/>
+                                <TableColumn fx:id="colIrrfTeto" text="Teto (R$)" prefWidth="120"/>
+                                <TableColumn fx:id="colIrrfAliquota" text="Alíquota (%)" prefWidth="100"/>
+                                <TableColumn fx:id="colIrrfParcela" text="Parcela Deduzir (R$)" prefWidth="140"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                    
+                </HBox>
+            </VBox>
+        </Tab>
+    </TabPane>
+</VBox>
