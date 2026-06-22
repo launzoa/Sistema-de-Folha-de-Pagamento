@@ -1,0 +1,9 @@
+@startuml
+object ": EventoInicial" as Evento
+object ": TelaHistorico" as Tela
+object ": CatalogoFolhas" as Catalogo
+
+Evento -- Tela : 1: AcessaHistorico() >
+
+Tela -- Catalogo : 2: Create() >\n< 3: ExibeFolhasProcessadas()
+@enduml

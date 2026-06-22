@@ -2,7 +2,6 @@ package com.sfp.folha.application.calculadoras;
 
 import com.sfp.folha.domain.Holerite;
 import com.sfp.folha.domain.RegraDeCalculo;
-import com.sfp.core.domain.FolhaDePonto;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,13 +18,12 @@ public class CalculadoraSalarioProporcional implements RegraDeCalculo {
     @Override
     public BigDecimal calcular(Holerite holerite) {
         BigDecimal salarioBruto = holerite.getFuncionario().getSalarioBruto();
-        FolhaDePonto ponto = holerite.getFuncionario().getPonto();
-
-        int diasTrabalhados = ponto.getDiasTrabalhados();
-        int diasUteis = ponto.getDiasUteis();
+        double diasFaltas = holerite.getQuantidadePorRubrica(102);
+        int diasUteis = holerite.getQuantidadeDiasUteis();
+        double diasTrabalhados = diasUteis - diasFaltas;
 
         // valor da diária = salário base / dias úteis
-        BigDecimal valorDiaria = salarioBruto.divide(BigDecimal.valueOf(ponto.getDiasUteis()), 2, RoundingMode.HALF_UP);
+        BigDecimal valorDiaria = salarioBruto.divide(BigDecimal.valueOf(diasUteis), 2, RoundingMode.HALF_UP);
 
         // salário proporcional = valor da diária * dias trabalhados
         return valorDiaria.multiply(BigDecimal.valueOf(diasTrabalhados));

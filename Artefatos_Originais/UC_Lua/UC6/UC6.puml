@@ -1,0 +1,17 @@
+@startuml
+title Colaboração - UC-06: Cadastro de Funcionários
+
+rectangle "Operador" as Operador
+rectangle ":TelaFuncionarios" as UI
+rectangle ":ControladorFuncionarios" as Controller
+rectangle "CatalogoFuncionarios" as Catalogo
+rectangle "f:Funcionario" as Funcionario
+rectangle ":ControladorAuditoria" as Log
+
+Operador -r-> UI : informarDadosFunc(pessoais : String, contrato : String) : void
+UI -d-> Controller : 1: cadastrarFuncionario(pessoais : String, contrato : String) : void
+Controller -r-> Catalogo : 2: f = criarFuncionario(pessoais : String, contrato : String) : Funcionarios
+Catalogo -d-> Funcionario : 3: create(pessoais : String, contrato : String) : void
+Controller -d-> Log : 4: registroAuditoria(ID : int, timestamp : Datetime, usuer : Usuario, acao : int) : void
+
+@enduml

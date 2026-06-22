@@ -5,7 +5,7 @@ import java.math.RoundingMode;
 import java.util.List;
 
 import com.sfp.folha.domain.Holerite;
-import com.sfp.folha.domain.FaixaIRRF;
+import com.sfp.core.domain.FaixaIRRF;
 import com.sfp.folha.domain.RegraDeCalculo;
 
 public class CalculadoraIRRF implements RegraDeCalculo {
@@ -16,20 +16,21 @@ public class CalculadoraIRRF implements RegraDeCalculo {
     private final List<FaixaIRRF> tabelaIRRF;
     private final BigDecimal tetoMaximoDesconto;
 
-    // @brief: Construtor da classe
-    // @param tabelaIRRF: Tabela de faixas do IRRF
-    // @param tetoMaximoDesconto: Teto máximo de desconto do IRRF
+    /**
+     * @brief Construtor da classe
+     * @param tabelaIRRF         Tabela de faixas do IRRF
+     * @param tetoMaximoDesconto Teto máximo de desconto do IRRF
+     */
     public CalculadoraIRRF(List<FaixaIRRF> tabelaIRRF, BigDecimal tetoMaximoDesconto) {
         this.tabelaIRRF = tabelaIRRF;
         this.tetoMaximoDesconto = tetoMaximoDesconto;
     }
 
-    // @brief: Calcula o desconto do IRRF
-    // @param funcionario: Objeto Funcionario que contém as informações do
-    // funcionário
-    // @param diasUteis: Número de dias úteis no mês
-    // @param diasTrabalhados: Número de dias trabalhados no mês
-    // @return BigDecimal: Desconto do IRRF
+    /**
+     * @brief Calcula o desconto do IRRF
+     * @param holerite Objeto Holerite que contém as informações do funcionário
+     * @return BigDecimal Desconto do IRRF
+     */
     @Override
     public BigDecimal calcular(Holerite holerite) {
         // Pega o salário bruto do funcionário e o número de dependentes
@@ -45,15 +46,12 @@ public class CalculadoraIRRF implements RegraDeCalculo {
         // Calcula a base simplificada
         BigDecimal baseSimplificada = salarioBruto.subtract(DESCONTO_SIMPLIFICADO);
 
-        // Inicialização das variáveis
-        BigDecimal desconto = BigDecimal.ZERO;
-        BigDecimal aliquota = BigDecimal.ZERO;
-        BigDecimal parcela = BigDecimal.ZERO;
-        BigDecimal baseCalculo;
-        // Flag para indicar se encontrou uma faixa
         boolean flag = false;
+        BigDecimal desconto = BigDecimal.ZERO;
+        BigDecimal baseCalculo;
 
-        // Verifica qual base é maior e aplica o desconto
+        // Verifica qual base é menor (mais vantajosa pro funcionário) e aplica o
+        // desconto
         if (baseLegal.compareTo(baseSimplificada) < 0) {
             baseCalculo = baseLegal;
         } else {
@@ -62,19 +60,11 @@ public class CalculadoraIRRF implements RegraDeCalculo {
 
         // Percorre a tabela do IRRF para encontrar a faixa correspondente
         for (FaixaIRRF faixa : tabelaIRRF) {
-            // Verifica se a base de cálculo se encaixa na faixa
-            if (baseCalculo.compareTo(faixa.getTeto()) <= 0) {
-                aliquota = faixa.getAliquota();
-                parcela = faixa.getParcelaADeduzir();
+            if (faixa.isSalarioNaFaixa(baseCalculo)) {
+                desconto = faixa.calcularDesconto(baseCalculo);
                 flag = true;
-
                 break;
             }
-        }
-
-        // Calcula o desconto do IRRF
-        if (flag) {
-            desconto = baseCalculo.multiply(aliquota).subtract(parcela);
         }
 
         // Verifica se o desconto é menor que zero
@@ -87,6 +77,11 @@ public class CalculadoraIRRF implements RegraDeCalculo {
             desconto = tetoMaximoDesconto;
         }
 
-        return desconto.setScale(2, RoundingMode.HALF_UP);
+        // Arredonda o desconto para 2 casas decimais
+        desconto = desconto.setScale(2, RoundingMode.HALF_UP);
+        // Seta o desconto do IRRF no holerite
+        holerite.setDescontoIRRF(desconto);
+        // Retorna o desconto
+        return desconto;
     }
 }
