@@ -5,6 +5,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import com.sfp.funcionario.domain.Funcionario;
+import com.sfp.folha.domain.Holerite;
+import com.sfp.folha.domain.Lancamento;
+import com.sfp.rubrica.domain.Rubrica;
+import java.util.List;
+import java.util.ArrayList;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,10 +33,18 @@ public class CalculadoraSalarioProporcionalTest {
                         int diasTrabalhados,
                         String resultadoEsperado) {
                 CalculadoraSalarioProporcional calculadora = new CalculadoraSalarioProporcional();
-                Funcionario funcionario = new Funcionario(new BigDecimal(salarioBaseStr));
+                Funcionario funcionario = new Funcionario("Teste", "000", "Cargo", LocalDate.now(), new BigDecimal(salarioBaseStr), true, 1);
+                
+                double faltas = diasUteis - diasTrabalhados;
+                List<Lancamento> lancamentos = new ArrayList<>();
+                if (faltas > 0) {
+                    lancamentos.add(new Lancamento(1, 1, funcionario.getCpf(), 102, faltas, null, BigDecimal.ZERO, "Quantidade", null, null, null, null));
+                }
+                Holerite holerite = new Holerite(funcionario, lancamentos, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+                holerite.setQuantidadeDiasUteis(diasUteis);
 
-                BigDecimal resultado = calculadora.calcular(funcionario, diasUteis, diasTrabalhados);
-                assertEquals(new BigDecimal(resultadoEsperado), resultado,
+                BigDecimal resultado = calculadora.calcular(holerite);
+                assertEquals(0, new BigDecimal(resultadoEsperado).compareTo(resultado),
                                 "O salário proporcional do funcionário deveria ser " + resultadoEsperado);
         }
 }

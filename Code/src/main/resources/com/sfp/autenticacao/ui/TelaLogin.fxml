@@ -10,12 +10,12 @@
 
 <HBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.sfp.autenticacao.ui.TelaLogin" styleClass="conteudo">
     <stylesheets>
-        <URL value="@style.css" />
+        <URL value="@/com/sfp/core/ui/style.css" />
     </stylesheets>
     
     <VBox styleClass="login-sidebar" alignment="CENTER" spacing="25" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
         <ImageView fx:id="imgLogo" fitWidth="130" fitHeight="130" pickOnBounds="true" preserveRatio="true">
-            <Image url="@gato.png"/> 
+            <Image url="/com/sfp/core/ui/gato.png"/> 
         </ImageView>
         
         <VBox alignment="CENTER" spacing="8">

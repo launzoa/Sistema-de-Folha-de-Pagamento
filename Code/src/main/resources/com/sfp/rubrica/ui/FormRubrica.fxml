@@ -9,7 +9,7 @@
 
 <VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.sfp.rubrica.ui.FormRubrica" styleClass="conteudo" spacing="20" prefWidth="400">
     <stylesheets>
-        <URL value="@style.css"/>
+        <URL value="@/com/sfp/core/ui/style.css"/>
     </stylesheets>
 
     <VBox spacing="5">

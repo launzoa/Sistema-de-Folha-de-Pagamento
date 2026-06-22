@@ -1,4 +1,3 @@
-/home/launzoa/GitHub/Sistema-de-Folha-de-Pagamento/Code/src/main/java/com/sfp/TestRunner.java
 /home/launzoa/GitHub/Sistema-de-Folha-de-Pagamento/Code/src/main/java/com/sfp/auditoria/application/ControladorAuditoria.java
 /home/launzoa/GitHub/Sistema-de-Folha-de-Pagamento/Code/src/main/java/com/sfp/auditoria/application/ServicoAuditoria.java
 /home/launzoa/GitHub/Sistema-de-Folha-de-Pagamento/Code/src/main/java/com/sfp/auditoria/domain/AuditoriaRepository.java
@@ -67,5 +66,3 @@
 /home/launzoa/GitHub/Sistema-de-Folha-de-Pagamento/Code/src/main/java/com/sfp/usuario/infrastructure/persistence/MySQLUsuarioRepository.java
 /home/launzoa/GitHub/Sistema-de-Folha-de-Pagamento/Code/src/main/java/com/sfp/usuario/ui/FormUsuario.java
 /home/launzoa/GitHub/Sistema-de-Folha-de-Pagamento/Code/src/main/java/com/sfp/usuario/ui/TelaUsuario.java
-/home/launzoa/GitHub/Sistema-de-Folha-de-Pagamento/Code/src/main/java/com/sfp/utils/CheckUser.java
-/home/launzoa/GitHub/Sistema-de-Folha-de-Pagamento/Code/src/main/java/com/sfp/utils/InsertAdmin.java

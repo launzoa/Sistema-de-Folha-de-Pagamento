@@ -32,11 +32,25 @@ public interface FolhaMesRepository {
     FolhaMes buscarFolhaAberta();
 
     /**
+     * @brief Busca as folhas que estão com status 'Aberta' ou 'Em Transição'
+     * @return List<FolhaMes> ativas
+     */
+    List<FolhaMes> buscarFolhasAtivas();
+
+    /**
      * @brief Atualiza o status de uma folha de pagamento
      * @param id         ID da folha de pagamento
      * @param novoStatus Novo status da folha de pagamento
      */
     void atualizarStatus(int id, String novoStatus);
+
+    /**
+     * @brief Atualiza as datas de início e fim da folha
+     * @param id     ID da folha
+     * @param inicio Nova data de início
+     * @param fim    Nova data de fim
+     */
+    void atualizarDatas(int id, java.time.LocalDate inicio, java.time.LocalDate fim);
 
     /**
      * @brief Exclui todas as folhas de pagamento

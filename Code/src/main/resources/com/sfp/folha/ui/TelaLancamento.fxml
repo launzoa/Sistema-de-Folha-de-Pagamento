@@ -9,7 +9,7 @@
 
 <VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.sfp.folha.ui.TelaLancamento" styleClass="conteudo" spacing="20">
     <stylesheets>
-        <URL value="@style.css"/>
+        <URL value="@/com/sfp/core/ui/style.css"/>
     </stylesheets>
     <HBox spacing="20">
        <!-- Card Competência -->
@@ -27,6 +27,10 @@
     
     <!-- Selecionar Funcionário -->
     <HBox spacing="20" alignment="CENTER_LEFT" styleClass="card_dash">
+        <VBox spacing="5">
+            <Label text="Folha (Competência)" styleClass="holerite-section-title"/>
+            <ComboBox fx:id="comboFolha" promptText="Selecione a folha..." prefWidth="250" styleClass="combo_box" onAction="#mudarFolha"/>
+        </VBox>
         <VBox spacing="5">
             <Label text="Filtrar por Funcionário" styleClass="holerite-section-title"/>
             <ComboBox fx:id="comboBuscaFuncionario" promptText="Selecione o funcionário..." prefWidth="250" styleClass="combo_box"/>
@@ -56,8 +60,6 @@
                 <TableColumn fx:id="colTipo" text="Tipo" prefWidth="120"/>
                 <TableColumn fx:id="colVal" text="Valor" prefWidth="110"/>
                 <TableColumn fx:id="colData" text="Data" prefWidth="110"/>
-                <TableColumn fx:id="colAcoes" text="Ações" prefWidth="70"/>
-                <TableColumn fx:id="colObs" text="Observação" prefWidth="80"/>
             </columns>
         </TableView>
     </VBox>

@@ -1,3 +1,6 @@
+/**
+ * @brief Classe responsável por calcular o INSS do funcionário.
+ */
 package com.sfp.folha.application.calculadoras;
 
 import java.math.BigDecimal;
@@ -16,7 +19,6 @@ public class CalculadoraINSS implements RegraDeCalculo {
     /**
      * @brief Construtor da classe
      * @param tabelaINSS         Tabela de faixas do INSS
-     * 
      * @param tetoMaximoDesconto Teto máximo de desconto do INSS
      */
     public CalculadoraINSS(List<FaixaINSS> tabelaINSS, BigDecimal tetoMaximoDesconto) {
@@ -31,21 +33,21 @@ public class CalculadoraINSS implements RegraDeCalculo {
      */
     @Override
     public BigDecimal calcular(Holerite holerite) {
-        BigDecimal salarioBruto = holerite.getFuncionario().getSalarioBruto(); // Pega o salário bruto
+        // Inicializa variáveis
+        BigDecimal salarioBruto = holerite.getFuncionario().getSalarioBruto();
         boolean flag = false;
         BigDecimal desconto = BigDecimal.ZERO;
+        // Percorre as faixas do INSS
         for (FaixaINSS faixa : this.tabelaINSS) {
-            if (faixa.isSalarioNaFaixa(salarioBruto)) {
-                desconto = faixa.calcularDesconto(salarioBruto);
-                flag = true;
-                break;
+            if (faixa.isSalarioNaFaixa(salarioBruto)) { // Verifica se o salário bruto está na faixa
+                desconto = faixa.calcularDesconto(salarioBruto); // Calcula o desconto
+                flag = true; // Seta flag para true
+                break; // Sai do loop
             }
         }
-
         if (!flag) { // Se não encontrou faixa, aplica o teto máximo
             desconto = this.tetoMaximoDesconto;
         }
-
         // Arredonda o desconto para 2 casas decimais
         desconto = desconto.setScale(2, RoundingMode.HALF_UP);
         // Seta o desconto do INSS no holerite

@@ -34,6 +34,13 @@ public interface LancamentoRepository {
     List<Lancamento> buscarTodos();
 
     /**
+     * @brief Busca lançamentos por uma folha específica
+     * @param idFolha ID da folha
+     * @return Lista de lançamentos da folha
+     */
+    List<Lancamento> buscarPorFolha(int idFolha);
+
+    /**
      * @brief Busca um lançamento pelo ID
      * @param id ID do lançamento
      * @return Lançamento

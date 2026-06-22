@@ -7,10 +7,13 @@ import org.junit.jupiter.params.provider.CsvSource;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.sfp.funcionario.domain.Funcionario;
-import com.sfp.folha.domain.FaixaINSS;
+import com.sfp.core.domain.FaixaINSS;
+import com.sfp.folha.domain.Holerite;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
+import java.time.LocalDate;
 
 public class CalculadoraINSSTest {
 
@@ -28,16 +31,16 @@ public class CalculadoraINSSTest {
 
                 List<FaixaINSS> tabelaVigente = Arrays.asList(
                                 new FaixaINSS(new BigDecimal("0.00"), new BigDecimal("1412.00"),
-                                                new BigDecimal("0.075"),
+                                                new BigDecimal("7.5"),
                                                 new BigDecimal("0.00")),
                                 new FaixaINSS(new BigDecimal("1412.01"), new BigDecimal("2666.68"),
-                                                new BigDecimal("0.090"),
+                                                new BigDecimal("9.0"),
                                                 new BigDecimal("21.18")),
                                 new FaixaINSS(new BigDecimal("2666.69"), new BigDecimal("4000.03"),
-                                                new BigDecimal("0.120"),
+                                                new BigDecimal("12.0"),
                                                 new BigDecimal("101.18")),
                                 new FaixaINSS(new BigDecimal("4000.04"), new BigDecimal("7786.02"),
-                                                new BigDecimal("0.140"),
+                                                new BigDecimal("14.0"),
                                                 new BigDecimal("181.18")));
 
                 BigDecimal tetoMaximo = new BigDecimal("908.86");
@@ -55,12 +58,12 @@ public class CalculadoraINSSTest {
         @DisplayName("Deve calcular INSS progressivo aplicando a parcela a deduzir e o teto máximo")
         public void testCalcularINSSCorretamente(String salarioBrutoStr, String descontoEsperadoStr) {
                 BigDecimal salarioBruto = new BigDecimal(salarioBrutoStr);
-                Funcionario funcionario = new Funcionario(salarioBruto);
-
-                BigDecimal desconto = calculadora.calcular(funcionario, 22, 22);
+                Funcionario funcionario = new Funcionario("Teste", "000", "Cargo", LocalDate.now(), salarioBruto, true, 1);
+                Holerite holerite = new Holerite(funcionario, new ArrayList<>(), salarioBruto, BigDecimal.ZERO, BigDecimal.ZERO);
+                BigDecimal desconto = calculadora.calcular(holerite);
                 BigDecimal descontoEsperado = new BigDecimal(descontoEsperadoStr);
 
-                assertEquals(descontoEsperado, desconto, "O desconto esperado era " + descontoEsperado);
+                assertEquals(0, descontoEsperado.compareTo(desconto), "O desconto esperado era " + descontoEsperado + " mas foi " + desconto);
 
         }
 }

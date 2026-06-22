@@ -15,7 +15,7 @@
 <VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sfp.funcionario.ui.CadastroFuncionarioController" styleClass="root">
     
     <stylesheets>
-        <URL value="@style.css" />
+        <URL value="@/com/sfp/core/ui/style.css" />
     </stylesheets>
 
     <padding>
@@ -24,7 +24,7 @@
 
     <ImageView fitWidth="80" fitHeight="80" preserveRatio="true">
         <image>
-            <Image url="@gato.png" />
+            <Image url="/com/sfp/core/ui/gato.png" />
         </image>
     </ImageView>
 

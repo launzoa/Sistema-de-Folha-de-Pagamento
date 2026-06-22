@@ -1,3 +1,6 @@
+/**
+ * @brief Classe responsável por calcular o desconto do IRRF
+ */
 package com.sfp.folha.application.calculadoras;
 
 import java.math.BigDecimal;
@@ -10,9 +13,10 @@ import com.sfp.folha.domain.RegraDeCalculo;
 
 public class CalculadoraIRRF implements RegraDeCalculo {
 
-    private static final BigDecimal DEDUCAO_POR_DEPENDENTE = new BigDecimal("189.59");
-    private static final BigDecimal DESCONTO_SIMPLIFICADO = new BigDecimal("564.80");
-
+    private static final BigDecimal DEDUCAO_POR_DEPENDENTE = new BigDecimal("189.59"); // Dedução por dependente
+                                                                                       // vigencia atual
+    private static final BigDecimal DESCONTO_SIMPLIFICADO = new BigDecimal("564.80"); // Desconto simplificado vigencia
+                                                                                      // atual
     private final List<FaixaIRRF> tabelaIRRF;
     private final BigDecimal tetoMaximoDesconto;
 
@@ -38,7 +42,6 @@ public class CalculadoraIRRF implements RegraDeCalculo {
         BigDecimal numeroDependentes = BigDecimal.valueOf(holerite.getFuncionario().getNumeroDependentes());
         // Pega o desconto do INSS
         BigDecimal descontoINSS = holerite.getDescontoINSS();
-
         // Calcula a base legal
         BigDecimal baseLegal = salarioBruto.subtract(descontoINSS)
                 .subtract(numeroDependentes.multiply(DEDUCAO_POR_DEPENDENTE));
@@ -46,7 +49,8 @@ public class CalculadoraIRRF implements RegraDeCalculo {
         // Calcula a base simplificada
         BigDecimal baseSimplificada = salarioBruto.subtract(DESCONTO_SIMPLIFICADO);
 
-        boolean flag = false;
+        // Inicia variaveis de desconto
+        boolean flag = false; // Flag para verificar se o desconto foi calculado
         BigDecimal desconto = BigDecimal.ZERO;
         BigDecimal baseCalculo;
 

@@ -53,8 +53,6 @@ public class Lancamento {
         this.pathPdf = pathPdf;
     }
 
-
-
     /**
      * @brief Retorna o código da rubrica
      * @return int

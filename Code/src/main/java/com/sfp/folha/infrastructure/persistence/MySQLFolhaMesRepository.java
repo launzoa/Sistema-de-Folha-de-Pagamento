@@ -149,6 +149,20 @@ public class MySQLFolhaMesRepository implements FolhaMesRepository {
     }
 
     @Override
+    public void atualizarDatas(int id, java.time.LocalDate inicio, java.time.LocalDate fim) {
+        String sql = "UPDATE folha_mes SET data_inicio = ?, data_fim = ? WHERE id = ?";
+        try (Connection conn = ConexaoBD.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setDate(1, inicio != null ? java.sql.Date.valueOf(inicio) : null);
+            pstmt.setDate(2, fim != null ? java.sql.Date.valueOf(fim) : null);
+            pstmt.setInt(3, id);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao atualizar datas da folha", e);
+        }
+    }
+
+    @Override
     public FolhaMes buscarFolhaAberta() {
         // SQL para buscar a folha aberta
         String sql = "SELECT * FROM folha_mes WHERE status = 'Aberta' ORDER BY id DESC LIMIT 1";
@@ -165,6 +179,24 @@ public class MySQLFolhaMesRepository implements FolhaMesRepository {
             throw new RuntimeException("Erro ao buscar folha aberta", e);
         }
         return null; // Retorna null se nenhuma folha aberta for encontrada
+    }
+
+    @Override
+    public List<FolhaMes> buscarFolhasAtivas() {
+        // SQL para buscar as folhas ativas
+        String sql = "SELECT * FROM folha_mes WHERE status IN ('Aberta', 'Em Transição') ORDER BY id DESC";
+        // Conexão com o banco de dados e preparação do statement
+        try (Connection conn = ConexaoBD.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            ResultSet rs = pstmt.executeQuery();
+            List<FolhaMes> folhas = new ArrayList<>();
+            while (rs.next()) {
+                folhas.add(mapearResultSetParaFolha(rs));
+            }
+            return folhas;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar folhas ativas", e);
+        }
     }
 
     /**

@@ -7,7 +7,7 @@
       fx:controller="com.sfp.folha.ui.FormLancamentoController" spacing="15" style="-fx-padding: 20;">
     
     <stylesheets>
-        <URL value="@style.css"/>
+        <URL value="@/com/sfp/core/ui/style.css"/>
     </stylesheets>
     
     <Label text="Novo Lançamento" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
@@ -32,7 +32,10 @@
         </HBox>
         <VBox spacing="5" fx:id="boxBaseCalculo">
             <Label text="Implica em (Base):"/>
-            <ComboBox fx:id="cbBaseCalculo" promptText="Selecione a Base" maxWidth="Infinity"/>
+            <HBox spacing="10">
+                <ComboBox fx:id="cbBaseCalculo" promptText="Selecione a Base" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="txtBaseLivre" promptText="R$ Valor Base Livre" visible="false" managed="false"/>
+            </HBox>
         </VBox>
         <CheckBox fx:id="chkDescontoDSR" text="Descontar DSR da Semana (Apenas p/ Faltas/Atrasos)"/>
     </VBox>

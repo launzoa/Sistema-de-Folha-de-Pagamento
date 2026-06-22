@@ -51,6 +51,7 @@ public class TelaDashboard {
             if (dados.getFolhaAtual() != null) { // Caso tenha folha atual
                 labelCompetencia.setText(dados.getFolhaAtual().getCompetencia());
                 // Seta o status da folha atual
+                labelStatus.setText(dados.getFolhaAtual().getStatus());
                 gerarGraficos(dados);
             } else { // Caso não tenha folha atual
                 labelCompetencia.setText("Nenhuma");

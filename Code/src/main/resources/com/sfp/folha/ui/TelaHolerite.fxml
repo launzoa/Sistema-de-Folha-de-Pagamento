@@ -9,7 +9,7 @@
 
 <VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.sfp.folha.ui.TelaHoleriteController" styleClass="conteudo" spacing="20">
     <stylesheets>
-        <URL value="@../../core/ui/style.css"/>
+        <URL value="@/com/sfp/core/ui/style.css"/>
     </stylesheets>
 
     <!-- Header / Controle da Folha -->
@@ -23,10 +23,6 @@
             <Label fx:id="labelStatus" text="Buscando..." style="-fx-font-size: 14px; -fx-text-fill: green"/>
         </VBox>
         <Region HBox.hgrow="ALWAYS"/>
-        <HBox fx:id="boxControlesFolha" spacing="10">
-            <Button text="Fechar Folha" styleClass="primary-button" onAction="#fecharFolha"/>
-            <Button text="Resetar (Zerar Tudo)" style="-fx-background-color: #ff4c4c; -fx-text-fill: white;" onAction="#resetarFolhas"/>
-        </HBox>
     </HBox>
 
     <!-- Removido cards estatísticos conforme pedido pelo usuário -->

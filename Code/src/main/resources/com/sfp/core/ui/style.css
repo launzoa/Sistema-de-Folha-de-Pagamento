@@ -2,7 +2,7 @@
 
 /* ===== VARIÁVEIS DE COR ===== */
 .root {
-    -fx-background-color: #121212;
+    -fx-background-color: -color-bg-light;
     -fx-font-family: "Segoe UI", "Inter", sans-serif;
  
     /* Roxo — cor primária */
@@ -429,6 +429,26 @@
     -fx-border-width: 1px;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 2);
 }
+
+/* Gráficos */
+.chart-title {
+    -fx-text-fill: -color-text-dark;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+.chart-legend {
+    -fx-background-color: transparent;
+}
+.chart-legend-item {
+    -fx-text-fill: -color-text-gray;
+}
+/* Pizza */
+.default-color0.chart-pie { -fx-pie-color: #10B981; } /* Verde: Líquido */
+.default-color1.chart-pie { -fx-pie-color: #EF4444; } /* Vermelho: Impostos */
+.default-color2.chart-pie { -fx-pie-color: #F59E0B; } /* Laranja: Descontos */
+/* Barras */
+.default-color0.chart-bar { -fx-bar-fill: #3B82F6; } /* Azul: Custo */
+.default-color1.chart-bar { -fx-bar-fill: #10B981; } /* Verde: Líquido */
 .card_title {
     -fx-font-size: 13px;
     -fx-font-weight: bold;

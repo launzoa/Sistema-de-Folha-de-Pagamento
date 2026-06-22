@@ -193,6 +193,33 @@ public class MySQLLancamentoRepository implements LancamentoRepository {
         return lancamentos; // Retorna a lista de lançamentos
     }
 
+    @Override
+    public List<Lancamento> buscarPorFolha(int idFolha) {
+        List<Lancamento> lancamentos = new ArrayList<>();
+        String sql = "SELECT * FROM lancamento WHERE id_folha = ?";
+        
+        try (Connection conn = ConexaoBD.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, idFolha);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Lancamento l = new Lancamento(
+                    rs.getInt("id"), rs.getInt("id_folha"), rs.getString("cpf_funcionario"),
+                    rs.getInt("codigo_rubrica"), rs.getDouble("quantidade"), 
+                    rs.getDate("data_clt") != null ? rs.getDate("data_clt").toLocalDate() : null,
+                    rs.getBigDecimal("valor"), rs.getString("modalidade"), rs.getString("base_calculo"),
+                    rs.getDate("data_inicio") != null ? rs.getDate("data_inicio").toLocalDate() : null,
+                    rs.getDate("data_fim") != null ? rs.getDate("data_fim").toLocalDate() : null,
+                    rs.getString("path_pdf")
+                );
+                lancamentos.add(l);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar lançamentos por folha", e);
+        }
+        return lancamentos;
+    }
+
     /**
      * @brief Busca um lançamento por ID
      * @param id ID do lançamento

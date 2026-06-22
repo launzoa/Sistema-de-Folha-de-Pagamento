@@ -39,11 +39,8 @@ public class MySQLFaixaINSSRepository implements FaixaINSSRepository {
             // Executa o statement
             int linhasAfetadas = pstmt.executeUpdate();
 
-            // Verifica se o statement foi executado com sucesso
-            if (linhasAfetadas == 1) {
-                System.out.println("Faixa de aliquota do INSS cadastrada com sucesso!");
-            } else {
-                System.out.println("Erro ao cadastrar faixa de aliquota do INSS!");
+            if (linhasAfetadas == 0) {
+                throw new RuntimeException("Nenhuma linha foi inserida ao cadastrar faixa de alíquota do INSS.");
             }
         } catch (Exception e) {
             throw new RuntimeException("Erro ao cadastrar Faixa INSS no Banco de Dados", e);
