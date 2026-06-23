@@ -1,0 +1,46 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 180
+skinparam ranksep 150
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC16_03_ExibirParametrosAtualizados
+
+actor "Administrador" as Administrador
+
+rectangle ":TelaRubrica.fxml" as TelaRubricaFXML
+rectangle ":TelaRubrica" as TelaRubrica
+rectangle ":TabelaINSS" as TabelaINSS
+rectangle ":TabelaIRRF" as TabelaIRRF
+rectangle ":MySQLFaixaINSSRepository" as MySQLFaixaINSSRepository
+rectangle ":MySQLFaixaIRRFRepository" as MySQLFaixaIRRFRepository
+
+TelaRubrica -[hidden]right- TelaRubrica
+TelaRubrica -[hidden]down- MySQLFaixaINSSRepository
+
+Administrador --> TelaRubricaFXML : exibeParametrosAtualizados() : void
+
+TelaRubricaFXML --> TelaRubrica : 1: carregarTabelasParametros() : void
+
+TelaRubrica -right-> MySQLFaixaINSSRepository : 1.1: faixasINSS := buscarTodas(): List<FaixaINSS>
+
+TelaRubrica -right-> MySQLFaixaIRRFRepository : 1.2: faixasIRRF := buscarTodas() : List<FaixaIRRF>
+
+TelaRubrica -right-> TabelaINSS : 1.3: setItems(faixasINSS) : void
+
+TelaRubrica -right-> TabelaIRRF : 1.4: setItems(faixasIRRF) : void
+@enduml

@@ -1,0 +1,33 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 220
+skinparam ranksep 100
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC09_03_AlterarDadosRubrica
+
+actor "Administrador" as Administrador
+
+rectangle ":FormRubrica.fxml" as FormRubricaFXML
+
+Administrador --> FormRubricaFXML : alteraDadosRubrica(descricao,\nnatureza, tipo, incideINSS,\nincideFGTS, incideIRRF, ativo) : void
+
+note right of FormRubricaFXML
+Os dados alterados permanecem preenchidos
+nos campos do formulário.
+end note
+@enduml

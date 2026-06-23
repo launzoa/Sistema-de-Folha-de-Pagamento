@@ -1,0 +1,42 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 180
+skinparam ranksep 40
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC10_02_SolicitarNovoLancamentoMensal
+
+actor "Usuário" as Usuario
+
+rectangle ":TelaLancamento.fxml" as TelaLancamentoFXML
+rectangle ":TelaLancamento" as TelaLancamento
+rectangle ":FormLancamento.fxml" as FormLancamentoFXML
+rectangle ":FormLancamentoController" as FormLancamentoController
+
+Usuario ---> TelaLancamentoFXML : solicitaNovoLancamentoMensal() : void
+
+TelaLancamentoFXML -right-> TelaLancamento : 1: registrar() : void
+
+TelaLancamento ---> TelaLancamento : 1.1: abrirFormularioLancamento(null): void
+
+TelaLancamento ---> FormLancamentoFXML : 1.1.1: load() : Parent
+
+FormLancamentoFXML ----> FormLancamentoController : 1.1.2: initialize() : void
+
+TelaLancamento ---> FormLancamentoController : 1.1.3: setFolhaSelecionada(folha): void
+
+@enduml

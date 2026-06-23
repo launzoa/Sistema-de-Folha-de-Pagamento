@@ -1,0 +1,68 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 290
+skinparam ranksep 130
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC01_02_PreencherLogin
+
+actor "Usuário" as Usuario
+
+rectangle ":TelaLogin.fxml" as TelaLoginFXML
+rectangle ":TelaLogin" as TelaLogin
+rectangle ":ControladorAutenticacao" as ControladorAutenticacao
+rectangle ":MySQLUsuarioRepository" as MySQLUsuarioRepository
+rectangle ":ServicoAuditoria" as ServicoAuditoria
+rectangle ":MainView.fxml" as MainView
+rectangle ":MainController" as MainController
+rectangle ":TelaDashboard.fxml" as TelaDashboard
+
+Usuario -[hidden]down- TelaLoginFXML
+
+TelaLoginFXML -[hidden]right- TelaLogin
+TelaLogin -[hidden]right- ControladorAutenticacao
+ControladorAutenticacao -[hidden]right- ServicoAuditoria
+
+TelaLoginFXML -[hidden]down- MainView
+TelaLogin -[hidden]down- MainController
+ControladorAutenticacao -[hidden]down- MySQLUsuarioRepository
+MainController -[hidden]down- TelaDashboard
+MainView -[hidden]right- MainController
+
+Usuario -down-> TelaLoginFXML : preencherCamposLogin(usuario,senha) : void
+
+TelaLoginFXML -right-> TelaLogin : 1: fazerLogin() : void
+
+TelaLogin -right-> ControladorAutenticacao : 1.1: usuario := autenticar(nome,senha) : Usuario
+
+ControladorAutenticacao -down-> MySQLUsuarioRepository : 1.1.1: usuario := buscarUsuarioSenha(nome,\nsenha) : Usuario
+
+ControladorAutenticacao -right-> ServicoAuditoria : 1.1.2: setUsuarioAtual(user) : void\n1.1.3: registrar("Login","Sistema", null) : void
+
+TelaLogin -down-> MainView : 1.2: load() : Parent
+
+MainView -right-> MainController : 1.2.1: initialize() : void
+
+MainController -down-> TelaDashboard : 1.2.1.1: load() : Parent
+
+TelaLogin -down-> MainController : 1.3: setUsuario(user) : void
+
+note left of MainView
+Após o login válido, a MainView.fxml
+é carregada e exibida como tela principal.
+end note
+@enduml

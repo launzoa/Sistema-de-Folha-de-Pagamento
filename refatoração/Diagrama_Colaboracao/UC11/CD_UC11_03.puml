@@ -1,0 +1,33 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 250
+skinparam ranksep 100
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC11_03_AlterarDadosLancamento
+
+actor "Usuário" as Usuario
+
+rectangle ":FormLancamento.fxml" as FormLancamentoFXML
+
+Usuario --> FormLancamentoFXML : alteraDadosLancamento(funcionario, rubrica, modalidade, valor,\nquantidade, baseCalculo, dataOcorrido) : void
+
+note right of FormLancamentoFXML
+Os dados alterados permanecem preenchidos
+nos campos do formulário.
+end note
+@enduml

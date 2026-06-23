@@ -1,0 +1,43 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 280
+skinparam ranksep 50
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC09_02_SelecionarRubricaEdicao
+
+actor "Administrador" as Administrador
+
+rectangle ":TelaRubrica.fxml" as TelaRubricaFXML
+rectangle ":TelaRubrica" as TelaRubrica
+rectangle ":ControladorRubrica" as ControladorRubrica
+rectangle ":FormRubrica.fxml" as FormRubricaFXML
+rectangle ":FormRubrica" as FormRubrica
+
+Administrador --> TelaRubricaFXML : selecionaRubricaPersonalizadaParaEdicao(rubricaSelecionada)\n: void
+
+TelaRubricaFXML -right-> TelaRubrica : 1: editarRubrica() : void
+
+TelaRubrica -up-> ControladorRubrica : 1.1: editavel := podeEditar(codigo): boolean
+
+TelaRubrica ---> TelaRubrica : 1.2: abrirFormularioRubrica(rubricaSelecionada)\n: void
+
+TelaRubrica ---> FormRubricaFXML : 1.2.1: load() : Parent
+
+FormRubricaFXML -right-> FormRubrica : 1.2.2: setRubrica(rubricaSelecionada): void
+
+@enduml

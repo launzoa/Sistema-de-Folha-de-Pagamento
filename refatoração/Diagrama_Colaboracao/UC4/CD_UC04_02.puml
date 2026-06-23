@@ -1,0 +1,38 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 180
+skinparam ranksep 60
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC04_02_CadastrarNovoUsuario
+
+actor "Administrador" as Administrador
+
+rectangle ":TelaUsuario.fxml" as TelaUsuarioFXML
+rectangle ":TelaUsuario" as TelaUsuario
+rectangle ":FormUsuario.fxml" as FormUsuarioFXML
+rectangle ":FormUsuario" as FormUsuario
+
+Administrador ---> TelaUsuarioFXML : cadastraNovoUsuario() : void
+
+TelaUsuarioFXML -right-> TelaUsuario : 1: AddUsuario() : void
+
+TelaUsuario -right-> FormUsuarioFXML : 1.1: exibirFormulario(null): void
+
+FormUsuarioFXML -down-> FormUsuario : 1.1.1: initialize() : void
+
+@enduml

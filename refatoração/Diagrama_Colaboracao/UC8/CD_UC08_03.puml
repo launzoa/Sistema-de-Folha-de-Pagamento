@@ -1,0 +1,33 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 210
+skinparam ranksep 180
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC08_03_PreencherDadosRubrica
+
+actor "Administrador" as Administrador
+
+rectangle ":FormRubrica.fxml" as FormRubricaFXML
+
+Administrador --> FormRubricaFXML : preencheDadosRubrica(codigo,\ndescricao, natureza, tipo,\nincideINSS, incideFGTS,\nincideIRRF, ativo) : void
+
+note right of FormRubricaFXML
+Os dados permanecem preenchidos
+nos campos do formulário.
+end note
+@enduml

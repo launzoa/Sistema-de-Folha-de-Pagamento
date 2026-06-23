@@ -1,0 +1,37 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 180
+skinparam ranksep 80
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC15_03_ConsultarDetalhesRegistro
+
+actor "Administrador" as Administrador
+
+rectangle ":TelaLog.fxml" as TelaLogFXML
+rectangle ":TelaLog" as TelaLog
+
+Administrador --> TelaLogFXML : consultaDetalhesRegistro(registroSelecionado) : void
+
+TelaLogFXML --> TelaLog : 1: registroSelecionado := getSelectionModel(): RegistroAuditoria
+
+note right of TelaLog
+A tabela exibe as informações
+do registro selecionado.
+end note
+
+@enduml

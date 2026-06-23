@@ -1,0 +1,42 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 160
+skinparam ranksep 40
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC08_02_SolicitarCadastroRubrica
+
+actor "Administrador" as Administrador
+
+rectangle ":TelaRubrica.fxml" as TelaRubricaFXML
+rectangle ":TelaRubrica" as TelaRubrica
+rectangle ":FormRubrica.fxml" as FormRubricaFXML
+rectangle ":FormRubrica" as FormRubrica
+
+Administrador --> TelaRubricaFXML : solicitaCadastroNovaRubrica() : void
+
+TelaRubricaFXML -right-> TelaRubrica : 1: addRubrica() : void
+
+TelaRubrica ---> TelaRubrica : 1.1: abrirFormularioRubrica(null): void
+
+TelaRubrica ---> FormRubricaFXML : 1.1.1: load() : Parent
+
+FormRubricaFXML ---> FormRubrica : 1.1.2: initialize() : void
+
+FormRubrica ---> FormRubrica : 1.1.3: setRubrica(null) : void
+
+@enduml

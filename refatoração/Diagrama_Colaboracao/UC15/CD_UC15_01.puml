@@ -1,0 +1,51 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 150
+skinparam ranksep 100
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC15_01_AcessarTelaLogAuditoria
+
+actor "Administrador" as Administrador
+
+rectangle ":MainView.fxml" as MainViewFXML
+rectangle ":MainController" as MainController
+rectangle ":TelaLog.fxml" as TelaLogFXML
+rectangle ":TelaLog" as TelaLog
+rectangle ":ControladorUsuario" as ControladorUsuario
+rectangle ":ControladorAuditoria" as ControladorAuditoria
+rectangle ":MySQLAuditoriaRepository" as MySQLAuditoriaRepository
+
+Administrador --> MainViewFXML : acessaTelaLogAuditoria() : void
+
+MainViewFXML -right-> MainController : 1: abrirLog() : void
+
+MainController -right-> TelaLogFXML : 1.1: load() : Parent
+
+TelaLogFXML -right-> TelaLog : 1.2: initialize() : void
+
+TelaLog -up-> ControladorUsuario : 1.3: usuarios := listarUsuarios(): List<Usuario>
+
+TelaLog ---> TelaLog : 1.4: buscar() : void
+
+TelaLog --> ControladorAuditoria : 1.4.1: registros := buscar(usuarioNome, data): List<RegistroAuditoria>
+
+ControladorAuditoria --> MySQLAuditoriaRepository : 1.4.1.1: registros := buscar(usuario, data): List<RegistroAuditoria>
+
+TelaLog ---> TelaLog : 1.5: setItems(obsList): void
+
+@enduml

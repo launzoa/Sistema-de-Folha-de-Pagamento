@@ -1,0 +1,35 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 300
+skinparam ranksep 100
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC01_01_IniciarSistema
+
+actor "Usuário" as Usuario
+rectangle ":Main" as Main
+rectangle ":TelaLogin.fxml" as TelaLogin
+
+Usuario -down-> Main : iniciarSistema() : void
+
+Main -right-> TelaLogin : 1: load() : Parent
+
+note right of TelaLogin
+A tela de login é carregada
+e exibida pelo Main.
+end note
+@enduml

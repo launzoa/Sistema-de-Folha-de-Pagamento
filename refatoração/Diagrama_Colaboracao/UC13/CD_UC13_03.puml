@@ -1,0 +1,37 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 320
+skinparam ranksep 80
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC13_03_SelecionarFuncionarioHolerite
+
+actor "Usuário" as Usuario
+
+rectangle ":TelaHolerite.fxml" as TelaHoleriteFXML
+rectangle ":TelaHoleriteController" as TelaHoleriteController
+
+Usuario --> TelaHoleriteFXML : selecionaFuncionarioParaVisualizarHolerite(funcionarioSelecionado): void
+
+TelaHoleriteFXML -down-> TelaHoleriteController : 1: exibirPreview(holerite) : void
+
+note left of TelaHoleriteController
+A seleção na tabela aciona a atualização
+do demonstrativo do holerite.
+end note
+
+@enduml

@@ -1,0 +1,47 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 300
+skinparam ranksep 50
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC13_02_SelecionarCompetencia
+
+actor "Usuário" as Usuario
+
+rectangle ":TelaHolerite.fxml" as TelaHoleriteFXML
+rectangle ":TelaHoleriteController" as TelaHoleriteController
+rectangle ":MySQLFuncionarioRepository" as MySQLFuncionarioRepository
+rectangle ":MySQLLancamentoRepository" as MySQLLancamentoRepository
+rectangle ":ProcessadorDeFolha" as ProcessadorDeFolha
+
+TelaHoleriteController -[hidden]up- ProcessadorDeFolha
+
+Usuario --> TelaHoleriteFXML : selecionaCompetencia(competencia): void
+
+TelaHoleriteFXML -right-> TelaHoleriteController : 1: mudarCompetencia() : void
+
+TelaHoleriteController ---> TelaHoleriteController : 1.1: carregarDados(): void
+
+TelaHoleriteController -right-> MySQLFuncionarioRepository : 1.1.1: funcionarios := buscarTodos(): List<Funcionario>
+
+TelaHoleriteController ---> MySQLLancamentoRepository : 1.1.2*: lancamentos := buscarPorFolhaEFuncionario(idFolha,\ncpfFuncionario) : List<Lancamento>
+
+TelaHoleriteController ---> ProcessadorDeFolha : 1.1.3*: holerite := processar(funcionario, lancamentos, diasUteis) : Holerite
+
+TelaHoleriteController ---> TelaHoleriteController : 1.2: exibirPreview(holerite) : void
+
+@enduml

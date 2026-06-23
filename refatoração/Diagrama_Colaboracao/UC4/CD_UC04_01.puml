@@ -1,0 +1,48 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 140
+skinparam ranksep 100
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC04_01_AcessarTelaUsuarios
+
+actor "Administrador" as Administrador
+
+rectangle ":MainView.fxml" as MainViewFXML
+rectangle ":MainController" as MainController
+rectangle ":TelaUsuario.fxml" as TelaUsuarioFXML
+rectangle ":TelaUsuario" as TelaUsuario
+rectangle ":ControladorUsuario" as ControladorUsuario
+rectangle ":MySQLUsuarioRepository" as MySQLUsuarioRepository
+
+
+
+Administrador --> MainViewFXML : acessaTelaUsuarios() : void
+
+MainViewFXML -right-> MainController : 1: abrirUsuario() : void
+
+MainController -right-> TelaUsuarioFXML : 1.1: load() : Parent
+
+TelaUsuarioFXML ----> TelaUsuario : 1.2: initialize() : void
+
+TelaUsuario ---> TelaUsuario : 1.3: atualizarTabela() : void
+
+TelaUsuario ---> ControladorUsuario : 1.3.1: usuarios := listarUsuarios(): List<Usuario>
+
+ControladorUsuario --> MySQLUsuarioRepository : 1.3.1.1: usuarios := listarUsuarios(): List<Usuario>
+
+@enduml

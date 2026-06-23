@@ -1,0 +1,41 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 250
+skinparam ranksep 110
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC16_02_AlterarParametroLegal
+
+actor "Administrador" as Administrador
+
+rectangle ":TelaRubrica.fxml" as TelaRubricaFXML
+rectangle ":TelaRubrica" as TelaRubrica
+rectangle ":MySQLFaixaINSSRepository" as MySQLFaixaINSSRepository
+rectangle ":MySQLFaixaIRRFRepository" as MySQLFaixaIRRFRepository
+
+TelaRubrica -[hidden]up- MySQLFaixaINSSRepository
+TelaRubrica -[hidden]down- MySQLFaixaIRRFRepository
+
+Administrador --> TelaRubricaFXML : alteraParametroLegal(tipoParametro,faixaSelecionada, piso, teto,\naliquota, parcelaDeducaoIRRF) : void
+
+TelaRubricaFXML -right-> TelaRubrica : 1: carregarTabelasParametros() : void
+
+TelaRubrica -right-> MySQLFaixaINSSRepository : 1.1a [tipoParametro = "INSS"] atualizar(faixaAntiga, faixaNova) : void
+
+TelaRubrica -left-> MySQLFaixaIRRFRepository : 1.1b [tipoParametro = "IRRF"] atualizar(faixaAntiga, faixaNova) : void
+
+@enduml

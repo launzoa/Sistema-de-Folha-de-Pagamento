@@ -1,0 +1,55 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 180
+skinparam ranksep 130
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC04_04_ConfirmarCadastroUsuario
+
+actor "Administrador" as Administrador
+
+rectangle ":FormUsuario.fxml" as FormUsuarioFXML
+rectangle ":FormUsuario" as FormUsuario
+rectangle ":ControladorUsuario" as ControladorUsuario
+rectangle ":MySQLUsuarioRepository" as MySQLUsuarioRepository
+rectangle ":TelaUsuario" as TelaUsuario
+
+Administrador -[hidden]down- FormUsuarioFXML
+FormUsuarioFXML -[hidden]down- FormUsuario
+FormUsuario -[hidden]down- ControladorUsuario
+ControladorUsuario -[hidden]down- MySQLUsuarioRepository
+
+FormUsuario -[hidden]right- TelaUsuario
+ControladorUsuario -[hidden]right- TelaUsuario
+
+Administrador ---> FormUsuarioFXML : confirmaCadastroUsuario() : void
+
+FormUsuarioFXML ---> FormUsuario : 1: salvar() : void
+
+FormUsuario ---> ControladorUsuario : 1.1: cadastrarUsuario(nome,\nsenha, perfil) : void
+
+ControladorUsuario ---> MySQLUsuarioRepository : 1.1.1: cadastrarUsuario(nome, senha, perfil) : void\n1.4.1.1: usuarios := listarUsuarios() : List<Usuario>
+
+FormUsuario ---> FormUsuario : 1.2: fecharJanela() : void
+
+FormUsuario <-left- TelaUsuario : 1.3: salvo := isSalvoComSucesso()\n: boolean
+
+TelaUsuario -up-> TelaUsuario : 1.4: atualizarTabela() : void
+
+TelaUsuario ---> ControladorUsuario : 1.4.1: usuarios := listarUsuarios(): List<Usuario>
+
+@enduml

@@ -1,0 +1,45 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 270
+skinparam ranksep 50
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC11_02_SelecionarLancamentoEdicao
+
+actor "Usuário" as Usuario
+
+rectangle ":TelaLancamento.fxml" as TelaLancamentoFXML
+rectangle ":TelaLancamento" as TelaLancamento
+rectangle ":MySQLLancamentoRepository" as MySQLLancamentoRepository
+rectangle ":FormLancamento.fxml" as FormLancamentoFXML
+rectangle ":FormLancamentoController" as FormLancamentoController
+
+Usuario ---> TelaLancamentoFXML : selecionaLancamentoParaEdicao(lancamentoSelecionado)\n: void
+
+TelaLancamentoFXML ---> TelaLancamento : 1: editarLancamento() : void
+
+TelaLancamento -left-> MySQLLancamentoRepository : 1.1: lancamento := buscarPorId(id)\n: Lancamento
+
+TelaLancamento -> TelaLancamento : 1.2: abrirFormularioLancamento(lancamento): void
+
+TelaLancamento ---> FormLancamentoFXML : 1.2.1: load() : Parent
+
+FormLancamentoFXML ---> FormLancamentoController : 1.2.2: initialize()\n: void
+
+TelaLancamento -down-> FormLancamentoController : 1.2.3: setLancamentoParaEdicao(lancamento): void
+
+@enduml

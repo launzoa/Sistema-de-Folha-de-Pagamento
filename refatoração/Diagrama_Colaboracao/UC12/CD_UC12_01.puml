@@ -1,0 +1,43 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 150
+skinparam ranksep 40
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC12_01_AcessarTelaProcessamentoHolerites
+
+actor "Usuário" as Usuario
+
+rectangle ":MainView.fxml" as MainViewFXML
+rectangle ":MainController" as MainController
+rectangle ":TelaHolerite.fxml" as TelaHoleriteFXML
+rectangle ":TelaHoleriteController" as TelaHoleriteController
+rectangle ":ServicoCicloFolha" as ServicoCicloFolha
+
+Usuario --> MainViewFXML : acessaTelaProcessamentoHolerites() : void
+
+MainViewFXML -right-> MainController : 1: abrirHolerite() : void
+
+MainController -right-> TelaHoleriteFXML : 1.1: load() : Parent
+
+TelaHoleriteFXML ---> TelaHoleriteController : 1.2: initialize() : void
+
+TelaHoleriteController ---> TelaHoleriteController : 1.3: carregarComboFolhas(): void
+
+
+TelaHoleriteController ----> ServicoCicloFolha : 1.3.2: folhaAberta := buscarFolhaAberta(): FolhaMes  \n1.3.1: folhas := buscarTodasFolhas(): List<FolhaMes>
+@enduml

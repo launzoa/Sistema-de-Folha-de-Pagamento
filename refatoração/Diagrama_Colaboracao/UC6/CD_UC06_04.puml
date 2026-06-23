@@ -1,0 +1,43 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 251
+skinparam ranksep 80
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC06_04_ConfirmarCadastroFuncionario
+
+actor "Usuário" as Usuario
+
+rectangle ":CadastroFuncionarioView.fxml" as CadastroFuncionarioView
+rectangle ":CadastroFuncionarioController" as CadastroFuncionarioController
+rectangle ":ControladorFuncionario" as ControladorFuncionario
+rectangle ":MySQLFuncionarioRepository" as MySQLFuncionarioRepository
+
+Usuario --> CadastroFuncionarioView : confirmaCadastroFuncionario() : void
+
+CadastroFuncionarioView --> CadastroFuncionarioController : 1: salvarFuncionario(event) : void
+
+CadastroFuncionarioController -right-> ControladorFuncionario : 1.1: cadastrarFuncionario(funcionario): void
+
+ControladorFuncionario -right-> MySQLFuncionarioRepository : 1.1.1: salvar(funcionario): void
+
+note left of CadastroFuncionarioController
+Mensagem de sucesso é exibida
+em labelMensagem.
+end note
+
+@enduml

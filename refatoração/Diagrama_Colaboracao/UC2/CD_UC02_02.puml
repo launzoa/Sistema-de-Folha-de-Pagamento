@@ -1,0 +1,50 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 150
+skinparam ranksep 70
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC02_02_PreencherCadastroEmpresa
+
+actor "Administrador" as Administrador
+
+rectangle ":FormEmpresa.fxml" as FormEmpresaFXML
+rectangle ":FormEmpresa" as FormEmpresa
+rectangle ":ControladorEmpresa" as ControladorEmpresa
+rectangle ":MySQLEmpresaRepository" as MySQLEmpresaRepository
+rectangle ":TelaEmpresa" as TelaEmpresa
+
+TelaEmpresa -[hidden]down- FormEmpresa
+
+Administrador ---> FormEmpresaFXML : preencherCamposCadastro(cnpj,razaoSocial, email,respLegal, diaFechamentoPonto) : void
+
+FormEmpresaFXML -right-> FormEmpresa : 1: salvar() : void
+
+FormEmpresa ----> ControladorEmpresa : 1.1: cadastrarEmpresa(empresa): void
+
+ControladorEmpresa ---> MySQLEmpresaRepository : 1.1.1: salvarEmpresa(empresa): void  \n 1.4.1.1: empresa := buscarEmpresaUnica(): Empresa
+
+FormEmpresa ---> FormEmpresa : 1.2: fecharJanela() : void
+
+TelaEmpresa -down-> FormEmpresa : 1.3: salvo := isSalvoComSucesso(): boolean
+
+TelaEmpresa ---> TelaEmpresa : 1.4: carregarEmpresa() : void
+
+TelaEmpresa ---> ControladorEmpresa : 1.4.1: empresa := buscarEmpresa(): Empresa
+
+
+@enduml

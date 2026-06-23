@@ -1,0 +1,38 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 250
+skinparam ranksep 80
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC12_03_ExibirResumoFolhaCalculada
+
+actor "Usuário" as Usuario
+
+rectangle ":TelaHolerite.fxml" as TelaHoleriteFXML
+rectangle ":TelaHoleriteController" as TelaHoleriteController
+
+Usuario --> TelaHoleriteFXML : exibeResumoFolhaCalculada() : void
+
+TelaHoleriteFXML --> TelaHoleriteController : 1: atualizarStatusTela() : void
+
+TelaHoleriteController --> TelaHoleriteController : 1.1: exibirPreview(holerite) : void
+
+note right of TelaHoleriteController
+A tela exibe os dados calculados
+da folha e o preview do holerite.
+end note
+@enduml

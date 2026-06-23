@@ -1,0 +1,38 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 180
+skinparam ranksep 50
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC06_02_CadastroFuncionario
+
+actor "Usuário" as Usuario
+
+rectangle ":TelaFuncionario.fxml" as TelaFuncionarioFXML
+rectangle ":TelaFuncionario" as TelaFuncionario
+rectangle ":CadastroFuncionarioView.fxml" as CadastroFuncionarioView
+rectangle ":CadastroFuncionarioController" as CadastroFuncionarioController
+
+Usuario --> TelaFuncionarioFXML : cadastroFuncionario() : void
+
+TelaFuncionarioFXML -right-> TelaFuncionario : 1: abrirTelaCadastro() : void
+
+TelaFuncionario -right-> CadastroFuncionarioView : 1.1: load() : Parent
+
+CadastroFuncionarioView ---> CadastroFuncionarioController : 1.2: load() : Parent
+
+@enduml

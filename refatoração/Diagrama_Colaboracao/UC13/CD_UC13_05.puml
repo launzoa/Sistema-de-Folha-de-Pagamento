@@ -1,0 +1,45 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 500
+skinparam ranksep 0
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC13_05_EscolherLocalSalvamento
+
+actor "Usuário" as Usuario
+
+rectangle ":DirectoryChooser" as DirectoryChooser
+rectangle ":TelaHoleriteController" as TelaHoleriteController
+rectangle ":GeradorHoleritePDF" as GeradorHoleritePDF
+rectangle ":GeradorRelatorioGeralPDF" as GeradorRelatorioGeralPDF
+
+TelaHoleriteController -[hidden]left- GeradorHoleritePDF
+TelaHoleriteController -[hidden]up- GeradorRelatorioGeralPDF
+
+Usuario --> DirectoryChooser : escolheLocalSalvamento()\n: void
+
+TelaHoleriteController -right-> DirectoryChooser : 1: diretorioSelecionado := showDialog(stage): File
+
+TelaHoleriteController -down-> GeradorHoleritePDF : 1.1a [tipoExportacao = "selecionado"] gerarPdf(holerite, competencia, diretorioSaida, mapaRubricas) : void\n1.1b* [tipoExportacao = "todos"] gerarPdf(holerite, competencia, diretorioSaida, mapaRubricas) : void
+
+TelaHoleriteController ----> GeradorRelatorioGeralPDF : 1.2 [tipoExportacao = "geral"] gerarPdf(holerites, competencia, diretorioSaida, totalBase, totalProv, totalDesc, totalLiq, totalFgts) : void
+
+TelaHoleriteController --> TelaHoleriteController : 1.3: mostrarMensagem("Sucesso", mensagem) : void
+
+
+
+@enduml

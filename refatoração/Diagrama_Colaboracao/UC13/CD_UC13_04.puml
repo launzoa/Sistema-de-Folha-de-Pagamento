@@ -1,0 +1,35 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 450
+skinparam ranksep 100
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC13_04_SelecionarOpcaoExportacao
+
+actor "Usuário" as Usuario
+
+rectangle ":TelaHolerite.fxml" as TelaHoleriteFXML
+rectangle ":TelaHoleriteController" as TelaHoleriteController
+rectangle ":DirectoryChooser" as DirectoryChooser
+
+Usuario --> TelaHoleriteFXML : selecionaOpcaoExportacao(tipoExportacao)\n: void
+
+TelaHoleriteFXML -right-> TelaHoleriteController : 1a [tipoExportacao = "selecionado"] exportarHoleriteSelecionado() : void\n1b [tipoExportacao = "todos"] exportarTodosHolerites() : void\n1c [tipoExportacao = "geral"] exportarRelatorioGeral() : void
+
+TelaHoleriteController ---> DirectoryChooser : 1.1: setTitle("Salvar PDF em...") : void\n1.2: diretorioSelecionado := showDialog(stage) : File
+
+@enduml

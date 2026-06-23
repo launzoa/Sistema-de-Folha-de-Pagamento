@@ -1,0 +1,50 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 220
+skinparam ranksep 100
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC14_03_ConsultarDadosCompetenciaSelecionada
+
+actor "Usuário" as Usuario
+
+rectangle ":TelaHolerite.fxml" as TelaHoleriteFXML
+rectangle ":TelaHoleriteController" as TelaHoleriteController
+rectangle ":TabelaHolerites" as TabelaHolerites
+rectangle ":PainelHoleritePreview" as PainelHoleritePreview
+rectangle ":TabelaRubricasPreview" as TabelaRubricasPreview
+
+TelaHoleriteFXML -[hidden]right- TelaHoleriteController
+TelaHoleriteController -[hidden]right- TabelaRubricasPreview
+TelaHoleriteController -[hidden]up- PainelHoleritePreview
+TelaHoleriteController -[hidden]- TelaHoleriteController
+
+Usuario --> TelaHoleriteFXML : consultaDadosCompetenciaSelecionada()\n: void
+
+TelaHoleriteFXML -right-> TelaHoleriteController : 1: exibirPreview(holerite): \n void
+
+TelaHoleriteController --> PainelHoleritePreview : 1.1: setVisible(true): void
+
+TelaHoleriteController -right-> TabelaRubricasPreview : 1.2: setItems(itens): void
+
+TelaHoleriteController ---> TabelaHolerites : 1.3: setItems(holeritesData): void
+
+note right of TelaHoleriteController
+Os dados da competência selecionada
+são apresentados na própria tela.
+end note
+@enduml

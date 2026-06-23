@@ -1,0 +1,48 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 170
+skinparam ranksep 0
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC10_04_ConfirmarRegistroLancamento
+
+actor "Usuário" as Usuario
+
+rectangle ":FormLancamento.fxml" as FormLancamentoFXML
+rectangle ":FormLancamentoController" as FormLancamentoController
+rectangle ":MySQLLancamentoRepository" as MySQLLancamentoRepository
+rectangle ":TelaLancamento" as TelaLancamento
+
+Usuario -[hidden]down- FormLancamentoFXML
+FormLancamentoFXML -[hidden]right- FormLancamentoController
+FormLancamentoController -[hidden]down- MySQLLancamentoRepository
+
+FormLancamentoController -[hidden]down- TelaLancamento
+
+Usuario ---> FormLancamentoFXML : confirmaRegistroLancamento() : void
+
+FormLancamentoFXML -right-> FormLancamentoController : 1: salvar() : void
+
+FormLancamentoController ---> MySQLLancamentoRepository : 1.1: salvar(lancamento): void\n1.4.1: lancamentos := buscarPorFolha(idFolha): List<Lancamento>
+
+FormLancamentoController ---> FormLancamentoController : 1.2: fecharJanela() : void
+
+TelaLancamento ---> TelaLancamento : 1.3: atualizarTabela(funcionarioFiltro)\n: void
+
+TelaLancamento ---> MySQLLancamentoRepository : 1.4: lancamentos := buscarPorFolha(idFolha): List<Lancamento>
+
+@enduml

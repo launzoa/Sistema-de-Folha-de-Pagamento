@@ -1,0 +1,47 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 250
+skinparam ranksep 100
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC03_02_AlterarCamposEmpresa
+
+actor "Administrador" as Administrador
+
+rectangle ":TelaEmpresa.fxml" as TelaEmpresaFXML
+rectangle ":TelaEmpresa" as TelaEmpresa
+rectangle ":FormEmpresa.fxml" as FormEmpresaFXML
+rectangle ":FormEmpresa" as FormEmpresa
+
+Administrador -[hidden]down- TelaEmpresaFXML
+TelaEmpresa -[hidden]down- FormEmpresaFXML
+
+Administrador ---> TelaEmpresaFXML : alteraCamposDesejados(razaoSocial,\nendereco, responsavelLegal) : void
+
+TelaEmpresaFXML -right-> TelaEmpresa : 1: editarEmpresa() : void
+
+TelaEmpresa ---> FormEmpresaFXML : 1.1: exibirFormularioEmpresa(empresaAtual): void
+
+FormEmpresaFXML -right-> FormEmpresa : 1.1.1: prepararEdicao(empresa): void
+
+note right of FormEmpresa
+Os campos editáveis permanecem alterados
+no formulário até a confirmação.
+A persistência ocorre no diagrama seguinte,
+ao executar salvar().
+end note
+@enduml

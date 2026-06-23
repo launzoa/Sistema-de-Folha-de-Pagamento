@@ -1,0 +1,33 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 220
+skinparam ranksep 100
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC07_03_AlterarDadosFuncionario
+
+actor "Usuário" as Usuario
+
+rectangle ":CadastroFuncionarioView.fxml" as CadastroFuncionarioView
+
+Usuario --> CadastroFuncionarioView : alteraDadosFuncionario(nome, cargo,\nsalarioBruto, dataAdmissao, status) : void
+
+note right of CadastroFuncionarioView
+Os dados alterados permanecem preenchidos
+nos campos do formulário.
+end note
+@enduml

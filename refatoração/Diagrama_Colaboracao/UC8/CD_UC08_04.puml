@@ -1,0 +1,52 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+skinparam nodesep 170
+skinparam ranksep 40
+
+skinparam rectangle {
+  BackgroundColor #FFFFCC
+  BorderColor Black
+  RoundCorner 0
+}
+
+skinparam actor {
+  BorderColor Black
+  FontColor Black
+}
+
+title CD_UC08_04_ConfirmarCadastroRubrica
+
+actor "Administrador" as Administrador
+
+rectangle ":FormRubrica.fxml" as FormRubricaFXML
+rectangle ":FormRubrica" as FormRubrica
+rectangle ":ControladorRubrica" as ControladorRubrica
+rectangle ":MySQLRubricaRepository" as MySQLRubricaRepository
+rectangle ":TelaRubrica" as TelaRubrica
+
+Administrador -[hidden]down- FormRubricaFXML
+FormRubrica -[hidden]down- ControladorRubrica
+ControladorRubrica -[hidden]down- MySQLRubricaRepository
+
+FormRubrica -[hidden]right- TelaRubrica
+ControladorRubrica -[hidden]right- TelaRubrica
+
+Administrador ---> FormRubricaFXML : confirmaCadastroRubrica() : void
+
+FormRubricaFXML -right-> FormRubrica : 1: salvar() : void
+
+FormRubrica ---> ControladorRubrica : 1.1: cadastrarRubrica(rubrica): void
+
+ControladorRubrica ---> MySQLRubricaRepository : 1.1.1: cadastrarRubrica(rubrica): void\n1.3.1.1: rubricas := listarAtivas(): List<Rubrica>
+
+FormRubrica ---> FormRubrica : 1.2: fecharJanela() : void
+
+TelaRubrica -down-> TelaRubrica : 1.3: carregarTabelaRubricas(controlador.listarTodasRubricas())\n: void
+
+TelaRubrica ---> ControladorRubrica : 1.3.1: rubricas := listarTodasRubricas(): List<Rubrica>
+
+@enduml
