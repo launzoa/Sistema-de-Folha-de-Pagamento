@@ -1,9 +1,0 @@
-@startuml
-object ": EventoInicial" as Evento
-object ": TelaParametros" as Tela
-object ": ParâmetrosLegais" as Parametros
-
-Evento -- Tela : 1: AlteracaoPL(Parametro:<ArrayList>) >
-
-Tela -- Parametros : 2: AlteracoesPL(Parametro:<ArrayList>) >\n< 3: Confirmacao = MensagemConfirmacao() : boolean
-@enduml

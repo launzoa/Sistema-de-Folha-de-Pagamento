@@ -1,9 +1,0 @@
-@startuml
-object ": EventoInicial" as Evento
-object ": TelaParametros" as Tela
-object ": ParâmetrosLegais" as Parametros
-
-Evento -- Tela : 1: AcessaParametrosLegais() >
-
-Tela -- Parametros : 2: Create() >\n< 3: ExibePainel()
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-object ": EventoInicial" as Evento
-object ": TelaAuditoria" as Tela
-object ": ControladorAuditoria" as Controlador
-
-Evento -- Tela : 1: AcessaAuditoria() >
-
-Tela -- Controlador : 2: Create() >\n< 3: [acoes != null] ExibePainel()
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-object ": EventoInicial" as Evento
-object ": TelaHistorico" as Tela
-object ": CatalogoFolhas" as Catalogo
-
-Evento -- Tela : 1: BuscaFolhaData(data : Datatime) >
-
-Tela -- Catalogo : 2: F = BuscaFolhasProcessadasD(data : Datatime) : Folha >\n< 3: [F != null] ExibeFolha(F : Folha) : void
-@enduml
