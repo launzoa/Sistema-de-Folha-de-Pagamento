@@ -23,20 +23,18 @@ public class ControladorRubrica {
         ServicoAuditoria.registrar("Cadastro", "Rubrica", "Código: " + rubrica.getCodigo());
     }
 
-    /**
-     * @brief Edita uma rubrica
-     * @param rubrica Rubrica a ser editada
-     */
     public void editarRubrica(Rubrica rubrica) {
+        if (!podeEditar(rubrica.getCodigo())) {
+            throw new RuntimeException("Violação Mecânica: Rubricas nativas constitucionais não podem ser alteradas!");
+        }
         rubricaRepository.editarRubrica(rubrica);
         ServicoAuditoria.registrar("Edição", "Rubrica", "Código: " + rubrica.getCodigo());
     }
 
-    /**
-     * @brief Exclui uma rubrica
-     * @param codigo Código da rubrica a ser excluída
-     */
     public void excluirRubrica(int codigo) {
+        if (!podeExcluir(codigo)) {
+            throw new RuntimeException("Violação Mecânica: Rubricas nativas constitucionais não podem ser excluídas!");
+        }
         rubricaRepository.excluirRubrica(codigo);
         ServicoAuditoria.registrar("Exclusão", "Rubrica", "Código: " + codigo);
     }
@@ -58,21 +56,11 @@ public class ControladorRubrica {
         return rubricaRepository.buscarPorCodigo(codigo);
     }
 
-    /**
-     * @brief Verifica se uma rubrica pode ser excluída
-     * @param codigo Código da rubrica
-     * @return true se a rubrica pode ser excluída, false caso contrário
-     */
     public boolean podeExcluir(int codigo) {
-        return codigo > 5; // 001-005 não podem ser excluídas
+        return !((codigo >= 1 && codigo <= 5) || (codigo >= 100 && codigo <= 103) || codigo == 901 || codigo == 902);
     }
 
-    /**
-     * @brief Verifica se uma rubrica pode ser editada
-     * @param codigo Código da rubrica
-     * @return true se a rubrica pode ser editada, false caso contrário
-     */
     public boolean podeEditar(int codigo) {
-        return codigo > 5; // 001-005 são somente leitura
+        return !((codigo >= 1 && codigo <= 5) || (codigo >= 100 && codigo <= 103) || codigo == 901 || codigo == 902);
     }
 }

@@ -199,7 +199,7 @@ public class TelaRubrica {
         }
         // Verificação de rubrica padrão
         if (!controlador.podeEditar(selecionada.getCodigo())) {
-            mostrarAviso("Rubricas padrão (001–005) não podem ser editadas.");
+            mostrarAviso("Rubricas Constitucionais e Legais (001–005 e 100-102) são blindadas e inalteráveis.");
             return;
         }
         // Verificação de rubrica inativa

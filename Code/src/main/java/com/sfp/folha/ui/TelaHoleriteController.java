@@ -239,7 +239,8 @@ public class TelaHoleriteController {
             carregarComboFolhas();
 
         } catch (Exception e) { // Captura exceções e imprime o stack trace
-            e.printStackTrace();
+            mostrarAlerta("Erro Crítico na UI", "Falha ao inicializar a tela de Holerites: " + e.getMessage());
+            System.err.println("Erro na inicialização de TelaHolerite: " + e.getMessage());
         }
     }
 
@@ -322,6 +323,10 @@ public class TelaHoleriteController {
         BigDecimal somaFGTS = BigDecimal.ZERO;
 
         // Itera sobre todos os funcionários
+        if (folhaAtual != null) {
+            processador.setFolhaContexto(folhaAtual);
+        }
+
         for (Funcionario f : funcionarios) {
             // Verifica se o funcionário está ativo e se a folha está aberta
             if (!f.getStatus() && "Aberta".equals(folhaAtual.getStatus())) {
@@ -331,8 +336,12 @@ public class TelaHoleriteController {
             // Busca os lançamentos do funcionário
             List<Lancamento> lancamentos = lancamentoRepository.buscarPorFolhaEFuncionario(folhaAtual.getId(),
                     f.getCpf());
-            // Processa o holerite
-            Holerite h = processador.processar(f, lancamentos, folhaAtual.getDiasUteis());
+            // Garante uma empresa mínima para não quebrar o motor matemático caso o banco esteja corrompido
+            Empresa empresaSegura = empresaConfigurada != null ? empresaConfigurada
+                : new Empresa("N/A", "Não Cadastrada", "N/A", "N/A", 30);
+                
+            // Processa o holerite repassando a entidade Empresa
+            Holerite h = processador.processar(empresaSegura, f, lancamentos, folhaAtual.getDiasUteis());
             // Adiciona o holerite na tabela
             if (h != null) {
                 holeritesData.add(h);
@@ -425,6 +434,11 @@ public class TelaHoleriteController {
             itens.add(new ItemHolerite(999, "Desconto IRRF", "-", null, holerite.getDescontoIRRF()));
         }
 
+        // Verifica se o holerite tem Dívida Residual acumulada (Requisito 3.1.6.4)
+        if (holerite.getDividaResidual() != null && holerite.getDividaResidual().compareTo(BigDecimal.ZERO) > 0) {
+            itens.add(new ItemHolerite(997, "Dívida a Abater Próx. Mês", "-", null, holerite.getDividaResidual()));
+        }
+
         tabelaRubricasPreview.setItems(itens);
 
         // Formata os valores
@@ -454,12 +468,17 @@ public class TelaHoleriteController {
         File dir = dc.showDialog(stage);
         // Verifica se o diretório não é nulo
         if (dir != null) {
-            // Cria o gerador de PDF
-            GeradorHoleritePDF gerador = new GeradorHoleritePDF();
-            // Gera o PDF
-            gerador.gerarPdf(h, folhaAtual.getCompetencia(), dir.getAbsolutePath(), mapaRubricas);
-            // Mostra a mensagem
-            mostrarMensagem("Sucesso", "Holerite de " + h.getFuncionario().getNome() + " exportado com sucesso!");
+            try {
+                // Cria o gerador de PDF
+                GeradorHoleritePDF gerador = new GeradorHoleritePDF();
+                // Gera o PDF
+                gerador.gerarPdf(h, folhaAtual.getCompetencia(), dir.getAbsolutePath(), mapaRubricas, empresaConfigurada);
+                // Mostra a mensagem
+                mostrarMensagem("Sucesso", "Holerite de " + h.getFuncionario().getNome() + " exportado com sucesso!");
+            } catch (Exception e) {
+                mostrarAlerta("Erro na Exportação", "Não foi possível gerar o holerite PDF: " + e.getMessage());
+                System.err.println("Erro na geração PDF do Holerite: " + e.getMessage());
+            }
         }
     }
 
@@ -481,15 +500,20 @@ public class TelaHoleriteController {
         File dir = dc.showDialog(stage);
 
         if (dir != null) { // Verifica se o diretório não é nulo
-            // Cria o gerador de PDF
-            GeradorHoleritePDF gerador = new GeradorHoleritePDF();
-            // Itera sobre todos os holerites
-            for (Holerite h : holeritesData) {
-                // Gera o PDF
-                gerador.gerarPdf(h, folhaAtual.getCompetencia(), dir.getAbsolutePath(), mapaRubricas);
+            try {
+                // Cria o gerador de PDF
+                GeradorHoleritePDF gerador = new GeradorHoleritePDF();
+                // Itera sobre todos os holerites
+                for (Holerite h : holeritesData) {
+                    // Gera o PDF
+                    gerador.gerarPdf(h, folhaAtual.getCompetencia(), dir.getAbsolutePath(), mapaRubricas, empresaConfigurada);
+                }
+                // Mostra a mensagem
+                mostrarMensagem("Sucesso", "Todos os " + holeritesData.size() + " holerites exportados com sucesso!");
+            } catch (Exception e) {
+                mostrarAlerta("Erro na Exportação", "Não foi possível gerar o lote de PDFs: " + e.getMessage());
+                System.err.println("Erro na geração em lote dos PDFs: " + e.getMessage());
             }
-            // Mostra a mensagem
-            mostrarMensagem("Sucesso", "Todos os " + holeritesData.size() + " holerites exportados com sucesso!");
         }
     }
 
@@ -511,12 +535,17 @@ public class TelaHoleriteController {
         File dir = dc.showDialog(stage);
 
         if (dir != null) { // Verifica se o diretório não é nulo
-            // Cria o gerador de PDF
-            GeradorRelatorioGeralPDF gerador = new GeradorRelatorioGeralPDF();
-            // Gera o PDF
-            gerador.gerarPdf(holeritesData, folhaAtual.getCompetencia(), dir.getAbsolutePath(), "", "", "", "", "");
-            // Mostra a mensagem
-            mostrarMensagem("Sucesso", "Relatório Geral exportado com sucesso!");
+            try {
+                // Cria o gerador de PDF
+                GeradorRelatorioGeralPDF gerador = new GeradorRelatorioGeralPDF();
+                // Gera o PDF
+                gerador.gerarPdf(holeritesData, folhaAtual.getCompetencia(), dir.getAbsolutePath(), "", "", "", "", "", empresaConfigurada);
+                // Mostra a mensagem
+                mostrarMensagem("Sucesso", "Relatório Geral exportado com sucesso!");
+            } catch (Exception e) {
+                mostrarAlerta("Erro na Exportação", "Falha ao gerar o Relatório Geral: " + e.getMessage());
+                System.err.println("Erro na geração do Relatório Geral PDF: " + e.getMessage());
+            }
         }
     }
 

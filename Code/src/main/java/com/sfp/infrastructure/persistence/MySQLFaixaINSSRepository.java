@@ -26,9 +26,8 @@ public class MySQLFaixaINSSRepository implements FaixaINSSRepository {
         String sql = "INSERT INTO faixa_inss (piso, teto, aliquota, parcela_deduzir) VALUES (?, ?, ?, ?)";
 
         // Conexão com banco de dados mysql
-        try (Connection conn = com.sfp.core.database.ConexaoBD.getConnection()) {
-            // Prepara statement para inserir dados
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+        try (Connection conn = com.sfp.core.database.ConexaoBD.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // Setando os valores para o statement
             pstmt.setBigDecimal(1, faixaINSS.getPiso());
@@ -58,9 +57,8 @@ public class MySQLFaixaINSSRepository implements FaixaINSSRepository {
         String sql = "SELECT * FROM faixa_inss";
 
         // Conexão com banco de dados mysql
-        try (Connection conn = com.sfp.core.database.ConexaoBD.getConnection()) {
-            // Prepara statement para buscar dados
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+        try (Connection conn = com.sfp.core.database.ConexaoBD.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             // Executa o statement
             ResultSet rs = pstmt.executeQuery();
             // Percorre o resultset
@@ -87,9 +85,8 @@ public class MySQLFaixaINSSRepository implements FaixaINSSRepository {
         // Script sql para atualizar uma faixa de aliquota do INSS
         String sql = "UPDATE faixa_inss SET piso = ?, teto = ?, aliquota = ?, parcela_deduzir = ? WHERE piso = ? AND teto = ?";
         // Conexão com banco de dados mysql
-        try (Connection conn = com.sfp.core.database.ConexaoBD.getConnection()) {
-            // Prepara statement para atualizar dados
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+        try (Connection conn = com.sfp.core.database.ConexaoBD.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             // Setando os valores para o statement
             pstmt.setBigDecimal(1, nova.getPiso());
             pstmt.setBigDecimal(2, nova.getTeto());

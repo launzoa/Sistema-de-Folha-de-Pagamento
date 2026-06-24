@@ -14,11 +14,31 @@
 
     <Label fx:id="labelTitulo" text="Cadastrar Empresa" styleClass="card_title"/>
 
-    <TextField fx:id="txtCnpj" promptText="CNPJ" styleClass="historico_field" prefWidth="420"/>
-    <TextField fx:id="txtRazaoSocial" promptText="Razão Social" styleClass="historico_field" prefWidth="420"/>
-    <TextField fx:id="txtEmail" promptText="Email" styleClass="historico_field" prefWidth="420"/>
-    <TextField fx:id="txtRespLegal" promptText="Responsável Legal" styleClass="historico_field" prefWidth="420"/>
-    <ComboBox fx:id="cbDiaFechamentoPonto" promptText="Dia de Fechamento do Ponto" styleClass="historico_field" prefWidth="420"/>
+    <VBox spacing="5" alignment="CENTER_LEFT">
+        <Label text="CNPJ:" styleClass="label-form"/>
+        <TextField fx:id="txtCnpj" promptText="Ex: 00.000.000/0001-00" styleClass="historico_field" prefWidth="420"/>
+    </VBox>
+
+    <VBox spacing="5" alignment="CENTER_LEFT">
+        <Label text="Razão Social:" styleClass="label-form"/>
+        <TextField fx:id="txtRazaoSocial" promptText="Ex: Minha Empresa S.A." styleClass="historico_field" prefWidth="420"/>
+    </VBox>
+
+    <VBox spacing="5" alignment="CENTER_LEFT">
+        <Label text="E-mail de Contato:" styleClass="label-form"/>
+        <TextField fx:id="txtEmail" promptText="Ex: contato@empresa.com.br" styleClass="historico_field" prefWidth="420"/>
+    </VBox>
+
+    <VBox spacing="5" alignment="CENTER_LEFT">
+        <Label text="Responsável Legal:" styleClass="label-form"/>
+        <TextField fx:id="txtRespLegal" promptText="Ex: João da Silva" styleClass="historico_field" prefWidth="420"/>
+    </VBox>
+
+    <VBox spacing="5" alignment="CENTER_LEFT">
+        <Label text="Dia de Fechamento do Ponto Mensal:" styleClass="label-form"/>
+        <ComboBox fx:id="cbDiaFechamentoPonto" styleClass="historico_field" prefWidth="420"/>
+    </VBox>
+
 
     <HBox alignment="CENTER" spacing="15">
         <Button text="Salvar" onAction="#salvar" styleClass="primary-button"/>

@@ -1,10 +1,10 @@
-/**
- * @brief Interface que representa o repositório de faixas de IRRF
- */
-
 package com.sfp.core.domain;
 
 import java.util.List;
+
+/**
+ * @brief Interface que representa o repositório de faixas de IRRF
+ */
 
 public interface FaixaIRRFRepository {
     /**

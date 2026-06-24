@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.time.LocalDate;
 
+import com.sfp.empresa.domain.Empresa;
+
 public class CalculadoraINSSTest {
 
         private CalculadoraINSS calculadora;
@@ -59,7 +61,8 @@ public class CalculadoraINSSTest {
         public void testCalcularINSSCorretamente(String salarioBrutoStr, String descontoEsperadoStr) {
                 BigDecimal salarioBruto = new BigDecimal(salarioBrutoStr);
                 Funcionario funcionario = new Funcionario("Teste", "000", "Cargo", LocalDate.now(), salarioBruto, true, 1);
-                Holerite holerite = new Holerite(funcionario, new ArrayList<>(), salarioBruto, BigDecimal.ZERO, BigDecimal.ZERO);
+                Empresa empresa = new Empresa("00.000.000/0001-00", "Test", "test@test.com", "Admin", 30);
+        Holerite holerite = new Holerite(empresa, funcionario, new ArrayList<>(), salarioBruto, BigDecimal.ZERO, BigDecimal.ZERO);
                 BigDecimal desconto = calculadora.calcular(holerite);
                 BigDecimal descontoEsperado = new BigDecimal(descontoEsperadoStr);
 

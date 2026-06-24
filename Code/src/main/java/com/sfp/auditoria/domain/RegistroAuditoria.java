@@ -1,10 +1,10 @@
-/**
- * @brief Classe que representa um registro de auditoria.
- */
 package com.sfp.auditoria.domain;
 
 import java.time.LocalDateTime;
 
+/**
+ * @brief Classe que representa um registro de auditoria.
+ */
 public class RegistroAuditoria {
     private int id;
     private LocalDateTime data_hora;

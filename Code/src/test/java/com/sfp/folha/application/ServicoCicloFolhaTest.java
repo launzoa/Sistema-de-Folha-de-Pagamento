@@ -20,7 +20,7 @@ public class ServicoCicloFolhaTest {
         ControladorEmpresa fakeControlador = new ControladorEmpresa() {
             @Override
             public Empresa buscarEmpresa() {
-                return new Empresa("00.000.000/0001-00", "Teste", "Teste", "teste@teste.com", 20);
+                return new Empresa("00.000.000/0001-00", "Empresa Fictícia", "contato@empresa.com", "Resp Legal", 15);
             }
         };
 

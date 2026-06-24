@@ -59,7 +59,7 @@ public class FormUsuario {
             exibirAlerta("Informe o nome.");
             return;
         }
-        if (senha == null || senha.trim().isEmpty()) {
+        if (usuarioEdicao == null && (senha == null || senha.trim().isEmpty())) {
             exibirAlerta("Informe a senha.");
             return;
         }
@@ -99,7 +99,8 @@ public class FormUsuario {
         labelTitulo.setText("Editar Usuário");
         // Preenche os inputs com os dados do usuário.
         txtNome.setText(user.getNome());
-        txtSenha.setText(user.getSenha());
+        txtSenha.setText(""); // Não carrega o hash na interface
+        txtSenha.setPromptText("Deixe em branco para manter");
         comboPerfil.setValue(user.isPerfil() ? "Administrador" : "Operador");
         checkAtivo.setSelected(user.isStatus());
         // Impede a alteração do perfil.

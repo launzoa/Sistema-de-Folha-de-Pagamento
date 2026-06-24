@@ -55,8 +55,8 @@ public class MySQLFaixaIRRFRepository implements FaixaIRRFRepository {
         // Script SQL para atualizar uma faixa de IRRF
         String sql = "UPDATE faixa_irrf SET piso = ?, teto = ?, aliquota = ?, parcela_deduzir = ? WHERE piso = ? AND teto = ?";
         // Conexão com banco de dados e preparação do statement
-        try (Connection conn = com.sfp.core.database.ConexaoBD.getConnection()) {
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+        try (Connection conn = com.sfp.core.database.ConexaoBD.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             // Setando os valores
             pstmt.setBigDecimal(1, nova.getPiso());
             pstmt.setBigDecimal(2, nova.getTeto());

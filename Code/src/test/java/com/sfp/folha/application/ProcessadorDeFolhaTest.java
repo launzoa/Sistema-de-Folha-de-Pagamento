@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.sfp.funcionario.domain.Funcionario;
+import com.sfp.empresa.domain.Empresa;
+import com.sfp.rubrica.domain.Rubrica;
 import com.sfp.folha.domain.Holerite;
 import com.sfp.folha.domain.RegraDeCalculo;
 import com.sfp.folha.application.calculadoras.CalculadoraSalarioProporcional;
@@ -46,10 +48,12 @@ public class ProcessadorDeFolhaTest {
     public void testProcessarFolhaCorretamente() {
         Funcionario funcionario = new Funcionario("João Silva", "111.111.111-11", "Dev", LocalDate.now(), new BigDecimal("2000.00"), true, 1);
         List<Lancamento> lancamentos = new ArrayList<>();
-        Holerite holerite = this.processador.processar(funcionario, lancamentos, 22);
+
+        Empresa empresa = new Empresa("00.000.000/0001-00", "Test", "test@test.com", "Admin", 30);
+        Holerite holerite = this.processador.processar(empresa, funcionario, lancamentos, 22);
 
         BigDecimal proventos = holerite.getTotalProventos();
-        BigDecimal proventosEsperados = new BigDecimal("2000.02");
+        BigDecimal proventosEsperados = new BigDecimal("2000.00");
 
         assertEquals(0, proventosEsperados.compareTo(proventos), "Os proventos esperados eram " + proventosEsperados);
 
@@ -59,7 +63,7 @@ public class ProcessadorDeFolhaTest {
         assertEquals(0, descontosEsperados.compareTo(descontos), "Os descontos esperados eram " + descontosEsperados);
 
         BigDecimal salarioLiquido = proventos.subtract(descontos);
-        BigDecimal salarioLiquidoEsperado = new BigDecimal("1841.20");
+        BigDecimal salarioLiquidoEsperado = new BigDecimal("1841.18");
 
         assertEquals(0, salarioLiquidoEsperado.compareTo(salarioLiquido),
                 "O salário líquido esperado era " + salarioLiquidoEsperado);

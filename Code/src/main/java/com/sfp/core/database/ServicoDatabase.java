@@ -1,14 +1,15 @@
-/**
- * @brief Classe responsável por gerenciar teste para o sistema conectado com o
- *        banco de dados.
- *        Possui métodos responsáveis por limpar o banco de dados e gerar dados de
- *        teste.
- */
-
 package com.sfp.core.database;
 
 import java.sql.Connection;
 import java.sql.Statement;
+
+/**
+ * @brief Classe responsável por gerenciar teste para o sistema conectado com o
+ *        banco de dados.
+ *        Possui métodos responsáveis por limpar o banco de dados e gerar dados
+ *        de
+ *        teste.
+ */
 
 public class ServicoDatabase {
 
@@ -35,14 +36,32 @@ public class ServicoDatabase {
                         // Desativa checagem de chaves estrangeiras
                         stmt.execute("SET FOREIGN_KEY_CHECKS = 0;");
 
-                        // Zera todas as tabelas, exceto as rubricas e impostos
+                        // Zera todas as tabelas, exceto as rubricas e impostos (que sofrem deleção
+                        // parcial)
                         for (String tabela : tabelas) {
                                 stmt.execute("TRUNCATE TABLE " + tabela + ";");
                         }
+                        // Limpa qualquer rubrica customizada que tenha sido criada (mantém apenas as
+                        // blindadas 1 a 5, 100 a 103, e os Vales 901/902)
+                        stmt.execute("DELETE FROM rubrica WHERE codigo NOT IN (1, 2, 3, 4, 5, 100, 101, 102, 103, 901, 902);");
 
-                        // Insere o usuário admin no BD, e.g., (nome:admin, senha:admin)
-                        String sqlAdmin = "INSERT INTO usuario (nome, senha, perfil, status) VALUES ('admin', 'admin', true, true);";
-                        stmt.execute(sqlAdmin);
+                        // Reconstrói as rubricas blindadas caso o banco tenha sido corrompido antes da
+                        // blindagem
+                        stmt.execute("INSERT IGNORE INTO rubrica VALUES (1, 'Salário Padrão', 'Provento', 'Fixo', TRUE, TRUE, TRUE, TRUE, TRUE);");
+                        stmt.execute("INSERT IGNORE INTO rubrica VALUES (2, 'Horas Extras 50%', 'Provento', 'Variável', TRUE, TRUE, TRUE, TRUE, TRUE);");
+                        stmt.execute("INSERT IGNORE INTO rubrica VALUES (3, 'Horas Extras 100%', 'Provento', 'Variável', TRUE, TRUE, TRUE, TRUE, TRUE);");
+                        stmt.execute("INSERT IGNORE INTO rubrica VALUES (4, 'Atraso por hora', 'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);");
+                        stmt.execute("INSERT IGNORE INTO rubrica VALUES (5, 'Falta por dia', 'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);");
+                        stmt.execute("INSERT IGNORE INTO rubrica VALUES (100, 'Desconto INSS', 'Desconto', 'Fixo', FALSE, FALSE, FALSE, TRUE, TRUE);");
+                        stmt.execute("INSERT IGNORE INTO rubrica VALUES (101, 'Desconto IRRF', 'Desconto', 'Fixo', FALSE, FALSE, FALSE, TRUE, TRUE);");
+                        stmt.execute("INSERT IGNORE INTO rubrica VALUES (102, 'Recolhimento FGTS', 'Desconto', 'Fixo', FALSE, FALSE, FALSE, TRUE, TRUE);");
+                        stmt.execute("INSERT IGNORE INTO rubrica VALUES (103, 'Desconto DSR', 'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);");
+                        stmt.execute("INSERT IGNORE INTO rubrica VALUES (901, 'Vale Transporte (VT)', 'Desconto', 'Fixo', FALSE, FALSE, FALSE, TRUE, TRUE);");
+                        stmt.execute("INSERT IGNORE INTO rubrica VALUES (902, 'Vale Alimentação (PAT)', 'Desconto', 'Fixo', FALSE, FALSE, FALSE, TRUE, TRUE);");
+
+                        // Recria o admin padrão com a senha 'admin' hasheada em SHA-256
+                        stmt.execute(
+                                        "INSERT IGNORE INTO usuario (nome, senha, perfil, status) VALUES ('admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', TRUE, TRUE);");
 
                         // Reativa chaves estrangeiras
                         stmt.execute("SET FOREIGN_KEY_CHECKS = 1;");
@@ -64,9 +83,10 @@ public class ServicoDatabase {
                         // Desativa checagem de chaves estrangeiras
                         stmt.execute("SET FOREIGN_KEY_CHECKS = 0;");
 
-                        // Insere os dados da Empresa: Unesp
-                        String sqlEmpresa = "INSERT INTO empresa (cnpj, razao_social, email, resp_legal) " +
-                                        "VALUES ('48.031.918/0001-24', 'Universidade Estadual Paulista - Unesp', 'unesp@unesp.br', 'Estado de São Paulo');";
+                        // Insere os dados da Empresa: Unesp (com parâmetros completos)
+                        String sqlEmpresa = "INSERT INTO empresa (cnpj, razao_social, email, resp_legal, dia_fechamento_ponto) "
+                                        +
+                                        "VALUES ('48.031.918/0001-24', 'Universidade Estadual Paulista - Unesp', 'unesp@unesp.br', 'Estado de São Paulo', 30);";
                         stmt.execute(sqlEmpresa);
 
                         // Assim como o endereço
@@ -95,16 +115,12 @@ public class ServicoDatabase {
                         stmt.execute(sqlFolhas);
 
                         // Adiciona Lançamentos
-                        stmt.execute(
-                                        "INSERT IGNORE INTO rubrica (codigo, descricao, natureza, tipo, incide_inss, incide_fgts, incide_irrf, padrao, ativo) VALUES (901, 'Vale Transporte', 'Desconto', 'Fixo', false, false, false, false, true);");
-                        stmt.execute(
-                                        "INSERT IGNORE INTO rubrica (codigo, descricao, natureza, tipo, incide_inss, incide_fgts, incide_irrf, padrao, ativo) VALUES (902, 'Vale Refeição', 'Desconto', 'Fixo', false, false, false, false, true);");
 
-                        // Aril (Folha 1)
+                        // Abril (Folha 1)
                         stmt.execute(
                                         "INSERT INTO lancamento (id_folha, cpf_funcionario, codigo_rubrica, quantidade, valor, modalidade, base_calculo) VALUES (1, '111.111.111-11', 2, 5, 340.90, 'Quantidade', 'Salário Bruto');");
                         stmt.execute(
-                                        "INSERT INTO lancamento (id_folha, cpf_funcionario, codigo_rubrica, quantidade, valor, modalidade, base_calculo) VALUES (1, '444.444.444-44', 102, 2, 213.33, 'Quantidade', 'Salário Bruto');");
+                                        "INSERT INTO lancamento (id_folha, cpf_funcionario, codigo_rubrica, quantidade, valor, modalidade, base_calculo) VALUES (1, '444.444.444-44', 5, 2, 213.33, 'Quantidade', 'Salário Bruto');");
 
                         // Maio (Folha 2)
                         stmt.execute(
@@ -118,7 +134,7 @@ public class ServicoDatabase {
                         stmt.execute(
                                         "INSERT INTO lancamento (id_folha, cpf_funcionario, codigo_rubrica, quantidade, valor, modalidade, base_calculo) VALUES (3, '111.111.111-11', 4, 1, 1200.00, 'Valor', 'Livre');");
                         stmt.execute(
-                                        "INSERT INTO lancamento (id_folha, cpf_funcionario, codigo_rubrica, quantidade, valor, modalidade, base_calculo) VALUES (3, '222.222.222-22', 102, 1, 666.66, 'Valor', 'Livre');");
+                                        "INSERT INTO lancamento (id_folha, cpf_funcionario, codigo_rubrica, quantidade, valor, modalidade, base_calculo) VALUES (3, '222.222.222-22', 5, 1, 666.66, 'Valor', 'Livre');");
 
                         // Insere no Log de Auditoria
                         String sqlLog = "INSERT INTO auditoria (timestamp, usuario, perfil, acao, entidade, detalhes) VALUES "

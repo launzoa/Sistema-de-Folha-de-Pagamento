@@ -50,6 +50,17 @@ public class CalculadoraINSS implements RegraDeCalculo {
         }
         // Arredonda o desconto para 2 casas decimais
         desconto = desconto.setScale(2, RoundingMode.HALF_UP);
+        
+        // Salva a Transparência Fiscal no Holerite
+        holerite.setBaseINSS(salarioBruto);
+        if (salarioBruto.compareTo(BigDecimal.ZERO) > 0) {
+            BigDecimal aliquotaReal = desconto.multiply(new BigDecimal("100"))
+                    .divide(salarioBruto, 2, RoundingMode.HALF_UP);
+            holerite.setAliquotaEfetivaINSS(aliquotaReal);
+        } else {
+            holerite.setAliquotaEfetivaINSS(BigDecimal.ZERO);
+        }
+
         // Seta o desconto do INSS no holerite
         holerite.setDescontoINSS(desconto);
         // Retorna o desconto do INSS

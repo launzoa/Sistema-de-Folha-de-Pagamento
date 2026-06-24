@@ -7,8 +7,10 @@ import java.util.List;
 import java.math.BigDecimal;
 
 import com.sfp.funcionario.domain.Funcionario;
+import com.sfp.empresa.domain.Empresa;
 
 public class Holerite {
+    private final Empresa empresa;
     private final Funcionario funcionario;
     private BigDecimal totalProventos;
     private BigDecimal totalDescontos;
@@ -18,18 +20,26 @@ public class Holerite {
     private int diasUteis;
     private List<Lancamento> lancamentos;
     private BigDecimal valorFGTS = BigDecimal.ZERO;
+    private FolhaMes folhaAtual;
+    private BigDecimal dividaResidual = BigDecimal.ZERO;
+    private BigDecimal baseINSS;
+    private BigDecimal aliquotaEfetivaINSS;
+    private BigDecimal baseIRRF;
+    private BigDecimal aliquotaEfetivaIRRF;
 
     /**
      * @brief Construtor da classe Holerite.
+     * @param empresa        Empresa patronal contendo regras.
      * @param funcionario    Funcionário responsável pelo holerite.
      * @param lancamentos    Lancamentos no holerite.
      * @param totalProventos Total de proventos do funcionário.
      * @param totalDescontos Total de descontos do funcionário.
      * @param salarioLiquido Salário líquido do funcionário.
      */
-    public Holerite(Funcionario funcionario, List<Lancamento> lancamentos, BigDecimal totalProventos,
+    public Holerite(Empresa empresa, Funcionario funcionario, List<Lancamento> lancamentos, BigDecimal totalProventos,
             BigDecimal totalDescontos,
             BigDecimal salarioLiquido) {
+        this.empresa = empresa;
         this.funcionario = funcionario;
         this.totalProventos = totalProventos;
         this.totalDescontos = totalDescontos;
@@ -52,6 +62,14 @@ public class Holerite {
         this.totalProventos = totalProventos;
         this.totalDescontos = totalDescontos;
         this.salarioLiquido = salarioLiquido;
+    }
+
+    /**
+     * @brief Retorna a empresa responsável pelo holerite.
+     * @return Empresa patronal.
+     */
+    public Empresa getEmpresa() {
+        return this.empresa;
     }
 
     /**
@@ -171,5 +189,69 @@ public class Holerite {
      */
     public void setValorFGTS(BigDecimal valorFGTS) {
         this.valorFGTS = valorFGTS;
+    }
+
+    /**
+     * @brief Pega a folha vinculada a este holerite.
+     * @return FolhaMes
+     */
+    public FolhaMes getFolhaAtual() {
+        return folhaAtual;
+    }
+
+    /**
+     * @brief Seta a folha vinculada a este holerite.
+     * @param folhaAtual Folha de competência.
+     */
+    public void setFolhaAtual(FolhaMes folhaAtual) {
+        this.folhaAtual = folhaAtual;
+    }
+
+    /**
+     * @brief Pega a dívida residual que foi salva.
+     * @return BigDecimal
+     */
+    public BigDecimal getDividaResidual() {
+        return dividaResidual;
+    }
+
+    /**
+     * @brief Seta a dívida residual do holerite.
+     * @param dividaResidual Valor da dívida.
+     */
+    public void setDividaResidual(BigDecimal dividaResidual) {
+        this.dividaResidual = dividaResidual;
+    }
+
+    public BigDecimal getBaseINSS() {
+        return baseINSS;
+    }
+
+    public void setBaseINSS(BigDecimal baseINSS) {
+        this.baseINSS = baseINSS;
+    }
+
+    public BigDecimal getAliquotaEfetivaINSS() {
+        return aliquotaEfetivaINSS;
+    }
+
+    public void setAliquotaEfetivaINSS(BigDecimal aliquotaEfetivaINSS) {
+        this.aliquotaEfetivaINSS = aliquotaEfetivaINSS;
+    }
+
+    public BigDecimal getBaseIRRF() {
+        return baseIRRF;
+    }
+
+    public void setBaseIRRF(BigDecimal baseIRRF) {
+        this.baseIRRF = baseIRRF;
+    }
+
+    public BigDecimal getAliquotaEfetivaIRRF() {
+        return aliquotaEfetivaIRRF;
+    }
+
+    public void setAliquotaEfetivaIRRF(BigDecimal aliquotaEfetivaIRRF) {
+        this.aliquotaEfetivaIRRF = aliquotaEfetivaIRRF;
     }
 }

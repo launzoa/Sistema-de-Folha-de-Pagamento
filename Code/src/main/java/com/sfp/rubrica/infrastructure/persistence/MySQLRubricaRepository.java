@@ -75,8 +75,8 @@ public class MySQLRubricaRepository implements RubricaRepository {
      */
     @Override
     public void excluirRubrica(int codigo) {
-        // SQL para excluir a rubrica
-        String sql = "DELETE FROM rubrica WHERE codigo=? AND codigo>5";
+        // SQL para excluir a rubrica (Req 3.1.4.1, 3.1.4.2 e 3.1.4.5)
+        String sql = "DELETE FROM rubrica WHERE codigo=? AND padrao=FALSE";
         // Abre a conexão com o banco de dados e prepara o statement
         try (Connection con = ConexaoBD.getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)) {

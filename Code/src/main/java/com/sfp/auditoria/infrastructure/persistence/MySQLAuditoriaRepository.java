@@ -1,8 +1,3 @@
-/**
- * @brief Repositório de auditoria.
- * Implementa a interface AuditoriaRepository.
- */
-
 package com.sfp.auditoria.infrastructure.persistence;
 
 import java.sql.Connection;
@@ -17,6 +12,10 @@ import com.sfp.auditoria.domain.AuditoriaRepository;
 import com.sfp.auditoria.domain.RegistroAuditoria;
 import com.sfp.core.database.ConexaoBD;
 
+/**
+ * @brief Repositório de auditoria.
+ *        Implementa a interface AuditoriaRepository.
+ */
 public class MySQLAuditoriaRepository implements AuditoriaRepository {
 
     /**

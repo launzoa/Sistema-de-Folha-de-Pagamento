@@ -59,6 +59,10 @@ public class FormEmpresa {
             exibirAlerta("Informe o CNPJ.");
             return;
         }
+        if (email == null || email.trim().isEmpty()) {
+            exibirAlerta("Informe o E-mail de contato.");
+            return;
+        }
         if (razaoSocial == null || razaoSocial.trim().isEmpty()) {
             exibirAlerta("Informe a razão social.");
             return;
@@ -72,26 +76,26 @@ public class FormEmpresa {
         }
 
         // Tenta criar ou atualizar a empresa
-        try {
-            Empresa empresa = new Empresa(
-                    cnpj,
-                    razaoSocial,
-                    email,
-                    respLegal,
-                    diaFechamento);
-
             if (empresaEdicao == null) { // Se não tiver empresa para editar, cadastra nova
+                Empresa empresa = new Empresa(
+                        cnpj,
+                        razaoSocial,
+                        email,
+                        respLegal,
+                        diaFechamento);
                 controladorEmpresa.cadastrarEmpresa(empresa);
             } else { // Se tiver empresa para editar, atualiza
+                Empresa empresa = new Empresa(
+                        cnpj,
+                        razaoSocial,
+                        email,
+                        respLegal,
+                        diaFechamento);
                 controladorEmpresa.atualizarEmpresa(empresa);
             }
 
             salvoComSucesso = true;
             fecharJanela();
-
-        } catch (NumberFormatException e) { // Exibe alerta se houver erro de digitação
-            exibirAlerta("Verifique os campos numéricos.");
-        }
     }
 
     /**

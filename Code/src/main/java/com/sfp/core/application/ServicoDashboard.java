@@ -1,6 +1,3 @@
-/**
- * @brief Classe responsável por processar os dados do dashboard.
- */
 package com.sfp.core.application;
 
 import java.math.BigDecimal;
@@ -23,7 +20,12 @@ import com.sfp.core.domain.FaixaINSSRepository;
 import com.sfp.infrastructure.persistence.MySQLFaixaINSSRepository;
 import com.sfp.core.domain.FaixaIRRFRepository;
 import com.sfp.infrastructure.persistence.MySQLFaixaIRRFRepository;
+import com.sfp.empresa.domain.Empresa;
+import com.sfp.empresa.application.ControladorEmpresa;
 
+/**
+ * @brief Classe responsável por processar os dados do dashboard.
+ */
 public class ServicoDashboard {
     private FuncionarioRepository funcRepo = new MySQLFuncionarioRepository();
     private FolhaMesRepository folhaRepo = new MySQLFolhaMesRepository();
@@ -38,7 +40,8 @@ public class ServicoDashboard {
         DashboardDados dados = new DashboardDados();
         // Lista todos os funcionários pega a quantidade cadastrada.
         List<Funcionario> funcionarios = funcRepo.buscarTodos();
-        dados.setTotalFuncionarios(funcionarios.size());
+        long ativos = funcionarios.stream().filter(Funcionario::getStatus).count();
+        dados.setTotalFuncionarios((int) ativos);
         // Busca a folha atual.
         FolhaMes folhaAtual = folhaRepo.buscarFolhaAberta();
         // Se não existir folha atual, busca a última folha cadastrada.
@@ -80,12 +83,23 @@ public class ServicoDashboard {
         BigDecimal totalFGTS = BigDecimal.ZERO;
         BigDecimal totalDescontosDiversos = BigDecimal.ZERO; // Faltas, VT, PAT, etc.
 
+        // Carrega a empresa
+        ControladorEmpresa controladorEmpresa = new ControladorEmpresa();
+        Empresa empresaConfig = controladorEmpresa.buscarEmpresa();
+        Empresa empresaSegura = empresaConfig != null ? empresaConfig
+                : new Empresa("N/A", "Não Cadastrada", "N/A", "N/A", 30);
+
         // Itera sobre todos os funcionários e calcula o financeiro do dashboard.
         for (Funcionario f : funcionarios) {
+            // Se o funcionário estiver inativo, não calcula a folha para ele (Requisito
+            // 3.1.3.5)
+            if (!f.getStatus())
+                continue;
+
             // Pega os lançamentos do funcionário na folha atual.
             List<Lancamento> lancamentos = lancamentoRepo.buscarPorFolhaEFuncionario(folha.getId(), f.getCpf());
             // Processa a folha do funcionário.
-            Holerite h = processador.processar(f, lancamentos, folha.getDiasUteis());
+            Holerite h = processador.processar(empresaSegura, f, lancamentos, folha.getDiasUteis());
             // Se a folha do funcionário foi processada com sucesso.
             if (h != null) {
                 // Adiciona o total de proventos do funcionário ao total de proventos do

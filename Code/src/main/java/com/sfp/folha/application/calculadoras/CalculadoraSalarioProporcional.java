@@ -20,17 +20,31 @@ public class CalculadoraSalarioProporcional implements RegraDeCalculo {
      */
     @Override
     public BigDecimal calcular(Holerite holerite) {
-        // Pega o salário bruto do funcionário
         BigDecimal salarioBruto = holerite.getFuncionario().getSalarioBruto();
-        // Pega a quantidade de faltas do funcionário
-        double diasFaltas = holerite.getQuantidadePorRubrica(102);
-        // Pega a quantidade de dias úteis no mês
-        int diasUteis = holerite.getQuantidadeDiasUteis();
-        // Calcula a quantidade de dias trabalhados
-        double diasTrabalhados = diasUteis - diasFaltas;
-        // valor da diária = salário base / dias úteis
-        BigDecimal valorDiaria = salarioBruto.divide(BigDecimal.valueOf(diasUteis), 2, RoundingMode.HALF_UP);
-        // salário proporcional = valor da diária * dias trabalhados
-        return valorDiaria.multiply(BigDecimal.valueOf(diasTrabalhados));
+        
+        // Se a folha não foi injetada, fallback para o salário integral.
+        if (holerite.getFolhaAtual() == null) {
+            return salarioBruto;
+        }
+
+        java.time.LocalDate dataAdmissao = holerite.getFuncionario().getDataAdmissao();
+        java.time.LocalDate inicioFolha = holerite.getFolhaAtual().getDataInicio();
+        java.time.LocalDate fimFolha = holerite.getFolhaAtual().getDataFim();
+
+        // Se a pessoa foi admitida DEPOIS do início do mês da folha atual, aplica Pro-Rata.
+        if (dataAdmissao != null && dataAdmissao.isAfter(inicioFolha) && !dataAdmissao.isAfter(fimFolha)) {
+            // Regra comercial da CLT: o mês tem 30 dias para cálculo salarial
+            int diasTrabalhados = 30 - dataAdmissao.getDayOfMonth() + 1;
+            
+            // Garantia para meses com 31 dias
+            if (diasTrabalhados < 0) diasTrabalhados = 0;
+            if (diasTrabalhados > 30) diasTrabalhados = 30;
+
+            BigDecimal valorDia = salarioBruto.divide(new BigDecimal("30"), 2, RoundingMode.HALF_UP);
+            return valorDia.multiply(new BigDecimal(diasTrabalhados)).setScale(2, RoundingMode.HALF_UP);
+        }
+
+        // Se admitida antes, salário integral
+        return salarioBruto;
     }
 }

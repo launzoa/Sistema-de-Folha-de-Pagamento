@@ -19,7 +19,6 @@ public class Lancamento {
     private String baseCalculo;
     private LocalDate dataInicio;
     private LocalDate dataFim;
-    private String pathPdf;
 
     /**
      * @brief Constructor da classe Lancamento
@@ -34,11 +33,10 @@ public class Lancamento {
      * @param baseCalculo    Base de Cálculo (Salário Bruto, Salário Líquido)
      * @param dataInicio     Data de início do lançamento
      * @param dataFim        Data de fim do lançamento
-     * @param pathPdf        Path do PDF do lançamento
      */
     public Lancamento(int id, int idFolha, String cpfFuncionario, int codigoRubrica, double quantidade,
             LocalDate dataClt, BigDecimal valor, String modalidade, String baseCalculo, LocalDate dataInicio,
-            LocalDate dataFim, String pathPdf) {
+            LocalDate dataFim) {
         this.id = id;
         this.idFolha = idFolha;
         this.cpfFuncionario = cpfFuncionario;
@@ -50,7 +48,6 @@ public class Lancamento {
         this.baseCalculo = baseCalculo;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
-        this.pathPdf = pathPdf;
     }
 
     /**
@@ -115,14 +112,6 @@ public class Lancamento {
      */
     public LocalDate getDataFim() {
         return this.dataFim;
-    }
-
-    /**
-     * @brief Retorna o path do PDF do lançamento
-     * @return String
-     */
-    public String getPathPdf() {
-        return this.pathPdf;
     }
 
     /**

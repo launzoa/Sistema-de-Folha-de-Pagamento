@@ -37,8 +37,8 @@
                 <Button text="Processamento e Holerites" styleClass="menu-button" onAction="#abrirHolerite"/>
             </VBox>
 
-            <Label text="Administração" styleClass="titles_dash"/>
-            <VBox styleClass="menu-items">
+            <Label fx:id="labelAdmin" text="Administração" styleClass="titles_dash"/>
+            <VBox fx:id="vboxAdmin" styleClass="menu-items">
                 <Button text="Usuários" styleClass="menu-button" onAction="#abrirUsuario"/>
                 <Button text="Empresa" styleClass="menu-button" onAction="#abrirEmpresa"/>
                 <Button text="Log" styleClass="menu-button" onAction="#abrirLog"/>

@@ -17,7 +17,6 @@
         <Region HBox.hgrow="ALWAYS"/>
         <Button fx:id="btnCadastrar" text="+ Cadastrar Empresa" styleClass="primary-button" onAction="#addEmpresa"/>
         <Button fx:id="btnEditar" text="Editar Empresa" styleClass="primary-button" onAction="#editarEmpresa"/>
-        <Button text="Excluir" styleClass="btn-excluir" onAction="#excluirEmpresa"/>
     </HBox>
     <VBox spacing="10" VBox.vgrow="ALWAYS">
         <Label text="Identificação da Empresa" styleClass="holerite-section-title"/>

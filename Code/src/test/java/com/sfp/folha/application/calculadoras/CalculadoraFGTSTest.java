@@ -11,6 +11,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import com.sfp.empresa.domain.Empresa;
+
 public class CalculadoraFGTSTest {
 
     @Test
@@ -20,7 +22,8 @@ public class CalculadoraFGTSTest {
         Funcionario funcionario = new Funcionario("Fulano", "000", "Cargo", LocalDate.now(), new BigDecimal("3000.00"), true, 1);
         
         // Simula um holerite que tem 3000.00 de proventos (que é a base do FGTS)
-        Holerite holerite = new Holerite(funcionario, new ArrayList<>(), new BigDecimal("3000.00"), BigDecimal.ZERO, BigDecimal.ZERO);
+        Empresa empresa = new Empresa("00.000.000/0001-00", "Test", "test@test.com", "Admin", 30);
+        Holerite holerite = new Holerite(empresa, funcionario, new ArrayList<>(), new BigDecimal("3000.00"), BigDecimal.ZERO, BigDecimal.ZERO);
         
         BigDecimal fgts = calculadora.calcular(holerite);
         

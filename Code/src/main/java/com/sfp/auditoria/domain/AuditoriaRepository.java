@@ -1,12 +1,11 @@
-/**
- * @brief Interface para o repositório de auditoria.
- 
- */
 package com.sfp.auditoria.domain;
 
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * @brief Interface para o repositório de auditoria.
+ */
 public interface AuditoriaRepository {
     /**
      * @brief Registra uma ação de auditoria.

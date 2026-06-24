@@ -1,11 +1,10 @@
-/**
- * @brief Classe que representa as faixas de IRRF
- */
-
 package com.sfp.core.domain;
 
 import java.math.BigDecimal;
 
+/**
+ * @brief Classe que representa as faixas de IRRF
+ */
 public class FaixaIRRF {
     private BigDecimal piso;
     private BigDecimal teto;
@@ -58,27 +57,53 @@ public class FaixaIRRF {
         return parcelaADeduzir;
     }
 
+    /**
+     * @brief Verifica se o salário está na faixa
+     * @param baseCalculo base de cálculo do imposto
+     * @return boolean: true se o salário está na faixa, false caso contrário
+     */
     public boolean isSalarioNaFaixa(BigDecimal baseCalculo) {
         return baseCalculo.compareTo(teto) <= 0;
     }
 
+    /**
+     * @brief Calcula o desconto do imposto
+     * @param baseCalculo base de cálculo do imposto
+     * @return BigDecimal: desconto do imposto
+     */
     public BigDecimal calcularDesconto(BigDecimal baseCalculo) {
         BigDecimal aliquotaDecimal = aliquota.divide(new BigDecimal("100"), 4, java.math.RoundingMode.HALF_UP);
         return baseCalculo.multiply(aliquotaDecimal).subtract(parcelaADeduzir);
     }
 
+    /**
+     * @brief Altera o piso
+     * @param piso: novo valor do piso
+     */
     public void setPiso(BigDecimal piso) {
         this.piso = piso;
     }
 
+    /**
+     * @brief Altera o teto
+     * @param teto: novo valor do teto
+     */
     public void setTeto(BigDecimal teto) {
         this.teto = teto;
     }
 
+    /**
+     * @brief Altera a alíquota
+     * @param aliquota: nova alíquota
+     */
     public void setAliquota(BigDecimal aliquota) {
         this.aliquota = aliquota;
     }
 
+    /**
+     * @brief Altera a parcela a deduzir
+     * @param parcelaADeduzir: nova parcela a deduzir
+     */
     public void setParcelaADeduzir(BigDecimal parcelaADeduzir) {
         this.parcelaADeduzir = parcelaADeduzir;
     }

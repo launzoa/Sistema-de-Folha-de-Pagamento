@@ -38,7 +38,8 @@ public class GeradorRelatorioGeralPDF {
      * @param totalFgts      Total geral de FGTS a recolher.
      */
     public void gerarPdf(List<Holerite> holerites, String competencia, String diretorioSaida,
-            String totalBase, String totalProv, String totalDesc, String totalLiq, String totalFgts) {
+            String totalBase, String totalProv, String totalDesc, String totalLiq, String totalFgts,
+            com.sfp.empresa.domain.Empresa empresaConfigurada) {
         // Nome do arquivo PDF com a competência.
         String nomeArquivo = diretorioSaida + "/Relatorio_Geral_Empresa_" + competencia.replaceAll("/", "_") + ".pdf";
         // Cria o documento.
@@ -62,12 +63,9 @@ public class GeradorRelatorioGeralPDF {
             // Informações da Empresa e Mês
             PdfPTable tableCabecalho = new PdfPTable(2);
             tableCabecalho.setWidthPercentage(100);
-            // Busca os dados da empresa do BD
-            EmpresaRepository empresaRepo = new MySQLEmpresaRepository();
-            Empresa emp = empresaRepo.buscarEmpresaUnica();
-            // String para guardar o nome e CNPJ da empresa
-            String nomeEmpresa = (emp != null) ? emp.getRazaoSocial() : "SFP Corporation LTDA";
-            String cnpjEmpresa = (emp != null) ? emp.getCnpj() : "00.000.000/0001-00";
+            // Busca os dados da empresa (Injetado em vez de pesquisar no BD)
+            String nomeEmpresa = (empresaConfigurada != null && empresaConfigurada.getRazaoSocial() != null) ? empresaConfigurada.getRazaoSocial() : "SFP Corporation LTDA";
+            String cnpjEmpresa = (empresaConfigurada != null && empresaConfigurada.getCnpj() != null) ? empresaConfigurada.getCnpj() : "00.000.000/0001-00";
             // Cria a célula com os dados da empresa
             PdfPCell cellEmpresa = new PdfPCell(
                     new Phrase("EMPRESA: " + nomeEmpresa + "\nCNPJ: " + cnpjEmpresa, fontNormal));

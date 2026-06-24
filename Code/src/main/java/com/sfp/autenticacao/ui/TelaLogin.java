@@ -1,6 +1,3 @@
-/**
- * @brief Controla a tela de login.
- */
 package com.sfp.autenticacao.ui;
 
 import javafx.fxml.FXML;
@@ -20,6 +17,9 @@ import com.sfp.core.ui.GerenciadorTema;
 import com.sfp.autenticacao.application.ControladorAutenticacao;
 import com.sfp.usuario.domain.Usuario;
 
+/**
+ * @brief Controla a tela de login.
+ */
 public class TelaLogin {
     @FXML
     private TextField inputUsuario; // Campo de texto para inserir o usuário.

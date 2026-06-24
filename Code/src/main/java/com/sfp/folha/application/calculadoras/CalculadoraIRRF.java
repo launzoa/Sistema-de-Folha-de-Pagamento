@@ -83,6 +83,17 @@ public class CalculadoraIRRF implements RegraDeCalculo {
 
         // Arredonda o desconto para 2 casas decimais
         desconto = desconto.setScale(2, RoundingMode.HALF_UP);
+        
+        // Salva a Transparência Fiscal no Holerite
+        holerite.setBaseIRRF(baseCalculo);
+        if (baseCalculo.compareTo(BigDecimal.ZERO) > 0) {
+            BigDecimal aliquotaReal = desconto.multiply(new BigDecimal("100"))
+                    .divide(baseCalculo, 2, RoundingMode.HALF_UP);
+            holerite.setAliquotaEfetivaIRRF(aliquotaReal);
+        } else {
+            holerite.setAliquotaEfetivaIRRF(BigDecimal.ZERO);
+        }
+
         // Seta o desconto do IRRF no holerite
         holerite.setDescontoIRRF(desconto);
         // Retorna o desconto

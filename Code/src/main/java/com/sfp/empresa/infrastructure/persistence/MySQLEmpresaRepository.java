@@ -25,7 +25,7 @@ public class MySQLEmpresaRepository implements EmpresaRepository {
         Empresa existente = buscarEmpresaUnica();
 
         if (existente == null) { // Se não existir empresa, insere uma nova
-            // SQL para inserir nova empresa no BD
+            // SQL para inserir nova empresa no BD com parametros padroes temporarios
             String sql = "INSERT INTO empresa (cnpj, razao_social, email, resp_legal, dia_fechamento_ponto) VALUES (?, ?, ?, ?, ?)";
             // Tenta conectar ao BD e prepara a query
             try (Connection conexao = ConexaoBD.getConnection();
@@ -42,7 +42,7 @@ public class MySQLEmpresaRepository implements EmpresaRepository {
                 throw new RuntimeException("Erro ao inserir nova empresa", e);
             }
         } else { // Se existir empresa, atualiza
-            // SQL para atualizar empresa
+            // SQL para atualizar empresa preservando as colunas
             String sql = "UPDATE empresa SET cnpj = ?, razao_social = ?, email = ?, resp_legal = ?, dia_fechamento_ponto = ? WHERE cnpj = ?";
             // Tenta conectar ao BD e prepara a query
             try (Connection conexao = ConexaoBD.getConnection();

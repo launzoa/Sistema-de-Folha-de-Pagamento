@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import com.sfp.folha.domain.Holerite;
 import com.sfp.folha.domain.Lancamento;
 import com.sfp.funcionario.domain.Funcionario;
+import com.sfp.empresa.domain.Empresa;
 import com.sfp.rubrica.domain.Rubrica;
 import com.sfp.rubrica.domain.RubricaRepository;
 
@@ -56,9 +57,10 @@ public class ProcessadorLancamentosVariaveisTest {
         
         List<Lancamento> lancamentos = new ArrayList<>();
         // 10 horas extras. Multiplicador 1.5. Rate = 10. Total = 10 * 10 * 1.5 = 150
-        lancamentos.add(new Lancamento(1, 1, "123", 10, 10.0, LocalDate.now(), null, "Quantidade", null, null, null, null));
+        lancamentos.add(new Lancamento(1, 1, "123", 10, 10.0, LocalDate.now(), null, "Quantidade", null, null, null));
         
-        Holerite holerite = processador.processar(func, lancamentos, 22);
+        Empresa empresa = new Empresa("00.000.000/0001-00", "Test", "test@test.com", "Admin", 30);
+        Holerite holerite = processador.processar(empresa, func, lancamentos, 22);
         
         assertEquals(new BigDecimal("150.00"), holerite.getTotalProventos());
         assertEquals(new BigDecimal("150.00"), lancamentos.get(0).getValor());
@@ -75,9 +77,10 @@ public class ProcessadorLancamentosVariaveisTest {
         
         List<Lancamento> lancamentos = new ArrayList<>();
         // 5 horas de atraso. Total = 5 * 10 = 50 de desconto
-        lancamentos.add(new Lancamento(2, 1, "123", 11, 5.0, LocalDate.now(), null, "Quantidade", null, null, null, null));
+        lancamentos.add(new Lancamento(2, 1, "123", 11, 5.0, LocalDate.now(), null, "Quantidade", null, null, null));
         
-        Holerite holerite = processador.processar(func, lancamentos, 22);
+        Empresa empresa = new Empresa("00.000.000/0001-00", "Test", "test@test.com", "Admin", 30);
+        Holerite holerite = processador.processar(empresa, func, lancamentos, 22);
         
         assertEquals(new BigDecimal("50.00"), holerite.getTotalDescontos());
         assertEquals(new BigDecimal("0"), holerite.getSalarioLiquido()); // Fica negativo mas o Math max zera
@@ -93,12 +96,13 @@ public class ProcessadorLancamentosVariaveisTest {
         Funcionario func = criarFuncionario(3000.0); // 100 reais por dia
         
         List<Lancamento> lancamentos = new ArrayList<>();
-        // 2 dias de falta. Total = 2 * 100 = 200 de desconto
-        lancamentos.add(new Lancamento(3, 1, "123", 12, 2.0, LocalDate.now(), null, "Quantidade", null, null, null, null));
+        // 2 dias de falta. Total de 3000 / 22 * 2 = 272.72
+        lancamentos.add(new Lancamento(3, 1, "123", 12, 2.0, LocalDate.now(), null, "Quantidade", null, null, null));
         
-        Holerite holerite = processador.processar(func, lancamentos, 22);
+        Empresa empresa = new Empresa("00.000.000/0001-00", "Test", "test@test.com", "Admin", 30);
+        Holerite holerite = processador.processar(empresa, func, lancamentos, 22);
         
-        assertEquals(new BigDecimal("200.00"), holerite.getTotalDescontos());
+        assertEquals(new BigDecimal("272.72"), holerite.getTotalDescontos());
     }
 
     @Test
@@ -112,9 +116,10 @@ public class ProcessadorLancamentosVariaveisTest {
         
         List<Lancamento> lancamentos = new ArrayList<>();
         // 30% do Salário Bruto (2000) = 600
-        lancamentos.add(new Lancamento(4, 1, "123", 13, 0.0, LocalDate.now(), new BigDecimal("30.00"), "Porcentagem", "Salário Bruto", null, null, null));
+        lancamentos.add(new Lancamento(4, 1, "123", 13, 0.0, LocalDate.now(), new BigDecimal("30.00"), "Porcentagem", "Salário Bruto", null, null));
         
-        Holerite holerite = processador.processar(func, lancamentos, 22);
+        Empresa empresa = new Empresa("00.000.000/0001-00", "Test", "test@test.com", "Admin", 30);
+        Holerite holerite = processador.processar(empresa, func, lancamentos, 22);
         
         assertEquals(new BigDecimal("600.00"), holerite.getTotalProventos());
     }

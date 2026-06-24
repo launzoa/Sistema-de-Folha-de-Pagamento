@@ -27,7 +27,7 @@ public class MySQLLancamentoRepository implements LancamentoRepository {
     @Override
     public void salvar(Lancamento lancamento) {
         // Comando SQL para inserir um novo lançamento
-        String sql = "INSERT INTO lancamento (id_folha, cpf_funcionario, codigo_rubrica, quantidade, data_clt, valor, modalidade, base_calculo, data_inicio, data_fim, path_pdf) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO lancamento (id_folha, cpf_funcionario, codigo_rubrica, quantidade, data_clt, valor, modalidade, base_calculo, data_inicio, data_fim) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         // Conexão com o banco de dados e preparo do statement
         try (Connection conn = ConexaoBD.getConnection();
@@ -67,7 +67,6 @@ public class MySQLLancamentoRepository implements LancamentoRepository {
             } else {
                 pstmt.setNull(10, Types.DATE);
             }
-            pstmt.setString(11, lancamento.getPathPdf());
 
             // Executa o comando SQL no banco de dados!
             pstmt.executeUpdate();
@@ -115,11 +114,9 @@ public class MySQLLancamentoRepository implements LancamentoRepository {
                 LocalDate dbDataInicio = (sqlDataInicio != null) ? sqlDataInicio.toLocalDate() : null;
                 Date sqlDataFim = rs.getDate("data_fim");
                 LocalDate dbDataFim = (sqlDataFim != null) ? sqlDataFim.toLocalDate() : null;
-                String dbPathPdf = rs.getString("path_pdf");
                 // Criando um novo objeto Lancamento com os dados que puxou
                 Lancamento lancamento = new Lancamento(dbId, dbIdFolha, dbCpfFuncionario, dbCodigoRubrica,
-                        dbQuantidade, dbDataClt, dbValor, dbModalidade, dbBaseCalculo, dbDataInicio, dbDataFim,
-                        dbPathPdf);
+                        dbQuantidade, dbDataClt, dbValor, dbModalidade, dbBaseCalculo, dbDataInicio, dbDataFim);
                 // Adicionando este objeto na lista 'lancamentos'
                 lancamentos.add(lancamento);
             }
@@ -145,6 +142,7 @@ public class MySQLLancamentoRepository implements LancamentoRepository {
             // Setando os parâmetros do statement
             pstmt.setInt(1, id);
             // Executando o statement
+            pstmt.executeUpdate();
         } catch (Exception e) {
             throw new RuntimeException("Erro ao deletar lançamento", e);
         }
@@ -179,11 +177,9 @@ public class MySQLLancamentoRepository implements LancamentoRepository {
                 LocalDate dbDataInicio = (sqlDataInicio != null) ? sqlDataInicio.toLocalDate() : null;
                 Date sqlDataFim = rs.getDate("data_fim");
                 LocalDate dbDataFim = (sqlDataFim != null) ? sqlDataFim.toLocalDate() : null;
-                String dbPathPdf = rs.getString("path_pdf");
                 // Criando um novo objeto Lancamento com os dados que puxou
                 Lancamento lancamento = new Lancamento(dbId, dbIdFolha, dbCpfFuncionario, dbCodigoRubrica,
-                        dbQuantidade, dbDataClt, dbValor, dbModalidade, dbBaseCalculo, dbDataInicio, dbDataFim,
-                        dbPathPdf);
+                        dbQuantidade, dbDataClt, dbValor, dbModalidade, dbBaseCalculo, dbDataInicio, dbDataFim);
                 // Adicionando este objeto na lista 'lancamentos'
                 lancamentos.add(lancamento);
             }
@@ -209,8 +205,7 @@ public class MySQLLancamentoRepository implements LancamentoRepository {
                     rs.getDate("data_clt") != null ? rs.getDate("data_clt").toLocalDate() : null,
                     rs.getBigDecimal("valor"), rs.getString("modalidade"), rs.getString("base_calculo"),
                     rs.getDate("data_inicio") != null ? rs.getDate("data_inicio").toLocalDate() : null,
-                    rs.getDate("data_fim") != null ? rs.getDate("data_fim").toLocalDate() : null,
-                    rs.getString("path_pdf")
+                    rs.getDate("data_fim") != null ? rs.getDate("data_fim").toLocalDate() : null
                 );
                 lancamentos.add(l);
             }
@@ -254,11 +249,9 @@ public class MySQLLancamentoRepository implements LancamentoRepository {
                     LocalDate dbDataInicio = (sqlDataInicio != null) ? sqlDataInicio.toLocalDate() : null;
                     Date sqlDataFim = rs.getDate("data_fim");
                     LocalDate dbDataFim = (sqlDataFim != null) ? sqlDataFim.toLocalDate() : null;
-                    String dbPathPdf = rs.getString("path_pdf");
                     // Criando um novo objeto Lancamento com os dados que puxou
                     lancamento = new Lancamento(dbId, dbIdFolha, dbCpfFuncionario, dbCodigoRubrica,
-                            dbQuantidade, dbDataClt, dbValor, dbModalidade, dbBaseCalculo, dbDataInicio, dbDataFim,
-                            dbPathPdf);
+                            dbQuantidade, dbDataClt, dbValor, dbModalidade, dbBaseCalculo, dbDataInicio, dbDataFim);
                 }
             }
         } catch (Exception e) { // Se der erro, lança uma exceção
@@ -274,29 +267,44 @@ public class MySQLLancamentoRepository implements LancamentoRepository {
     @Override
     public void atualizar(Lancamento lancamento) {
         // Comando SQL para atualizar um lançamento
-        String sql = "UPDATE lancamento SET cpf_funcionario = ?, codigo_rubrica = ?, quantidade = ?, data_clt = ?, valor = ?, modalidade = ?, base_calculo = ? WHERE id = ?";
+        String sql = "UPDATE lancamento SET id_folha = ?, cpf_funcionario = ?, codigo_rubrica = ?, quantidade = ?, data_clt = ?, valor = ?, modalidade = ?, base_calculo = ?, data_inicio = ?, data_fim = ? WHERE id = ?";
+
         // Conexão com o banco de dados e preparo do statement
         try (Connection conn = ConexaoBD.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
             // Setando os parâmetros do statement
-            pstmt.setString(1, lancamento.getCpfFuncionario());
-            pstmt.setInt(2, lancamento.getCodigoRubrica());
-            pstmt.setDouble(3, lancamento.getQuantidade());
+            pstmt.setInt(1, lancamento.getIdFolha());
+            pstmt.setString(2, lancamento.getCpfFuncionario());
+            pstmt.setInt(3, lancamento.getCodigoRubrica());
+            pstmt.setDouble(4, lancamento.getQuantidade());
             // Verificando se a data CLT não é nula para adicionar ao statement
             if (lancamento.getDataClt() != null) {
-                pstmt.setDate(4, java.sql.Date.valueOf(lancamento.getDataClt()));
+                pstmt.setDate(5, java.sql.Date.valueOf(lancamento.getDataClt()));
             } else {
-                pstmt.setNull(4, Types.DATE);
+                pstmt.setNull(5, Types.DATE);
             }
             // Verificando se o valor não é nulo para adicionar ao statement
             if (lancamento.getValor() != null) {
-                pstmt.setBigDecimal(5, lancamento.getValor());
+                pstmt.setBigDecimal(6, lancamento.getValor());
             } else {
-                pstmt.setNull(5, Types.DECIMAL);
+                pstmt.setNull(6, Types.DECIMAL);
             }
-            pstmt.setString(6, lancamento.getModalidade());
-            pstmt.setString(7, lancamento.getBaseCalculo());
-            pstmt.setInt(8, lancamento.getId());
+            pstmt.setString(7, lancamento.getModalidade());
+            pstmt.setString(8, lancamento.getBaseCalculo());
+            
+            if (lancamento.getDataInicio() != null) {
+                pstmt.setDate(9, java.sql.Date.valueOf(lancamento.getDataInicio()));
+            } else {
+                pstmt.setNull(9, Types.DATE);
+            }
+            
+            if (lancamento.getDataFim() != null) {
+                pstmt.setDate(10, java.sql.Date.valueOf(lancamento.getDataFim()));
+            } else {
+                pstmt.setNull(10, Types.DATE);
+            }
+            
+            pstmt.setInt(11, lancamento.getId());
             // Executando o statement
             pstmt.executeUpdate();
         } catch (Exception e) { // Se der erro, lança uma exceção

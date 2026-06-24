@@ -1,6 +1,3 @@
-/**
- * @brief Controla as operações de auditoria.
- */
 package com.sfp.auditoria.application;
 
 import java.time.LocalDate;
@@ -10,6 +7,9 @@ import com.sfp.auditoria.domain.AuditoriaRepository;
 import com.sfp.auditoria.domain.RegistroAuditoria;
 import com.sfp.auditoria.infrastructure.persistence.MySQLAuditoriaRepository;
 
+/**
+ * @brief Classe que controla as operações de auditoria.
+ */
 public class ControladorAuditoria {
     private AuditoriaRepository auditoriaRepository = new MySQLAuditoriaRepository();
 

@@ -33,7 +33,7 @@ public class GeradorHoleritePDF {
      *                       de nomes.
      */
     public void gerarPdf(Holerite holerite, String competencia, String diretorioSaida,
-            Map<Integer, com.sfp.rubrica.domain.Rubrica> mapaRubricas) {
+            Map<Integer, com.sfp.rubrica.domain.Rubrica> mapaRubricas, com.sfp.empresa.domain.Empresa empresaConfigurada) {
         // Caminho onde o PDF será salvo
         String nomeArquivo = diretorioSaida + "/Holerite_" + holerite.getFuncionario().getNome().replaceAll(" ", "_")
                 + "_" + competencia.replaceAll("/", "_") + ".pdf";
@@ -57,11 +57,9 @@ public class GeradorHoleritePDF {
             // Informações da Empresa e Mês
             PdfPTable tableCabecalho = new PdfPTable(2);
             tableCabecalho.setWidthPercentage(100);
-            // Busca os dados da empresa do BD
-            com.sfp.empresa.domain.EmpresaRepository empresaRepo = new com.sfp.empresa.infrastructure.persistence.MySQLEmpresaRepository();
-            com.sfp.empresa.domain.Empresa emp = empresaRepo.buscarEmpresaUnica();
-            String nomeEmpresa = (emp != null) ? emp.getRazaoSocial() : "SFP Corporation LTDA";
-            String cnpjEmpresa = (emp != null) ? emp.getCnpj() : "00.000.000/0001-00";
+            // Busca os dados da empresa (Injetado em vez de pesquisar no BD)
+            String nomeEmpresa = (empresaConfigurada != null && empresaConfigurada.getRazaoSocial() != null) ? empresaConfigurada.getRazaoSocial() : "SFP Corporation LTDA";
+            String cnpjEmpresa = (empresaConfigurada != null && empresaConfigurada.getCnpj() != null) ? empresaConfigurada.getCnpj() : "00.000.000/0001-00";
             // Adiciona as informações da empresa na célula
             PdfPCell cellEmpresa = new PdfPCell(
                     new Phrase("EMPRESA: " + nomeEmpresa + "\nCNPJ: " + cnpjEmpresa, fontNormal));
@@ -125,12 +123,20 @@ public class GeradorHoleritePDF {
             }
             // INSS e IRRF
             if (holerite.getDescontoINSS() != null && holerite.getDescontoINSS().compareTo(BigDecimal.ZERO) > 0) {
-                adicionarLinhaTabela(tableEventos, "002", "Desconto INSS", "-", "",
+                String refINSS = holerite.getBaseINSS() != null ? 
+                    "Base R$ " + holerite.getBaseINSS().toString() + " (" + holerite.getAliquotaEfetivaINSS().toString() + "%)" : "-";
+                adicionarLinhaTabela(tableEventos, "002", "Desconto INSS", refINSS, "",
                         "R$ " + holerite.getDescontoINSS().toString(), fontNormal);
             }
             if (holerite.getDescontoIRRF() != null && holerite.getDescontoIRRF().compareTo(BigDecimal.ZERO) > 0) {
-                adicionarLinhaTabela(tableEventos, "003", "Desconto IRRF", "-", "",
+                String refIRRF = holerite.getBaseIRRF() != null ? 
+                    "Base R$ " + holerite.getBaseIRRF().toString() + " (" + holerite.getAliquotaEfetivaIRRF().toString() + "%)" : "-";
+                adicionarLinhaTabela(tableEventos, "003", "Desconto IRRF", refIRRF, "",
                         "R$ " + holerite.getDescontoIRRF().toString(), fontNormal);
+            }
+            if (holerite.getDividaResidual() != null && holerite.getDividaResidual().compareTo(BigDecimal.ZERO) > 0) {
+                adicionarLinhaTabela(tableEventos, "997", "Dívida a Abater Próx. Mês", "-", "",
+                        "R$ " + holerite.getDividaResidual().toString(), fontNormal);
             }
             // Adiciona a tabela com os lançamentos e eventos ao documento
             document.add(tableEventos);

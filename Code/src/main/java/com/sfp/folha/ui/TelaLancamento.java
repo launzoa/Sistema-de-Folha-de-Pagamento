@@ -293,7 +293,11 @@ public class TelaLancamento {
                 // Formata o valor
                 String valorFormatado = "";
                 if (l.getValor() != null) {
-                    valorFormatado = "R$ " + l.getValor().toString();
+                    if ("Porcentagem".equals(l.getModalidade())) {
+                        valorFormatado = l.getValor().toString() + "%";
+                    } else {
+                        valorFormatado = "R$ " + l.getValor().toString();
+                    }
                 } else if (l.getQuantidade() > 0) {
                     valorFormatado = l.getQuantidade() + " un";
                 }

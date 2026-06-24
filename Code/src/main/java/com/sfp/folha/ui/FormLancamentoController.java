@@ -143,22 +143,11 @@ public class FormLancamentoController {
                 return null;
             }
         });
-        // Adiciona as rubricas ao comboRubrica
-        List<Rubrica> rubricas = rubricaRepo.buscarTodas();
-        boolean temAdicionalNoturno = rubricas.stream().anyMatch(r -> r.getDescricao().contains("Adicional Noturno"));
-        // Se não tiver Adicional Noturno, adiciona
-        if (!temAdicionalNoturno) {
-            // Pega o maior código de rubrica
-            int maxCodigo = rubricas.stream().mapToInt(Rubrica::getCodigo).max().orElse(0);
-            // Cria o Adicional Noturno
-            ControladorRubrica controlador = new ControladorRubrica();
-            // Adiciona o Adicional Noturno
-            controlador.cadastrarRubrica(
-                    new Rubrica(maxCodigo + 1, "Adicional Noturno 20%", "Provento", "Variável", true, true, true, true,
-                            true));
-            // Atualiza as rubricas
-            rubricas = rubricaRepo.buscarTodas();
-        }
+        // Busca apenas as rubricas ativas e que NÃO são padrão (evita dupla tributação de impostos estruturais manuais)
+        List<Rubrica> rubricas = rubricaRepo.buscarTodas().stream()
+                .filter(r -> !r.isPadrao() && r.isAtivo())
+                .collect(Collectors.toList());
+
         // Adiciona as rubricas ao comboRubrica
         comboRubrica.getItems().addAll(rubricas);
         // Define o conversor do comboRubrica
@@ -275,12 +264,7 @@ public class FormLancamentoController {
             // Se a modalidade for Quantidade
             if ("Quantidade".equals(modalidade)) {
                 quantidade = numInserido;
-                // Se o checkbox descontoDSR estiver marcado e a rubrica contiver "falta",
-                // adiciona 1.0
-                // à quantidade
-                if (chkDescontoDSR.isSelected() && r.getDescricao().toLowerCase().contains("falta")) {
-                    quantidade += 1.0;
-                }
+                // A rubrica 103 (DSR) será lançada separadamente no final, se o checkbox estiver marcado.
             } else if ("Porcentagem".equals(modalidade)) {
                 // Se a modalidade for Porcentagem, converte o valor inserido para BigDecimal
                 valor = new java.math.BigDecimal(numInserido).setScale(2, java.math.RoundingMode.HALF_UP);
@@ -312,7 +296,7 @@ public class FormLancamentoController {
             if (lancamentoEditado == null) {
                 // Cria um novo lançamento
                 Lancamento l = new Lancamento(0, folhaAtual.getId(), f.getCpf(), r.getCodigo(), quantidade, data, valor,
-                        modalidade, baseCalculo, null, null, null);
+                        modalidade, baseCalculo, null, null);
                 lancamentoRepo.salvar(l);
             } else { // Se não, o lançamento está editado
                 // Atualiza o lançamento
@@ -324,6 +308,14 @@ public class FormLancamentoController {
                 lancamentoEditado.setBaseCalculo(baseCalculo);
                 lancamentoEditado.setDataClt(data);
                 lancamentoRepo.atualizar(lancamentoEditado);
+            }
+            
+            // Verifica se o desconto DSR deve ser lançado como rubrica independente (103)
+            if (chkDescontoDSR.isSelected() && r.getDescricao().toLowerCase().contains("falta")) {
+                // Cria um lançamento separado para a rubrica 103 (DSR)
+                Lancamento lDsr = new Lancamento(0, folhaAtual.getId(), f.getCpf(), 103, 1.0, data, null,
+                        "Quantidade", "Salário Bruto", null, null);
+                lancamentoRepo.salvar(lDsr);
             }
             fecharJanela();
 

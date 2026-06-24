@@ -56,6 +56,11 @@
             <DatePicker fx:id="inputDataAdmissao" promptText="Selecione a data" styleClass="input-field" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
         </HBox>
 
+        <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <Label text="Nº Dependentes:" styleClass="field-label" prefWidth="150"/>
+            <TextField fx:id="inputDependentes" promptText="Ex: 0" styleClass="input-field" HBox.hgrow="ALWAYS"/>
+        </HBox>
+
         <HBox fx:id="boxStatus" alignment="CENTER_LEFT" spacing="10.0" visible="false" managed="false">
             <Label text="Status:" styleClass="field-label" prefWidth="150"/>
             <CheckBox fx:id="checkStatus" text="Funcionário Ativo" selected="true" style="-fx-text-fill: white;"/>

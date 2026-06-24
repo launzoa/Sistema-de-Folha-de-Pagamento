@@ -56,11 +56,13 @@ com/sfp/core/domain/FaixaIRRFRepository.class
 com/sfp/empresa/domain/Empresa.class
 com/sfp/infrastructure/persistence/MySQLFaixaINSSRepository.class
 com/sfp/folha/domain/ConstantesFolha.class
+com/sfp/MigracaoDB.class
 com/sfp/folha/ui/TelaLancamento.class
 com/sfp/empresa/ui/FormEndereco.class
 com/sfp/auditoria/ui/TelaLog$1.class
 com/sfp/rubrica/ui/TelaRubrica$1.class
 com/sfp/core/ui/GerenciadorTema.class
+com/sfp/TesteMesaBug.class
 com/sfp/funcionario/ui/TelaFuncionario.class
 com/sfp/folha/infrastructure/persistence/MySQLFolhaMesRepository.class
 com/sfp/folha/ui/TelaHoleriteController$ItemHolerite.class

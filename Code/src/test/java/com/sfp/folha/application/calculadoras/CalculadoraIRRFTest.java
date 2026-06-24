@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.sfp.funcionario.domain.Funcionario;
+import com.sfp.empresa.domain.Empresa;
 import com.sfp.folha.domain.Holerite;
 import com.sfp.core.domain.FaixaIRRF;
 
@@ -35,8 +36,8 @@ public class CalculadoraIRRFTest {
         // Funcionario ganha 3500.00 e tem 1 dependente.
         // O provento total no holerite sera 3500.00
         Funcionario funcionario = new Funcionario("Fulano", "000", "Cargo", LocalDate.now(), new BigDecimal("3500.00"), true, 1);
-        
-        Holerite holerite = new Holerite(funcionario, new ArrayList<>(), new BigDecimal("3500.00"), BigDecimal.ZERO, BigDecimal.ZERO);
+        Empresa empresa = new Empresa("00.000.000/0001-00", "Test", "test@test.com", "Admin", 30);
+        Holerite holerite = new Holerite(empresa, funcionario, new ArrayList<>(), new BigDecimal("3500.00"), BigDecimal.ZERO, BigDecimal.ZERO);
         holerite.setDescontoINSS(new BigDecimal("300.00")); // INSS deduzido = 300
 
         // Base de Calculo IRRF = 3500.00 - 300.00 (INSS) - 189.59 (Dep) = 3010.41

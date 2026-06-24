@@ -5,7 +5,12 @@ CREATE TABLE IF NOT EXISTS empresa (
     cnpj varchar(18) not null primary key,
     razao_social varchar(120) not null,
     email varchar(120) not null unique,
-    resp_legal varchar(120) not null
+    resp_legal varchar(120) not null,
+    dia_fechamento_ponto int not null default 30,
+    aliquota_fgts decimal(5,2) not null default 0.08,
+    teto_vr decimal(10,2) not null default 500.0,
+    dias_uteis int not null default 22,
+    horas_mes int not null default 220
 );
 
 CREATE TABLE IF NOT EXISTS endereco_empresa (
@@ -61,21 +66,22 @@ CREATE TABLE IF NOT EXISTS rubrica (
     ativo boolean not null default true
 );
 
--- Rubricas padrão
-INSERT IGNORE INTO rubrica VALUES (1,  'Salário Base',          'Provento', 'Fixo',     TRUE,  TRUE,  TRUE, TRUE, TRUE);
-INSERT IGNORE INTO rubrica VALUES (2,  'Hora Extra 50%',        'Provento', 'Variável', TRUE,  TRUE,  TRUE, TRUE, TRUE);
-INSERT IGNORE INTO rubrica VALUES (3,  'Hora Extra 100%',       'Provento', 'Variável', TRUE,  TRUE,  TRUE, TRUE, TRUE);
-INSERT IGNORE INTO rubrica VALUES (4,  'Bônus / Gratificação',  'Provento', 'Variável', TRUE,  TRUE,  FALSE, TRUE, TRUE);
-INSERT IGNORE INTO rubrica VALUES (5,  'Cesta Básica',          'Provento', 'Fixo',     FALSE, FALSE, FALSE, TRUE, TRUE);
-INSERT IGNORE INTO rubrica VALUES (6,  'PLR',                   'Provento', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
-INSERT IGNORE INTO rubrica VALUES (7,  'Adiantamento Salarial', 'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
-INSERT IGNORE INTO rubrica VALUES (8,  'Outros Proventos',      'Provento', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
-INSERT IGNORE INTO rubrica VALUES (101,'Desconto INSS',         'Desconto', 'Fixo',     FALSE, FALSE, FALSE, TRUE, TRUE);
-INSERT IGNORE INTO rubrica VALUES (102,'Desconto por Falta',    'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
-INSERT IGNORE INTO rubrica VALUES (103,'Desconto por Atraso',   'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
-INSERT IGNORE INTO rubrica VALUES (104,'Desconto DSR',          'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
-INSERT IGNORE INTO rubrica VALUES (105,'Desconto Atestado',     'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
-INSERT IGNORE INTO rubrica VALUES (106,'Outros Descontos',      'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
+-- Rubricas padrão (Blindadas)
+INSERT IGNORE INTO rubrica VALUES (1,  'Salário Padrão',        'Provento', 'Fixo',     TRUE,  TRUE,  TRUE, TRUE, TRUE);
+INSERT IGNORE INTO rubrica VALUES (2,  'Horas Extras 50%',      'Provento', 'Variável', TRUE,  TRUE,  TRUE, TRUE, TRUE);
+INSERT IGNORE INTO rubrica VALUES (3,  'Horas Extras 100%',     'Provento', 'Variável', TRUE,  TRUE,  TRUE, TRUE, TRUE);
+INSERT IGNORE INTO rubrica VALUES (4,  'Atraso por hora',       'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
+INSERT IGNORE INTO rubrica VALUES (5,  'Falta por dia',         'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
+
+-- Parâmetros Legais (Blindados)
+INSERT IGNORE INTO rubrica VALUES (100,'Desconto INSS',         'Desconto', 'Fixo',     FALSE, FALSE, FALSE, TRUE, TRUE);
+INSERT IGNORE INTO rubrica VALUES (101,'Desconto IRRF',         'Desconto', 'Fixo',     FALSE, FALSE, FALSE, TRUE, TRUE);
+INSERT IGNORE INTO rubrica VALUES (102,'Recolhimento FGTS',     'Desconto', 'Fixo',     FALSE, FALSE, FALSE, TRUE, TRUE);
+INSERT IGNORE INTO rubrica VALUES (103,'Desconto DSR',          'Desconto', 'Variável', FALSE, FALSE, FALSE, TRUE, TRUE);
+
+-- Benefícios Padrões (Blindados)
+INSERT IGNORE INTO rubrica VALUES (901,'Vale Transporte (VT)',  'Desconto', 'Fixo',     FALSE, FALSE, FALSE, TRUE, TRUE);
+INSERT IGNORE INTO rubrica VALUES (902,'Vale Alimentação (PAT)','Desconto', 'Fixo',     FALSE, FALSE, FALSE, TRUE, TRUE);
 
 CREATE TABLE IF NOT EXISTS folha_mes (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -100,7 +106,6 @@ CREATE TABLE IF NOT EXISTS lancamento (
     -- Campos exclusivos de atestado (requisito 3.1.7.4.4)
     data_inicio     DATE,
     data_fim        DATE,
-    path_pdf        VARCHAR(255),
 
     -- AS TRÊS CHAVES ESTRANGEIRAS QUE SÃO O CORAÇÃO DA TABELA:
     FOREIGN KEY (codigo_rubrica) REFERENCES rubrica(codigo),

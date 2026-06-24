@@ -1,12 +1,12 @@
-/**
- * @brief Classe que armazena os dados do dashboard.
- */
 package com.sfp.core.application;
 
 import java.math.BigDecimal;
 
 import com.sfp.folha.domain.FolhaMes;
 
+/**
+ * @brief Classe que armazena os dados do dashboard.
+ */
 public class DashboardDados {
     private int totalFuncionarios;
     private FolhaMes folhaAtual;

@@ -1,11 +1,10 @@
-/**
- * @brief Classe que representa as faixas de INSS
- */
-
 package com.sfp.core.domain;
 
 import java.math.BigDecimal;
 
+/**
+ * @brief Classe que representa as faixas de INSS
+ */
 public class FaixaINSS {
     private BigDecimal piso;
     private BigDecimal teto;

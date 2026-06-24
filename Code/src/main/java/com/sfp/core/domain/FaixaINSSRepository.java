@@ -1,11 +1,12 @@
-/**
- * @brief Interface responsável por definir as operações de banco de dados para a
- *        classe FaixaINSS.
- */
-
 package com.sfp.core.domain;
 
 import java.util.List;
+
+/**
+ * @brief Interface responsável por definir as operações de banco de dados para
+ *        a
+ *        classe FaixaINSS.
+ */
 
 public interface FaixaINSSRepository {
     /**

@@ -1,10 +1,10 @@
-/**
- * @brief Classe que representa o serviço de auditoria.
- */
 package com.sfp.auditoria.application;
 
 import com.sfp.usuario.domain.Usuario;
 
+/**
+ * @brief Classe que representa o registro do serviço de auditoria
+ */
 public class ServicoAuditoria {
     private static Usuario usuarioAtual = null;
     private static final ControladorAuditoria controlador = new ControladorAuditoria();

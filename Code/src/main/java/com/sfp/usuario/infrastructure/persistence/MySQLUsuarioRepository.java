@@ -14,6 +14,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.security.MessageDigest;
+
 public class MySQLUsuarioRepository implements UsuarioRepository {
 
     /**
@@ -31,7 +33,7 @@ public class MySQLUsuarioRepository implements UsuarioRepository {
                 PreparedStatement ps = con.prepareStatement(sql)) {
             // Insere os parâmetros na query
             ps.setString(1, nome);
-            ps.setString(2, senha);
+            ps.setString(2, criptografarSenha(senha));
             // Executa a query
             ResultSet rs = ps.executeQuery();
             // Se encontrar um usuário, cria o objeto Usuario
@@ -100,7 +102,7 @@ public class MySQLUsuarioRepository implements UsuarioRepository {
                 PreparedStatement ps = conexao.prepareStatement(sql)) {
             // Insere os parâmetros na query
             ps.setString(1, nome);
-            ps.setString(2, senha);
+            ps.setString(2, criptografarSenha(senha));
             ps.setBoolean(3, perfil);
             ps.setBoolean(4, true);
             // Executa a query
@@ -119,16 +121,25 @@ public class MySQLUsuarioRepository implements UsuarioRepository {
      */
     @Override
     public void atualizarUsuario(int id, String nome, String senha, boolean status) {
+        boolean atualizarSenha = (senha != null && !senha.trim().isEmpty());
         // SQL para atualizar usuário
-        String sql = "UPDATE usuario SET nome = ?, senha = ?, status = ? WHERE id = ?";
+        String sql = atualizarSenha 
+            ? "UPDATE usuario SET nome = ?, senha = ?, status = ? WHERE id = ?"
+            : "UPDATE usuario SET nome = ?, status = ? WHERE id = ?";
+            
         // Tenta obter a conexão e preparar a query
         try (Connection conexao = ConexaoBD.getConnection();
                 PreparedStatement ps = conexao.prepareStatement(sql)) {
             // Insere os parâmetros na query
             ps.setString(1, nome);
-            ps.setString(2, senha);
-            ps.setBoolean(3, status);
-            ps.setInt(4, id);
+            if (atualizarSenha) {
+                ps.setString(2, criptografarSenha(senha));
+                ps.setBoolean(3, status);
+                ps.setInt(4, id);
+            } else {
+                ps.setBoolean(2, status);
+                ps.setInt(3, id);
+            }
             // Executa a query
             ps.executeUpdate();
         } catch (Exception e) {
@@ -184,5 +195,29 @@ public class MySQLUsuarioRepository implements UsuarioRepository {
             throw new RuntimeException("Erro ao listar todos os usuários", e);
         }
         return usuarios;
+    }
+
+    /**
+     * @brief Criptografa uma string usando o algoritmo SHA-256.
+     * @param texto String em texto claro.
+     * @return String criptografada em hexadecimal.
+     */
+    private String criptografarSenha(String texto) {
+        if (texto == null)
+            return null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(texto.getBytes("UTF-8"));
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1)
+                    hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao criptografar senha", e);
+        }
     }
 }

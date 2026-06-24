@@ -27,6 +27,10 @@ public class MainController {
     private Label labelTela; // Label que mostra o nome do menu atual
     @FXML
     private Label labelUsuario; // Label que mostra o usuario logado
+    @FXML
+    private Label labelAdmin;
+    @FXML
+    private javafx.scene.layout.VBox vboxAdmin;
 
     /**
      * @brief Método que inicializa a tela principal.
@@ -46,8 +50,16 @@ public class MainController {
         // Define o perfil do usuário
         if (usuario.isPerfil() == true) {
             labelUsuario.setText(usuario.getNome() + " | Administrador");
+            labelAdmin.setVisible(true);
+            labelAdmin.setManaged(true);
+            vboxAdmin.setVisible(true);
+            vboxAdmin.setManaged(true);
         } else {
             labelUsuario.setText(usuario.getNome() + " | Operador");
+            labelAdmin.setVisible(false);
+            labelAdmin.setManaged(false);
+            vboxAdmin.setVisible(false);
+            vboxAdmin.setManaged(false);
         }
     }
 

@@ -1,0 +1,3 @@
+sed -i 's/processador.processar(funcionario, lancamentos, 22);/processador.processar(empresa, funcionario, lancamentos, 22);/g' src/test/java/com/sfp/folha/application/ProcessadorLancamentosVariaveisTest.java
+sed -i 's/public class CalculadoraFGTSTest {/import com.sfp.empresa.domain.Empresa;\n\npublic class CalculadoraFGTSTest {/g' src/test/java/com/sfp/folha/application/calculadoras/CalculadoraFGTSTest.java
+sed -i 's/public class CalculadoraINSSTest {/import com.sfp.empresa.domain.Empresa;\n\npublic class CalculadoraINSSTest {/g' src/test/java/com/sfp/folha/application/calculadoras/CalculadoraINSSTest.java
