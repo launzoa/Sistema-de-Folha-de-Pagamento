@@ -15,11 +15,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CalculadoraIRRFTest {
+class CalculadoraIRRFTest {
 
     @Test
     @DisplayName("Deve calcular corretamente o IRRF considerando deduções e dependentes")
-    public void testCalcularIRRFCorretamente() {
+    void testCalcularIRRFCorretamente() {
         // Tabela Fictícia Simplificada de IRRF
         // Faixa 1: Ate 2259.20 -> Isento
         // Faixa 2: 2259.21 ate 2826.65 -> 7.5% - Deduzir 169.44

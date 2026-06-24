@@ -1,9 +1,7 @@
-/**
- * @brief Classe responsável por exibir a tela de gerenciamento de usuários.
- */
 package com.sfp.usuario.ui;
 
 import java.util.List;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -16,12 +14,17 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 import com.sfp.core.ui.GerenciadorTema;
 import com.sfp.usuario.domain.Usuario;
 import com.sfp.usuario.application.ControladorUsuario;
 
+/**
+ * @brief Classe responsável por exibir a tela de gerenciamento de usuários.
+ */
 public class TelaUsuario {
     @FXML
     private TableView<Usuario> tabelaUsuario; // Tabela que exibe os usuários
@@ -73,7 +76,7 @@ public class TelaUsuario {
         // Adiciona os usuários ao ComboBox
         List<Usuario> usuarios = controladorUsuario.listarUsuarios();
         comboUsuario.getItems().addAll(usuarios);
-        comboUsuario.setConverter(new javafx.util.StringConverter<Usuario>() {
+        comboUsuario.setConverter(new StringConverter<Usuario>() {
             /**
              * @brief Converte um usuário para String.
              */
@@ -167,7 +170,7 @@ public class TelaUsuario {
             stage.setScene(scene);
             stage.setTitle(usuario == null ? "Novo Usuário" : "Editar Usuário");
             // Modal evita cliques na tela de trás enquanto o pop-up está aberto
-            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            stage.initModality(Modality.APPLICATION_MODAL);
             // Trava a execução até fechar o pop-up
             stage.showAndWait();
 
@@ -177,7 +180,7 @@ public class TelaUsuario {
             }
 
         } catch (Exception e) { // Caso ocorra algum erro, exibe uma mensagem
-            e.printStackTrace();
+            Logger.getGlobal().severe(e.getMessage());
         }
     }
 

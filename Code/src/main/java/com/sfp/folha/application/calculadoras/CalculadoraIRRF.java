@@ -1,6 +1,3 @@
-/**
- * @brief Classe responsável por calcular o desconto do IRRF
- */
 package com.sfp.folha.application.calculadoras;
 
 import java.math.BigDecimal;
@@ -11,6 +8,9 @@ import com.sfp.folha.domain.Holerite;
 import com.sfp.core.domain.FaixaIRRF;
 import com.sfp.folha.domain.RegraDeCalculo;
 
+/**
+ * @brief Classe responsável por calcular o desconto do IRRF
+ */
 public class CalculadoraIRRF implements RegraDeCalculo {
 
     private static final BigDecimal DEDUCAO_POR_DEPENDENTE = new BigDecimal("189.59"); // Dedução por dependente
@@ -38,7 +38,7 @@ public class CalculadoraIRRF implements RegraDeCalculo {
     @Override
     public BigDecimal calcular(Holerite holerite) {
         // Pega o salário bruto do funcionário e o número de dependentes
-        BigDecimal salarioBruto = holerite.getFuncionario().getSalarioBruto();
+        BigDecimal salarioBruto = holerite.getTotalProventos();
         BigDecimal numeroDependentes = BigDecimal.valueOf(holerite.getFuncionario().getNumeroDependentes());
         // Pega o desconto do INSS
         BigDecimal descontoINSS = holerite.getDescontoINSS();
@@ -50,7 +50,6 @@ public class CalculadoraIRRF implements RegraDeCalculo {
         BigDecimal baseSimplificada = salarioBruto.subtract(DESCONTO_SIMPLIFICADO);
 
         // Inicia variaveis de desconto
-        boolean flag = false; // Flag para verificar se o desconto foi calculado
         BigDecimal desconto = BigDecimal.ZERO;
         BigDecimal baseCalculo;
 
@@ -66,7 +65,6 @@ public class CalculadoraIRRF implements RegraDeCalculo {
         for (FaixaIRRF faixa : tabelaIRRF) {
             if (faixa.isSalarioNaFaixa(baseCalculo)) {
                 desconto = faixa.calcularDesconto(baseCalculo);
-                flag = true;
                 break;
             }
         }
@@ -83,7 +81,7 @@ public class CalculadoraIRRF implements RegraDeCalculo {
 
         // Arredonda o desconto para 2 casas decimais
         desconto = desconto.setScale(2, RoundingMode.HALF_UP);
-        
+
         // Salva a Transparência Fiscal no Holerite
         holerite.setBaseIRRF(baseCalculo);
         if (baseCalculo.compareTo(BigDecimal.ZERO) > 0) {

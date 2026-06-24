@@ -1,9 +1,3 @@
-/**
- * @brief Classe que gerencia a tela de funcionários.
- * É responsável pela interação entre a View e a lógica de negócio referente a funcionários.
- * O Controller manipula os dados exibidos na View e responde às ações do usuário.
- */
-
 package com.sfp.funcionario.ui;
 
 import com.sfp.core.ui.GerenciadorTema;
@@ -15,6 +9,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,10 +18,18 @@ import com.sfp.funcionario.domain.FuncionarioRepository;
 import com.sfp.funcionario.infrastructure.persistence.MySQLFuncionarioRepository;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableCell;
 
+/**
+ * @brief Classe que gerencia a tela de funcionários.
+ *        É responsável pela interação entre a View e a lógica de negócio
+ *        referente a funcionários.
+ *        O Controller manipula os dados exibidos na View e responde às ações do
+ *        usuário.
+ */
 public class TelaFuncionario {
     @FXML
     private TableView<Funcionario> tabelaFuncionarios; // Tabela que exibe os funcionários
@@ -87,7 +90,7 @@ public class TelaFuncionario {
             ObservableList<Funcionario> obsList = FXCollections.observableArrayList(lista);
             tabelaFuncionarios.setItems(obsList);
         } catch (Exception e) { // Captura erro de execução ao carregar dados
-            System.err.println("Erro ao carregar tabela: " + e.getMessage());
+            java.util.logging.Logger.getGlobal().severe("Erro ao carregar tabela: " + e.getMessage());
         }
     }
 
@@ -109,9 +112,11 @@ public class TelaFuncionario {
             Stage stage = new Stage();
             stage.setTitle("Cadastrar Novo Funcionário");
             stage.setScene(new Scene(root));
-            stage.show(); // Mostra a tela de cadastro
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait(); // Mostra a tela de cadastro
+            carregarDadosBanco(); // Recarrega os dados após fechar
         } catch (Exception e) { // Captura possíveis erros ao abrir a tela de cadastro
-            e.printStackTrace();
+            Logger.getGlobal().severe(e.getMessage());
         }
     }
 
@@ -151,9 +156,11 @@ public class TelaFuncionario {
             // Configura os campos da nova janela
             stage.setTitle("Editar Funcionário");
             stage.setScene(new Scene(root));
-            stage.show();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+            carregarDadosBanco(); // Recarrega os dados após fechar
         } catch (Exception e) { // Captura possíveis erros ao abrir a tela de edição
-            e.printStackTrace();
+            Logger.getGlobal().severe(e.getMessage());
         }
     }
 

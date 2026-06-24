@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ServicoCicloFolhaTest {
+class ServicoCicloFolhaTest {
 
     @Test
     @DisplayName("Deve colocar folha Aberta em Transição se a data fim foi ultrapassada")
-    public void testGerenciarCicloFolhas_AbertaParaTransicao() {
+    void testGerenciarCicloFolhas_AbertaParaTransicao() {
         // Mock manual do ControladorEmpresa
         ControladorEmpresa fakeControlador = new ControladorEmpresa() {
             @Override

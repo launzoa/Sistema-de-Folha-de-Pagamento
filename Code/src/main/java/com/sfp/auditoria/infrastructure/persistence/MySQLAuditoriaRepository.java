@@ -42,7 +42,7 @@ public class MySQLAuditoriaRepository implements AuditoriaRepository {
             // Executa a query.
             ps.executeUpdate();
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao registrar auditoria no Banco de Dados", e);
+            throw new IllegalStateException("Erro ao registrar auditoria no Banco de Dados", e);
         }
     }
 
@@ -87,7 +87,7 @@ public class MySQLAuditoriaRepository implements AuditoriaRepository {
                 lista.add(r); // Adiciona o objeto na lista.
             }
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar registros de auditoria", e);
+            throw new IllegalStateException("Erro ao buscar registros de auditoria", e);
         }
         return lista;
     }

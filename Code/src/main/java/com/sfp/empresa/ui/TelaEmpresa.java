@@ -1,7 +1,6 @@
-/** 
- * @brief Classe controladora da tela de empresas
- */
 package com.sfp.empresa.ui;
+
+import java.util.logging.Logger;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import com.sfp.core.ui.GerenciadorTema;
@@ -23,6 +23,9 @@ import com.sfp.empresa.application.ControladorEmpresa;
 import com.sfp.empresa.domain.Empresa;
 import com.sfp.empresa.domain.EnderecoEmpresa;
 
+/**
+ * @brief Classe controladora da tela de empresas
+ */
 public class TelaEmpresa {
     @FXML
     private Label labelRazaoSocial; // Label da Razao Social da Empresa
@@ -47,7 +50,7 @@ public class TelaEmpresa {
     @FXML
     private TableColumn<EnderecoEmpresa, String> colBairro; // Coluna Bairro
     @FXML
-    private TableColumn<EnderecoEmpresa, String> colComplemento;
+    private TableColumn<EnderecoEmpresa, String> colComplemento; // Coluna Complemento
 
     private ControladorEmpresa controladorEmpresa = new ControladorEmpresa();
     private Empresa empresaAtual = null;
@@ -64,7 +67,6 @@ public class TelaEmpresa {
         colLogradouro.setCellValueFactory(new PropertyValueFactory<>("logradouro"));
         colBairro.setCellValueFactory(new PropertyValueFactory<>("bairro"));
         colComplemento.setCellValueFactory(new PropertyValueFactory<>("complemento"));
-
         carregarEmpresa();
     }
 
@@ -95,7 +97,6 @@ public class TelaEmpresa {
         }
         // Exclui a empresa
         controladorEmpresa.excluirEmpresa(empresaAtual.getCnpj());
-        ServicoAuditoria.registrar("Exclusão", "Empresa", "CNPJ:" + empresaAtual.getCnpj());
         carregarEmpresa();
         limparDadosEmpresa();
     }
@@ -244,7 +245,7 @@ public class TelaEmpresa {
             }
 
         } catch (Exception e) { // Captura exceções e as imprime
-            e.printStackTrace();
+            Logger.getGlobal().severe(e.getMessage());
         }
     }
 
@@ -275,7 +276,7 @@ public class TelaEmpresa {
             // Define a cena no palco e configura o título e a modalidade
             stage.setScene(scene);
             stage.setTitle(endereco == null ? "Novo Endereço" : "Editar Endereço");
-            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            stage.initModality(Modality.APPLICATION_MODAL);
             // Mostra o formulario e espera até que ele seja fechado
             stage.showAndWait();
 
@@ -285,7 +286,7 @@ public class TelaEmpresa {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.getGlobal().severe(e.getMessage());
         }
     }
 

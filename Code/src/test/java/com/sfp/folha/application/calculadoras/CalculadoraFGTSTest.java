@@ -13,11 +13,11 @@ import java.util.ArrayList;
 
 import com.sfp.empresa.domain.Empresa;
 
-public class CalculadoraFGTSTest {
+class CalculadoraFGTSTest {
 
     @Test
     @DisplayName("Deve calcular o FGTS como 8% sobre a base de cálculo de proventos")
-    public void testCalcularFGTSCorretamente() {
+    void testCalcularFGTSCorretamente() {
         CalculadoraFGTS calculadora = new CalculadoraFGTS();
         Funcionario funcionario = new Funcionario("Fulano", "000", "Cargo", LocalDate.now(), new BigDecimal("3000.00"), true, 1);
         

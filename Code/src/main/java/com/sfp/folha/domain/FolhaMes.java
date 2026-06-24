@@ -1,10 +1,10 @@
-/**
- * @brief Classe que representa uma folha de pagamento para um mês específico
- */
 package com.sfp.folha.domain;
 
 import java.time.LocalDate;
 
+/**
+ * @brief Classe que representa uma folha de pagamento para um mês específico
+ */
 public class FolhaMes {
     private int id;
     private String competencia; // Ex: "06/2026"

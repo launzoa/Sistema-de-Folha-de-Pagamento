@@ -1,8 +1,3 @@
-/**
- * @brief: Controller para a janela de cadastro de funcionários.
- * É responsável por interagir com a view e com o repositório de funcionários.
- */
-
 package com.sfp.funcionario.ui;
 
 import java.math.BigDecimal;
@@ -21,6 +16,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
 
+/**
+ * @brief: Controller para a janela de cadastro de funcionários.
+ *         É responsável por interagir com a view e com o repositório de
+ *         funcionários.
+ */
 public class CadastroFuncionarioController {
     @FXML
     private TextField inputNome; // Campo de texto para o nome do funcionário
@@ -84,8 +84,43 @@ public class CadastroFuncionarioController {
             return;
         }
 
-        // Validação Algorítmica do CPF (Requisito 3.1.3.2)
-        if (!isCpfValido(cpf)) {
+        // Validação Algorítmica do CPF
+        boolean cpfValido = false;
+        if (cpf != null && !cpf.trim().isEmpty()) { // Se o cpf não estiver vazio
+            String cpfLimpo = cpf.replaceAll("\\D", ""); // Remove caracteres não numéricos
+            if (cpfLimpo.length() == 11 && cpfLimpo.chars().distinct().count() > 1) { // Se o cpf tiver 11 dígitos e
+                                                                                      // não for uma sequência de
+                                                                                      // números iguais
+                try {
+                    int sm = 0; // Soma dos produtos
+                    int peso = 10; // Peso para o cálculo
+                    for (int i = 0; i < 9; i++) { // Para os 9 primeiros dígitos
+                        int num = (cpfLimpo.charAt(i) - 48); // Pega o valor do dígito
+                        sm = sm + (num * peso); // Multiplica pelo peso
+                        peso = peso - 1; // Decrementa o peso
+                    }
+                    int r = 11 - (sm % 11); // Calcula o resto da divisão
+                    char dig10 = (r == 10 || r == 11) ? '0' : (char) (r + 48); // Pega o primeiro dígito verificador
+
+                    sm = 0; // Soma dos produtos
+                    peso = 11; // Peso para o cálculo
+                    for (int i = 0; i < 10; i++) { // Para os 10 primeiros dígitos
+                        int num = (cpfLimpo.charAt(i) - 48); // Pega o valor do dígito
+                        sm = sm + (num * peso); // Multiplica pelo peso
+                        peso = peso - 1; // Decrementa o peso
+                    }
+                    r = 11 - (sm % 11);
+                    char dig11 = (r == 10 || r == 11) ? '0' : (char) (r + 48);
+
+                    cpfValido = (dig10 == cpfLimpo.charAt(9)) && (dig11 == cpfLimpo.charAt(10)); // Se os dígitos
+                                                                                                 // verificadores
+                                                                                                 // estiverem corretos
+                } catch (Exception ignored) {
+                }
+            }
+        }
+
+        if (!cpfValido) { // Se o cpf for inválido
             labelMensagem.setText("O CPF informado é matematicamente inválido!");
             labelMensagem.setStyle("-fx-text-fill: red;");
             return;
@@ -97,7 +132,8 @@ public class CadastroFuncionarioController {
 
             // Validação de Salário Mínimo (2026)
             if (salarioBruto.compareTo(ConstantesFolha.SALARIO_MINIMO) < 0) {
-                labelMensagem.setText(String.format("Operação Bloqueada: Salário inferior ao Piso Vigente (R$ %.2f).", ConstantesFolha.SALARIO_MINIMO));
+                labelMensagem.setText(String.format("Operação Bloqueada: Salário inferior ao Piso Vigente (R$ %.2f).",
+                        ConstantesFolha.SALARIO_MINIMO));
                 labelMensagem.setStyle("-fx-text-fill: red;");
                 return;
             }
@@ -109,7 +145,8 @@ public class CadastroFuncionarioController {
 
             // Cria um objeto Funcionario
             boolean ativo = modoEdicao ? checkStatus.isSelected() : true;
-            Funcionario funcionario = new Funcionario(nome, cpf, cargo, dataAdmissao, salarioBruto, ativo, numeroDependentes);
+            Funcionario funcionario = new Funcionario(nome, cpf, cargo, dataAdmissao, salarioBruto, ativo,
+                    numeroDependentes);
 
             if (modoEdicao) { // Se estiver em modo de edição, atualiza o funcionário
                 controladorFuncionario.atualizarFuncionario(funcionario);
@@ -126,9 +163,9 @@ public class CadastroFuncionarioController {
             labelMensagem.setStyle("-fx-text-fill: red;");
         } catch (Exception e) { // Lança erro se houver outro erro
             String msgErro = e.getMessage();
-            // Verifica se a causa raiz do erro foi a trava UNIQUE do banco (Requisito
-            // 3.1.3.3)
-            if (e.getCause() != null && e.getCause().getMessage().toLowerCase().contains("duplicate entry")) {
+            // Verifica se a causa raiz do erro foi a trava UNIQUE do banco
+            if (e.getCause() != null && e.getCause().getMessage() != null
+                    && e.getCause().getMessage().toLowerCase().contains("duplicate entry")) {
                 msgErro = "Clonagem Funcional (CPF Duplicado). Inserção Abortada!";
             }
             labelMensagem.setText("Erro: " + msgErro);
@@ -136,57 +173,4 @@ public class CadastroFuncionarioController {
         }
     }
 
-    /**
-     * @brief Valida o algoritmo de um CPF (Módulo 11)
-     * @param cpf CPF a ser validado
-     * @return true se o CPF for válido, false caso contrário
-     */
-    private boolean isCpfValido(String cpf) {
-        if (cpf == null || cpf.trim().isEmpty()) {
-            return false;
-        }
-
-        // Remove caracteres não numéricos
-        cpf = cpf.replaceAll("\\D", "");
-
-        // Verifica se tem 11 dígitos
-        if (cpf.length() != 11) {
-            return false;
-        }
-
-        // Verifica se todos os dígitos são iguais (ex: 11111111111), o que é inválido apesar de passar no algoritmo
-        if (cpf.matches("(\\d)\\1{10}")) {
-            return false;
-        }
-
-        try {
-            // Cálculo do 1º Dígito Verificador
-            int sm = 0;
-            int peso = 10;
-            for (int i = 0; i < 9; i++) {
-                int num = (cpf.charAt(i) - 48);
-                sm = sm + (num * peso);
-                peso = peso - 1;
-            }
-            int r = 11 - (sm % 11);
-            char dig10 = (r == 10 || r == 11) ? '0' : (char) (r + 48);
-
-            // Cálculo do 2º Dígito Verificador
-            sm = 0;
-            peso = 11;
-            for (int i = 0; i < 10; i++) {
-                int num = (cpf.charAt(i) - 48);
-                sm = sm + (num * peso);
-                peso = peso - 1;
-            }
-            r = 11 - (sm % 11);
-            char dig11 = (r == 10 || r == 11) ? '0' : (char) (r + 48);
-
-            // Verifica se os dígitos calculados conferem com os passados
-            return (dig10 == cpf.charAt(9)) && (dig11 == cpf.charAt(10));
-        } catch (InputMismatchException e) {
-            return false;
-        }
-    }
 }
-

@@ -1,7 +1,3 @@
-/**
- * @brief classe que representa o controller de empresa
- * Ela faz a interface com o catálogo de empresa
- */
 package com.sfp.empresa.application;
 
 import com.sfp.empresa.domain.Empresa;
@@ -11,6 +7,10 @@ import com.sfp.empresa.infrastructure.persistence.MySQLEmpresaRepository;
 import com.sfp.auditoria.application.ServicoAuditoria;
 import java.util.List;
 
+/**
+ * @brief classe que representa o controller de empresa
+ *        Ela faz a interface com o catálogo de empresa
+ */
 public class ControladorEmpresa {
      private EmpresaRepository empresaRepository = new MySQLEmpresaRepository();
 

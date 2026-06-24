@@ -1,6 +1,3 @@
-/**
- * @brief Implementação da interface FaixaIRRFRepository utilizando MySQL
- */
 package com.sfp.infrastructure.persistence;
 
 import java.sql.Connection;
@@ -13,6 +10,9 @@ import com.sfp.core.database.ConexaoBD;
 import com.sfp.core.domain.FaixaIRRF;
 import com.sfp.core.domain.FaixaIRRFRepository;
 
+/**
+ * @brief Implementação da interface FaixaIRRFRepository utilizando MySQL
+ */
 public class MySQLFaixaIRRFRepository implements FaixaIRRFRepository {
 
     /**
@@ -37,11 +37,11 @@ public class MySQLFaixaIRRFRepository implements FaixaIRRFRepository {
                         rs.getBigDecimal("piso"),
                         rs.getBigDecimal("teto"),
                         rs.getBigDecimal("aliquota"),
-                        rs.getBigDecimal("parcela_a_deduzir"));
+                        rs.getBigDecimal("parcela_deduzir"));
                 faixas.add(f);
             }
         } catch (Exception e) { // Em caso de erro, lança uma exceção
-            throw new RuntimeException("Erro ao buscar faixas de IRRF no Banco de Dados", e);
+            throw new IllegalStateException("Erro ao buscar faixas de IRRF no Banco de Dados", e);
         }
         return faixas; // Retorna a lista de faixas
     }
@@ -56,7 +56,7 @@ public class MySQLFaixaIRRFRepository implements FaixaIRRFRepository {
         String sql = "UPDATE faixa_irrf SET piso = ?, teto = ?, aliquota = ?, parcela_deduzir = ? WHERE piso = ? AND teto = ?";
         // Conexão com banco de dados e preparação do statement
         try (Connection conn = com.sfp.core.database.ConexaoBD.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
             // Setando os valores
             pstmt.setBigDecimal(1, nova.getPiso());
             pstmt.setBigDecimal(2, nova.getTeto());
@@ -67,7 +67,7 @@ public class MySQLFaixaIRRFRepository implements FaixaIRRFRepository {
             // Execução da query
             pstmt.executeUpdate();
         } catch (Exception e) { // Em caso de erro, lança uma exceção
-            throw new RuntimeException("Erro ao atualizar Faixa IRRF", e);
+            throw new IllegalStateException("Erro ao atualizar Faixa IRRF", e);
         }
     }
 }

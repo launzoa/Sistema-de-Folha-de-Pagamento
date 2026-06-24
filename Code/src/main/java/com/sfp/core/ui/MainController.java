@@ -1,11 +1,3 @@
-/**
- * @brief Arquivo responsável pelo controller da tela principal.
- *        Ele é o controlador do arquivo FXML da tela principal (MainView.fxml).
- *        Contém os métodos que abrem as telas de acordo com o menu.
- *        Ele opera no estilo Single Page Application (SPA). Em vez de abrir novas janelas (Stages),
- *        ele carrega as telas dentro do painel de conteúdo central (AnchorPane).
- */
-
 package com.sfp.core.ui;
 
 import javafx.fxml.FXML;
@@ -15,11 +7,23 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+
+import java.util.logging.Logger;
 
 import com.sfp.auditoria.application.ServicoAuditoria;
 import com.sfp.usuario.domain.Usuario;
 
-// @brief Classe responsável por gerenciar a tela principal.
+/**
+ * @brief Arquivo responsável pelo controller da tela principal.
+ *        Ele é o controlador do arquivo FXML da tela principal (MainView.fxml).
+ *        Contém os métodos que abrem as telas de acordo com o menu.
+ *        Ele opera no estilo Single Page Application (SPA). Em vez de abrir
+ *        novas janelas (Stages),
+ *        ele carrega as telas dentro do painel de conteúdo central
+ *        (AnchorPane).
+ */
+
 public class MainController {
     @FXML
     private AnchorPane painelConteudo; // Area da tela principal onde será carregado os menus
@@ -28,9 +32,9 @@ public class MainController {
     @FXML
     private Label labelUsuario; // Label que mostra o usuario logado
     @FXML
-    private Label labelAdmin;
+    private Label labelAdmin; // Label que mostra se o usuario é administrador
     @FXML
-    private javafx.scene.layout.VBox vboxAdmin;
+    private VBox vboxAdmin; // VBox que contém os elementos da administração
 
     /**
      * @brief Método que inicializa a tela principal.
@@ -127,6 +131,11 @@ public class MainController {
         navegarPara("Log de Auditoria", "/com/sfp/auditoria/ui/TelaLog.fxml");
     }
 
+    /**
+     * @brief Método que navega para a tela desejada.
+     * @param titulo Título da tela
+     * @param fxml   FXML da tela
+     */
     private void navegarPara(String titulo, String fxml) {
         labelTela.setText(titulo);
         carregarTela(fxml);
@@ -147,7 +156,7 @@ public class MainController {
             AnchorPane.setLeftAnchor(tela, 0.0);
             AnchorPane.setRightAnchor(tela, 0.0);
         } catch (Exception e) { // Em caso de erro
-            e.printStackTrace();
+            Logger.getGlobal().severe(e.getMessage());
         }
 
     }
@@ -173,7 +182,7 @@ public class MainController {
             stage.setScene(scene);
             stage.setTitle("Sistema de Folha de Pagamento - SFP");
         } catch (Exception e) { // Em caso de erro...
-            e.printStackTrace();
+            Logger.getGlobal().severe(e.getMessage());
         }
     }
 
@@ -197,7 +206,7 @@ public class MainController {
                 rootNode.getStyleClass().removeAll("dark-mode");
             }
         } catch (Exception e) { // Em caso de erro...
-            e.printStackTrace();
+            Logger.getGlobal().severe(e.getMessage());
         }
     }
 }

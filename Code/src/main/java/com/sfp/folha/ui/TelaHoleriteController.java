@@ -1,8 +1,3 @@
-/**
- * @brief Controller da tela principal de Processamento e Visualização Eletrônica de Holerites.
- * Executa o processamento dinâmico em RAM baseando-se nos lançamentos do banco.
- * Realiza a exportação final dos arquivos PDF.
- */
 package com.sfp.folha.ui;
 
 import javafx.fxml.FXML;
@@ -10,6 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.StringConverter;
@@ -22,6 +18,7 @@ import javafx.stage.Stage;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.io.File;
 
@@ -34,7 +31,6 @@ import com.sfp.folha.application.calculadoras.*;
 import com.sfp.folha.domain.FolhaMes;
 import com.sfp.folha.domain.Holerite;
 import com.sfp.folha.domain.Lancamento;
-import com.sfp.folha.domain.FolhaMesRepository;
 import com.sfp.folha.domain.LancamentoRepository;
 import com.sfp.folha.infrastructure.persistence.*;
 import com.sfp.funcionario.domain.Funcionario;
@@ -50,6 +46,13 @@ import com.sfp.rubrica.infrastructure.persistence.MySQLRubricaRepository;
 import com.sfp.empresa.domain.Empresa;
 import com.sfp.empresa.application.ControladorEmpresa;
 
+/**
+ * @brief Controller da tela principal de Processamento e Visualização
+ *        Eletrônica de Holerites.
+ *        Executa o processamento dinâmico em RAM baseando-se nos lançamentos do
+ *        banco.
+ *        Realiza a exportação final dos arquivos PDF.
+ */
 public class TelaHoleriteController {
 
     /** @brief Classe auxiliar para exibir na tabela de preview */
@@ -180,6 +183,12 @@ public class TelaHoleriteController {
     private Empresa empresaConfigurada;
     private Map<Integer, Rubrica> mapaRubricas;
 
+    private BigDecimal somaBaseGeral = BigDecimal.ZERO;
+    private BigDecimal somaProvGeral = BigDecimal.ZERO;
+    private BigDecimal somaDescGeral = BigDecimal.ZERO;
+    private BigDecimal somaLiqGeral = BigDecimal.ZERO;
+    private BigDecimal somaFGTSGeral = BigDecimal.ZERO;
+
     /**
      * @brief Método responsável por inicializar a tela de holerites. Responsável
      *        por
@@ -192,9 +201,9 @@ public class TelaHoleriteController {
     public void initialize() {
         try {
             // Configuração das colunas da tabela de holerites
-            colNome.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
+            colNome.setCellValueFactory(cellData -> new SimpleStringProperty(
                     cellData.getValue().getFuncionario().getNome()));
-            colCargo.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
+            colCargo.setCellValueFactory(cellData -> new SimpleStringProperty(
                     cellData.getValue().getFuncionario().getCargo()));
             colLiquido.setCellValueFactory(new PropertyValueFactory<>("salarioLiquido"));
             // Configuração das colunas da tabela de rubricas
@@ -240,7 +249,7 @@ public class TelaHoleriteController {
 
         } catch (Exception e) { // Captura exceções e imprime o stack trace
             mostrarAlerta("Erro Crítico na UI", "Falha ao inicializar a tela de Holerites: " + e.getMessage());
-            System.err.println("Erro na inicialização de TelaHolerite: " + e.getMessage());
+            java.util.logging.Logger.getGlobal().severe("Erro na inicialização de TelaHolerite: " + e.getMessage());
         }
     }
 
@@ -336,10 +345,11 @@ public class TelaHoleriteController {
             // Busca os lançamentos do funcionário
             List<Lancamento> lancamentos = lancamentoRepository.buscarPorFolhaEFuncionario(folhaAtual.getId(),
                     f.getCpf());
-            // Garante uma empresa mínima para não quebrar o motor matemático caso o banco esteja corrompido
+            // Garante uma empresa mínima para não quebrar o motor matemático caso o banco
+            // esteja corrompido
             Empresa empresaSegura = empresaConfigurada != null ? empresaConfigurada
-                : new Empresa("N/A", "Não Cadastrada", "N/A", "N/A", 30);
-                
+                    : new Empresa("N/A", "Não Cadastrada", "N/A", "N/A", 30);
+
             // Processa o holerite repassando a entidade Empresa
             Holerite h = processador.processar(empresaSegura, f, lancamentos, folhaAtual.getDiasUteis());
             // Adiciona o holerite na tabela
@@ -359,6 +369,12 @@ public class TelaHoleriteController {
                     somaFGTS = somaFGTS.add(h.getValorFGTS());
             }
         }
+        // Setando os valores gerais
+        this.somaBaseGeral = somaBase;
+        this.somaProvGeral = somaProv;
+        this.somaDescGeral = somaDesc;
+        this.somaLiqGeral = somaLiq;
+        this.somaFGTSGeral = somaFGTS;
 
         tabelaHolerites.setItems(holeritesData); // Define os dados da tabela
         // Seleciona o primeiro holerite
@@ -472,12 +488,13 @@ public class TelaHoleriteController {
                 // Cria o gerador de PDF
                 GeradorHoleritePDF gerador = new GeradorHoleritePDF();
                 // Gera o PDF
-                gerador.gerarPdf(h, folhaAtual.getCompetencia(), dir.getAbsolutePath(), mapaRubricas, empresaConfigurada);
+                gerador.gerarPdf(h, folhaAtual.getCompetencia(), dir.getAbsolutePath(), mapaRubricas,
+                        empresaConfigurada);
                 // Mostra a mensagem
                 mostrarMensagem("Sucesso", "Holerite de " + h.getFuncionario().getNome() + " exportado com sucesso!");
             } catch (Exception e) {
                 mostrarAlerta("Erro na Exportação", "Não foi possível gerar o holerite PDF: " + e.getMessage());
-                System.err.println("Erro na geração PDF do Holerite: " + e.getMessage());
+                java.util.logging.Logger.getGlobal().severe("Erro na geração PDF do Holerite: " + e.getMessage());
             }
         }
     }
@@ -506,13 +523,14 @@ public class TelaHoleriteController {
                 // Itera sobre todos os holerites
                 for (Holerite h : holeritesData) {
                     // Gera o PDF
-                    gerador.gerarPdf(h, folhaAtual.getCompetencia(), dir.getAbsolutePath(), mapaRubricas, empresaConfigurada);
+                    gerador.gerarPdf(h, folhaAtual.getCompetencia(), dir.getAbsolutePath(), mapaRubricas,
+                            empresaConfigurada);
                 }
                 // Mostra a mensagem
                 mostrarMensagem("Sucesso", "Todos os " + holeritesData.size() + " holerites exportados com sucesso!");
             } catch (Exception e) {
                 mostrarAlerta("Erro na Exportação", "Não foi possível gerar o lote de PDFs: " + e.getMessage());
-                System.err.println("Erro na geração em lote dos PDFs: " + e.getMessage());
+                Logger.getGlobal().severe("Erro na geração em lote dos PDFs: " + e.getMessage());
             }
         }
     }
@@ -539,12 +557,18 @@ public class TelaHoleriteController {
                 // Cria o gerador de PDF
                 GeradorRelatorioGeralPDF gerador = new GeradorRelatorioGeralPDF();
                 // Gera o PDF
-                gerador.gerarPdf(holeritesData, folhaAtual.getCompetencia(), dir.getAbsolutePath(), "", "", "", "", "", empresaConfigurada);
+                gerador.gerarPdf(holeritesData, folhaAtual.getCompetencia(), dir.getAbsolutePath(),
+                        String.format("R$ %.2f", somaBaseGeral),
+                        String.format("R$ %.2f", somaProvGeral),
+                        String.format("R$ %.2f", somaDescGeral),
+                        String.format("R$ %.2f", somaLiqGeral),
+                        String.format("R$ %.2f", somaFGTSGeral),
+                        empresaConfigurada);
                 // Mostra a mensagem
                 mostrarMensagem("Sucesso", "Relatório Geral exportado com sucesso!");
             } catch (Exception e) {
                 mostrarAlerta("Erro na Exportação", "Falha ao gerar o Relatório Geral: " + e.getMessage());
-                System.err.println("Erro na geração do Relatório Geral PDF: " + e.getMessage());
+                Logger.getGlobal().severe("Erro na geração do Relatório Geral PDF: " + e.getMessage());
             }
         }
     }

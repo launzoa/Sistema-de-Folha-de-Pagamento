@@ -48,7 +48,7 @@ public class MySQLUsuarioRepository implements UsuarioRepository {
                 return user;
             }
         } catch (Exception ex) {
-            throw new RuntimeException("Erro ao buscar usuário e senha no Banco de Dados", ex);
+            throw new IllegalStateException("Erro ao buscar usuário e senha no Banco de Dados", ex);
         }
         return null;
     }
@@ -82,7 +82,7 @@ public class MySQLUsuarioRepository implements UsuarioRepository {
                 usuarios.add(user);
             }
         } catch (Exception ex) {
-            throw new RuntimeException("Erro ao buscar usuários pelo nome", ex);
+            throw new IllegalStateException("Erro ao buscar usuários pelo nome", ex);
         }
         return usuarios;
     }
@@ -108,7 +108,7 @@ public class MySQLUsuarioRepository implements UsuarioRepository {
             // Executa a query
             ps.executeUpdate();
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao cadastrar novo usuário", e);
+            throw new IllegalStateException("Erro ao cadastrar novo usuário", e);
         }
     }
 
@@ -143,7 +143,7 @@ public class MySQLUsuarioRepository implements UsuarioRepository {
             // Executa a query
             ps.executeUpdate();
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao atualizar usuário", e);
+            throw new IllegalStateException("Erro ao atualizar usuário", e);
         }
     }
 
@@ -163,7 +163,7 @@ public class MySQLUsuarioRepository implements UsuarioRepository {
             // Executa a query
             ps.executeUpdate();
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao desativar usuário", e);
+            throw new IllegalStateException("Erro ao desativar usuário", e);
         }
     }
 
@@ -192,7 +192,7 @@ public class MySQLUsuarioRepository implements UsuarioRepository {
                 usuarios.add(usuario);
             }
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao listar todos os usuários", e);
+            throw new IllegalStateException("Erro ao listar todos os usuários", e);
         }
         return usuarios;
     }
@@ -217,7 +217,7 @@ public class MySQLUsuarioRepository implements UsuarioRepository {
             }
             return hexString.toString();
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao criptografar senha", e);
+            throw new IllegalStateException("Erro ao criptografar senha", e);
         }
     }
 }

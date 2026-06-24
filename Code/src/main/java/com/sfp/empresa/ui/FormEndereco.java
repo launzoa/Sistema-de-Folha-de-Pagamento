@@ -1,6 +1,3 @@
-/**
- * @brief Classe que representa o formulario de endereço de empresa
- */
 package com.sfp.empresa.ui;
 
 import javafx.fxml.FXML;
@@ -13,6 +10,9 @@ import com.sfp.auditoria.application.ServicoAuditoria;
 import com.sfp.empresa.domain.EnderecoEmpresa;
 import com.sfp.empresa.application.ControladorEmpresa;
 
+/**
+ * @brief Classe que representa o formulario de endereço de empresa
+ */
 public class FormEndereco {
     @FXML
     private Label labelTitulo; // Título do formulario

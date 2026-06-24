@@ -1,8 +1,8 @@
+package com.sfp.empresa.domain;
+
 /**
  * @brief classe que representa um endereço de uma empresa
  */
-package com.sfp.empresa.domain;
-
 public class EnderecoEmpresa {
     private int id;
     private String cnpjEmpresa;

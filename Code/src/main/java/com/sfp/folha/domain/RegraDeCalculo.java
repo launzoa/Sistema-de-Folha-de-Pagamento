@@ -1,9 +1,10 @@
-/**
- * @brief Interface que representa uma regra de cálculo
- */
 package com.sfp.folha.domain;
 
 import java.math.BigDecimal;
+
+/**
+ * @brief Interface que representa uma regra de cálculo
+ */
 
 public interface RegraDeCalculo {
     /**

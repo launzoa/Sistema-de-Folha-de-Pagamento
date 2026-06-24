@@ -1,7 +1,3 @@
-/**
- * @brief Classe responsável por controlar a interface de logs.
- * 
- */
 package com.sfp.auditoria.ui;
 
 import java.time.LocalDate;
@@ -20,6 +16,9 @@ import com.sfp.auditoria.domain.RegistroAuditoria;
 import com.sfp.usuario.domain.Usuario;
 import com.sfp.usuario.application.ControladorUsuario;
 
+/**
+ * @brief Classe responsável por controlar a interface de logs.
+ */
 public class TelaLog {
     @FXML
     private ComboBox<Usuario> comboUsuario; // ComboBox para selecionar o usuário

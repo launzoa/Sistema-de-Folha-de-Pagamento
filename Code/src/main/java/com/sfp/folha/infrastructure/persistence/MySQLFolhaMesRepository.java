@@ -1,12 +1,12 @@
-/**
- * @brief Classe que implementa a interface FolhaMesRepository para MySQL
- */
 package com.sfp.folha.infrastructure.persistence;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,9 @@ import com.sfp.folha.domain.FolhaMes;
 import com.sfp.core.database.ConexaoBD;
 import com.sfp.folha.domain.FolhaMesRepository;
 
+/**
+ * @brief Classe que implementa a interface FolhaMesRepository para MySQL
+ */
 public class MySQLFolhaMesRepository implements FolhaMesRepository {
 
     /**
@@ -35,18 +38,18 @@ public class MySQLFolhaMesRepository implements FolhaMesRepository {
                 pstmt.setString(3, folha.getStatus());
                 // Validação para datas
                 if (folha.getDataInicio() != null)
-                    pstmt.setDate(4, java.sql.Date.valueOf(folha.getDataInicio()));
+                    pstmt.setDate(4, Date.valueOf(folha.getDataInicio()));
                 else
-                    pstmt.setNull(4, java.sql.Types.DATE);
+                    pstmt.setNull(4, Types.DATE);
                 if (folha.getDataFim() != null)
-                    pstmt.setDate(5, java.sql.Date.valueOf(folha.getDataFim()));
+                    pstmt.setDate(5, Date.valueOf(folha.getDataFim()));
                 else
-                    pstmt.setNull(5, java.sql.Types.DATE);
+                    pstmt.setNull(5, Types.DATE);
                 pstmt.setInt(6, folha.getId());
                 // Executa o statement
                 pstmt.executeUpdate();
             } catch (Exception e) { // Captura qualquer exceção que possa ocorrer
-                throw new RuntimeException("Erro ao atualizar folha de mês no Banco de Dados", e);
+                throw new IllegalStateException("Erro ao atualizar folha de mês no Banco de Dados", e);
             }
         } else { // Se a folha não existir, insere uma nova
             // SQL para inserir uma nova folha
@@ -60,17 +63,17 @@ public class MySQLFolhaMesRepository implements FolhaMesRepository {
                 pstmt.setString(3, folha.getStatus());
                 // Validação para datas
                 if (folha.getDataInicio() != null)
-                    pstmt.setDate(4, java.sql.Date.valueOf(folha.getDataInicio()));
+                    pstmt.setDate(4, Date.valueOf(folha.getDataInicio()));
                 else
-                    pstmt.setNull(4, java.sql.Types.DATE);
+                    pstmt.setNull(4, Types.DATE);
                 if (folha.getDataFim() != null)
-                    pstmt.setDate(5, java.sql.Date.valueOf(folha.getDataFim()));
+                    pstmt.setDate(5, Date.valueOf(folha.getDataFim()));
                 else
-                    pstmt.setNull(5, java.sql.Types.DATE);
+                    pstmt.setNull(5, Types.DATE);
                 // Executa o statement
                 pstmt.executeUpdate();
             } catch (Exception e) { // Captura qualquer exceção que possa ocorrer
-                throw new RuntimeException("Erro ao inserir nova folha de mês no Banco de Dados", e);
+                throw new IllegalStateException("Erro ao inserir nova folha de mês no Banco de Dados", e);
             }
         }
     }
@@ -96,7 +99,7 @@ public class MySQLFolhaMesRepository implements FolhaMesRepository {
                 return mapearResultSetParaFolha(rs);
             }
         } catch (Exception e) { // Captura qualquer exceção que possa ocorrer
-            throw new RuntimeException("Erro ao buscar folha por competência", e);
+            throw new IllegalStateException("Erro ao buscar folha por competência", e);
         }
         return null;
     }
@@ -122,7 +125,7 @@ public class MySQLFolhaMesRepository implements FolhaMesRepository {
             return folhas; // Retorna a lista
 
         } catch (Exception e) { // Captura qualquer exceção que possa ocorrer
-            throw new RuntimeException("Erro ao buscar todas as folhas de mês", e);
+            throw new IllegalStateException("Erro ao buscar todas as folhas de mês", e);
         }
     }
 
@@ -144,21 +147,21 @@ public class MySQLFolhaMesRepository implements FolhaMesRepository {
             // Executa o statement
             pstmt.executeUpdate();
         } catch (Exception e) { // Captura qualquer exceção que possa ocorrer
-            throw new RuntimeException("Erro ao atualizar status da folha", e);
+            throw new IllegalStateException("Erro ao atualizar status da folha", e);
         }
     }
 
     @Override
-    public void atualizarDatas(int id, java.time.LocalDate inicio, java.time.LocalDate fim) {
+    public void atualizarDatas(int id, LocalDate inicio, LocalDate fim) {
         String sql = "UPDATE folha_mes SET data_inicio = ?, data_fim = ? WHERE id = ?";
         try (Connection conn = ConexaoBD.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setDate(1, inicio != null ? java.sql.Date.valueOf(inicio) : null);
-            pstmt.setDate(2, fim != null ? java.sql.Date.valueOf(fim) : null);
+            pstmt.setDate(1, inicio != null ? Date.valueOf(inicio) : null);
+            pstmt.setDate(2, fim != null ? Date.valueOf(fim) : null);
             pstmt.setInt(3, id);
             pstmt.executeUpdate();
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao atualizar datas da folha", e);
+            throw new IllegalStateException("Erro ao atualizar datas da folha", e);
         }
     }
 
@@ -176,7 +179,7 @@ public class MySQLFolhaMesRepository implements FolhaMesRepository {
                 return mapearResultSetParaFolha(rs);
             }
         } catch (Exception e) { // Captura qualquer exceção que possa ocorrer
-            throw new RuntimeException("Erro ao buscar folha aberta", e);
+            throw new IllegalStateException("Erro ao buscar folha aberta", e);
         }
         return null; // Retorna null se nenhuma folha aberta for encontrada
     }
@@ -195,7 +198,7 @@ public class MySQLFolhaMesRepository implements FolhaMesRepository {
             }
             return folhas;
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar folhas ativas", e);
+            throw new IllegalStateException("Erro ao buscar folhas ativas", e);
         }
     }
 
@@ -204,13 +207,15 @@ public class MySQLFolhaMesRepository implements FolhaMesRepository {
      */
     public void excluirTodasFolhas() {
         // Conexão com o banco de dados
-        try (Connection conn = ConexaoBD.getConnection()) {
+        try (Connection conn = ConexaoBD.getConnection();
+                Statement stmtLancamento = conn.createStatement();
+                Statement stmtFolha = conn.createStatement()) {
             // Deleta todos os lançamentos
-            conn.createStatement().executeUpdate("DELETE FROM lancamento");
+            stmtLancamento.executeUpdate("DELETE FROM lancamento");
             // Deleta todas as folhas
-            conn.createStatement().executeUpdate("DELETE FROM folha_mes");
+            stmtFolha.executeUpdate("DELETE FROM folha_mes");
         } catch (Exception e) { // Captura qualquer exceção que possa ocorrer
-            throw new RuntimeException("Erro ao excluir todas as folhas", e);
+            throw new IllegalStateException("Erro ao excluir todas as folhas", e);
         }
     }
 

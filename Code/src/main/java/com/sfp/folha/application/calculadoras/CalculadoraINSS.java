@@ -1,6 +1,3 @@
-/**
- * @brief Classe responsável por calcular o INSS do funcionário.
- */
 package com.sfp.folha.application.calculadoras;
 
 import java.math.BigDecimal;
@@ -11,6 +8,9 @@ import com.sfp.folha.domain.Holerite;
 import com.sfp.core.domain.FaixaINSS;
 import com.sfp.folha.domain.RegraDeCalculo;
 
+/**
+ * @brief Classe responsável por calcular o INSS do funcionário.
+ */
 public class CalculadoraINSS implements RegraDeCalculo {
 
     private final List<FaixaINSS> tabelaINSS;
@@ -34,7 +34,7 @@ public class CalculadoraINSS implements RegraDeCalculo {
     @Override
     public BigDecimal calcular(Holerite holerite) {
         // Inicializa variáveis
-        BigDecimal salarioBruto = holerite.getFuncionario().getSalarioBruto();
+        BigDecimal salarioBruto = holerite.getTotalProventos();
         boolean flag = false;
         BigDecimal desconto = BigDecimal.ZERO;
         // Percorre as faixas do INSS
@@ -50,7 +50,7 @@ public class CalculadoraINSS implements RegraDeCalculo {
         }
         // Arredonda o desconto para 2 casas decimais
         desconto = desconto.setScale(2, RoundingMode.HALF_UP);
-        
+
         // Salva a Transparência Fiscal no Holerite
         holerite.setBaseINSS(salarioBruto);
         if (salarioBruto.compareTo(BigDecimal.ZERO) > 0) {

@@ -1,12 +1,12 @@
-/**
- * @brief Classe responsável por gerenciar as empresas
- */
-
 package com.sfp.empresa.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+/**
+ * @brief Classe responsável por gerenciar as empresas
+ */
 public class Empresa {
     private String cnpj;
     private String razaoSocial;
@@ -113,8 +113,6 @@ public class Empresa {
         this.diaFechamentoPonto = diaFechamentoPonto;
     }
 
-
-
     /**
      * @brief método que retorna a lista de endereços
      * @return Lista de endereços
@@ -139,5 +137,28 @@ public class Empresa {
     @Override
     public String toString() {
         return razaoSocial + this.respLegal;
+    }
+
+    /**
+     * @brief método que retorna o código hash da empresa
+     * @return Código hash da empresa
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Empresa empresa = (Empresa) o;
+        return Objects.equals(cnpj, empresa.cnpj);
+    }
+
+    /**
+     * @brief método que retorna o código hash da empresa
+     * @return Código hash da empresa
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(cnpj);
     }
 }

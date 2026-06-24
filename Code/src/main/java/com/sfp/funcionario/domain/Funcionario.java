@@ -1,12 +1,12 @@
-/**
- * @brief: Classe que representa um funcionário
- */
-
 package com.sfp.funcionario.domain;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
+/**
+ * @brief: Classe que representa um funcionário
+ */
 public class Funcionario {
     private String nome;
     private String cpf;
@@ -91,5 +91,29 @@ public class Funcionario {
      */
     public int getNumeroDependentes() {
         return numeroDependentes;
+    }
+
+    /**
+     * @brief: Verifica se dois funcionários são iguais
+     * @param o: Objeto a ser comparado
+     * @return boolean: true se os funcionários são iguais, false caso contrário
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Funcionario that = (Funcionario) o;
+        return Objects.equals(cpf, that.cpf);
+    }
+
+    /**
+     * @brief: Retorna o hash code do funcionário
+     * @return int: Hash code do funcionário
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(cpf);
     }
 }

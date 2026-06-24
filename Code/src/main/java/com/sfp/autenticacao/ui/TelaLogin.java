@@ -18,7 +18,7 @@ import com.sfp.autenticacao.application.ControladorAutenticacao;
 import com.sfp.usuario.domain.Usuario;
 
 /**
- * @brief Controla a tela de login.
+ * @brief Classe responsável por controlar a interface de login.
  */
 public class TelaLogin {
     @FXML
@@ -63,7 +63,7 @@ public class TelaLogin {
                 stage.setScene(scene);
                 stage.setTitle("SPF - Sistema de Folha de Pagamento");
             } catch (Exception e) { // Se ocorrer um erro, imprime o stack trace.
-                e.printStackTrace();
+                java.util.logging.Logger.getGlobal().severe(e.getMessage());
             }
         } else { // Se o usuário for inválido.
             labelErro.setText("Usario ou senha inválidos.");
@@ -97,23 +97,4 @@ public class TelaLogin {
         }
     }
 
-    /**
-     * @brief Método que gera o teste de mesa.
-     */
-    @FXML
-    public void acaoGerarTesteMesa() {
-        try {
-            // Cria um novo serviço de banco de dados.
-            ServicoDatabase servico = new ServicoDatabase();
-            // Gera o teste de mesa.
-            servico.gerarTesteDeMesa();
-            // Mostra um alerta de informação.
-            Alert info = new Alert(Alert.AlertType.INFORMATION,
-                    "Teste de mesa (Unesp) gerado com sucesso!\nEntre com admin/admin.");
-            info.showAndWait();
-        } catch (Exception e) { // Se ocorrer um erro, imprime o stack trace.
-            Alert erro = new Alert(Alert.AlertType.ERROR, "Erro ao gerar teste: " + e.getMessage());
-            erro.showAndWait();
-        }
-    }
 }

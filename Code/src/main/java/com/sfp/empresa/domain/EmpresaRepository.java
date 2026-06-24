@@ -1,10 +1,10 @@
-/**
- * @brief Interface responsável por gerenciar as empresas
- */
 package com.sfp.empresa.domain;
 
 import java.util.List;
 
+/**
+ * @brief Interface responsável por gerenciar as empresas
+ */
 public interface EmpresaRepository {
     /**
      * @brief Método responsável por salvar a empresa

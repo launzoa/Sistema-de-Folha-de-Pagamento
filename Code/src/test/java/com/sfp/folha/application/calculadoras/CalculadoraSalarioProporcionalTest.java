@@ -21,7 +21,7 @@ import java.math.RoundingMode;
 
 import org.junit.jupiter.api.DisplayName;
 
-public class CalculadoraSalarioProporcionalTest {
+class CalculadoraSalarioProporcionalTest {
 
         @ParameterizedTest
         @CsvSource({
@@ -31,7 +31,7 @@ public class CalculadoraSalarioProporcionalTest {
                         "3000.00, 20, 5,  3000.00" // Cenário 4: Outro salário, outros dias
         })
         @DisplayName("Deve retornar salário proporcional quando trabalhou 'n' dias úteis.")
-        public void testCalcularSalarioProporcionalCorretamente(String salarioBaseStr, int diasUteis,
+        void testCalcularSalarioProporcionalCorretamente(String salarioBaseStr, int diasUteis,
                         int diasTrabalhados,
                         String resultadoEsperado) {
                 CalculadoraSalarioProporcional calculadora = new CalculadoraSalarioProporcional();
@@ -53,7 +53,7 @@ public class CalculadoraSalarioProporcionalTest {
 
         @Test
         @DisplayName("Deve retornar salário pro-rata se admitido no meio do mês")
-        public void testCalcularSalarioProporcionalMeioDoMes() {
+        void testCalcularSalarioProporcionalMeioDoMes() {
                 CalculadoraSalarioProporcional calculadora = new CalculadoraSalarioProporcional();
                 // Admitido no dia 16/06/2026
                 LocalDate admissao = LocalDate.of(2026, 6, 16);

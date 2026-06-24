@@ -1,6 +1,3 @@
-/**
- * @brief Classe responsável por controlar as operações de funcionário
- */
 package com.sfp.funcionario.application;
 
 import java.util.List;
@@ -10,6 +7,9 @@ import com.sfp.funcionario.domain.FuncionarioRepository;
 import com.sfp.funcionario.infrastructure.persistence.MySQLFuncionarioRepository;
 import com.sfp.auditoria.application.ServicoAuditoria;
 
+/**
+ * @brief Classe responsável por controlar as operações de funcionário
+ */
 public class ControladorFuncionario {
     private FuncionarioRepository funcionarioRepository = new MySQLFuncionarioRepository();
 

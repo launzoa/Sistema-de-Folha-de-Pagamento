@@ -1,10 +1,10 @@
-/**
- * @brief Interface que representa o repositório de lançamentos
- */
 package com.sfp.folha.domain;
 
 import java.util.List;
 
+/**
+ * @brief Interface que representa o repositório de lançamentos
+ */
 public interface LancamentoRepository {
 
     /**

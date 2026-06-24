@@ -6,6 +6,7 @@ import com.sfp.usuario.domain.Usuario;
  * @brief Classe que representa o registro do serviço de auditoria
  */
 public class ServicoAuditoria {
+    private ServicoAuditoria() {}
     private static Usuario usuarioAtual = null;
     private static final ControladorAuditoria controlador = new ControladorAuditoria();
 

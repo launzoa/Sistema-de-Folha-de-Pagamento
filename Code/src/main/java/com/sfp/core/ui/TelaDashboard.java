@@ -1,9 +1,8 @@
-/**
- * @brief Classe responsável por gerenciar a tela de dashboard
- */
 package com.sfp.core.ui;
 
 import java.math.BigDecimal;
+import java.util.logging.Logger;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.chart.BarChart;
@@ -15,6 +14,9 @@ import javafx.collections.ObservableList;
 import com.sfp.core.application.ServicoDashboard;
 import com.sfp.core.application.DashboardDados;
 
+/**
+ * @brief Classe responsável por gerenciar a tela de dashboard
+ */
 public class TelaDashboard {
     @FXML
     private Label labelCompetencia; // Label que mostra a competência da folha atual
@@ -58,7 +60,7 @@ public class TelaDashboard {
                 labelStatus.setText("Nenhuma Folha");
             }
         } catch (Exception e) { // Caso ocorra um erro
-            e.printStackTrace();
+            Logger.getGlobal().severe(e.getMessage());
             labelFuncionarios.setText("Erro");
         }
     }
@@ -67,19 +69,20 @@ public class TelaDashboard {
      * @brief Método que gera os gráficos do dashboard
      * @param dados Objeto que contém os dados do dashboard
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked") // Utilizado para suprimir o warning de tipo genérico.
     private void gerarGraficos(DashboardDados dados) {
         // --- PieChart: Distribuição Financeira ---
+        // Variáveis para calcular o financeiro do dashboard
         double tLiq = dados.getTotalLiquido().doubleValue();
         double tImp = dados.getTotalImpostos().doubleValue();
         double tDesc = dados.getTotalDescontosDiversos().doubleValue();
         double totalGlobal = tLiq + tImp + tDesc;
-
+        // Cria strings formatadas para os labels
         String lblLiq = String.format("Líquido (%.1f%%)", totalGlobal > 0 ? (tLiq / totalGlobal * 100) : 0);
         String lblImp = String.format("Impostos (%.1f%%)", totalGlobal > 0 ? (tImp / totalGlobal * 100) : 0);
         String lblDesc = String.format("Descontos Diversos (%.1f%%)",
                 totalGlobal > 0 ? (tDesc / totalGlobal * 100) : 0);
-
+        // Cria o pie chart com os dados
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
                 new PieChart.Data(lblLiq, tLiq),
                 new PieChart.Data(lblImp, tImp),
@@ -90,17 +93,18 @@ public class TelaDashboard {
 
         // --- BarChart: Comparativo ---
         barChartComparativo.getData().clear();
-
+        // Cria a series de custo empresa
         XYChart.Series<String, Number> seriesCusto = new XYChart.Series<>();
         seriesCusto.setName("Custo Empresa");
         // Custo Empresa = Total Bruto + FGTS (simplificado)
         BigDecimal custoEmpresa = dados.getCustoEmpresa();
+        // Adiciona o custo empresa ao series
         seriesCusto.getData().add(new XYChart.Data<>("Totais", custoEmpresa.doubleValue()));
-
+        // Cria a series de liquido pago
         XYChart.Series<String, Number> seriesLiquido = new XYChart.Series<>();
         seriesLiquido.setName("Líquido Pago");
         seriesLiquido.getData().add(new XYChart.Data<>("Totais", dados.getTotalLiquido().doubleValue()));
-
+        // Adiciona os series ao bar chart
         barChartComparativo.getData().addAll(seriesCusto, seriesLiquido);
     }
 }

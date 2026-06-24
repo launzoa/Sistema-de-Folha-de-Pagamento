@@ -25,7 +25,7 @@ public class ControladorRubrica {
 
     public void editarRubrica(Rubrica rubrica) {
         if (!podeEditar(rubrica.getCodigo())) {
-            throw new RuntimeException("Violação Mecânica: Rubricas nativas constitucionais não podem ser alteradas!");
+            throw new IllegalStateException("Violação Mecânica: Rubricas nativas constitucionais não podem ser alteradas!");
         }
         rubricaRepository.editarRubrica(rubrica);
         ServicoAuditoria.registrar("Edição", "Rubrica", "Código: " + rubrica.getCodigo());
@@ -33,7 +33,7 @@ public class ControladorRubrica {
 
     public void excluirRubrica(int codigo) {
         if (!podeExcluir(codigo)) {
-            throw new RuntimeException("Violação Mecânica: Rubricas nativas constitucionais não podem ser excluídas!");
+            throw new IllegalStateException("Violação Mecânica: Rubricas nativas constitucionais não podem ser excluídas!");
         }
         rubricaRepository.excluirRubrica(codigo);
         ServicoAuditoria.registrar("Exclusão", "Rubrica", "Código: " + codigo);

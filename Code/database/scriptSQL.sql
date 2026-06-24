@@ -1,6 +1,3 @@
-CREATE DATABASE IF NOT EXISTS sfp;
-USE sfp;
-
 CREATE TABLE IF NOT EXISTS empresa (
     cnpj varchar(18) not null primary key,
     razao_social varchar(120) not null,
@@ -87,7 +84,9 @@ CREATE TABLE IF NOT EXISTS folha_mes (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     competencia VARCHAR(7) NOT NULL, -- Ex: '06/2026'
     dias_uteis INT NOT NULL,
-    status VARCHAR(20) NOT NULL DEFAULT 'Aberta'
+    status VARCHAR(20) NOT NULL DEFAULT 'Aberta',
+    data_inicio DATE,
+    data_fim DATE
 );
 
 CREATE TABLE IF NOT EXISTS lancamento (
@@ -111,4 +110,18 @@ CREATE TABLE IF NOT EXISTS lancamento (
     FOREIGN KEY (codigo_rubrica) REFERENCES rubrica(codigo),
     FOREIGN KEY (id_folha) REFERENCES folha_mes(id),       
     FOREIGN KEY (cpf_funcionario) REFERENCES funcionarios(cpf) 
+);
+
+CREATE TABLE IF NOT EXISTS faixa_inss (
+    piso DECIMAL(10,2) NOT NULL,
+    teto DECIMAL(10,2) NOT NULL,
+    aliquota DECIMAL(5,2) NOT NULL,
+    parcela_deduzir DECIMAL(10,2) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS faixa_irrf (
+    piso DECIMAL(10,2) NOT NULL,
+    teto DECIMAL(10,2) NOT NULL,
+    aliquota DECIMAL(5,2) NOT NULL,
+    parcela_deduzir DECIMAL(10,2) NOT NULL
 );

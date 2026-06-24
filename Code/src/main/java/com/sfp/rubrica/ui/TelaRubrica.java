@@ -199,7 +199,7 @@ public class TelaRubrica {
         }
         // Verificação de rubrica padrão
         if (!controlador.podeEditar(selecionada.getCodigo())) {
-            mostrarAviso("Rubricas Constitucionais e Legais (001–005 e 100-102) são blindadas e inalteráveis.");
+            mostrarAviso("Rubricas Constitucionais, Legais e Benefícios Padrões (001–005, 100-103, 901 e 902) são blindadas e inalteráveis.");
             return;
         }
         // Verificação de rubrica inativa
@@ -237,7 +237,7 @@ public class TelaRubrica {
             // Atualiza a tabela
             carregarTabelaRubricas(controlador.listarTodasRubricas());
         } catch (IOException e) { // Captura erro de IO
-            e.printStackTrace();
+            java.util.logging.Logger.getGlobal().severe(e.getMessage());
         }
     }
 
@@ -327,7 +327,7 @@ public class TelaRubrica {
             irrfRepo.atualizar(old, f);
         });
 
-        colIrrfParcela.setCellValueFactory(new PropertyValueFactory<>("parcelaDeduzir"));
+        colIrrfParcela.setCellValueFactory(new PropertyValueFactory<>("parcelaADeduzir"));
         colIrrfParcela.setCellFactory(TextFieldTableCell.forTableColumn(converter));
         colIrrfParcela.setOnEditCommit(event -> {
             FaixaIRRF f = event.getRowValue();

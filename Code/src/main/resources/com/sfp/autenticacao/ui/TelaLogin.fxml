@@ -48,7 +48,6 @@
             <Button text="Entrar" onAction="#fazerLogin" styleClass="primary-button"/>
             <HBox spacing="10" alignment="CENTER">
                 <Button text="Zerar Dados" onAction="#acaoZerarDados" styleClass="secondary-button" style="-fx-border-color: #ff4c4c; -fx-text-fill: #ff4c4c;"/>
-                <Button text="Gerar Teste de Mesa" onAction="#acaoGerarTesteMesa" styleClass="secondary-button"/>
             </HBox>
             <Label text="SPF v1.0.0 - 2026" styleClass="login-version-label"/>
             <Label text="" fx:id="labelErro" styleClass="result-value-red"/>

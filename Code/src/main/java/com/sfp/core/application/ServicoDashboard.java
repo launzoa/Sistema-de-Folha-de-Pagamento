@@ -2,6 +2,7 @@ package com.sfp.core.application;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Arrays;
 
 import com.sfp.funcionario.domain.Funcionario;
 import com.sfp.funcionario.domain.FuncionarioRepository;
@@ -70,11 +71,11 @@ public class ServicoDashboard {
     private void calcularFinanceiro(DashboardDados dados, FolhaMes folha, List<Funcionario> funcionarios) {
         // Processador de folha.
         ProcessadorDeFolha processador = new ProcessadorDeFolha(
-                java.util.Arrays.asList(new CalculadoraSalarioProporcional()),
-                java.util.Arrays.asList(
+                Arrays.asList(new CalculadoraSalarioProporcional()),
+                Arrays.asList(
                         new CalculadoraINSS(inssRepo.buscarTodas(), ConstantesFolha.TETO_INSS),
                         new CalculadoraIRRF(irrfRepo.buscarTodas(), ConstantesFolha.TETO_IRRF)),
-                java.util.Arrays.asList(new CalculadoraFGTS()));
+                Arrays.asList(new CalculadoraFGTS()));
 
         // Variáveis para calcular o financeiro do dashboard.
         BigDecimal totalBruto = BigDecimal.ZERO;

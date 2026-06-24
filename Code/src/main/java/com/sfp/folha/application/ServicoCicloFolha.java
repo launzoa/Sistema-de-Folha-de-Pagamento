@@ -1,8 +1,3 @@
-/**
- * @brief Classe responsável por gerenciar o ciclo da folha de pagamento,
- *        incluindo abertura, fechamento e exclusão.
- */
-
 package com.sfp.folha.application;
 
 import com.sfp.folha.domain.FolhaMes;
@@ -16,14 +11,26 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 
+/**
+ * @brief Classe responsável por gerenciar o ciclo da folha de pagamento,
+ *        incluindo abertura, fechamento e exclusão.
+ */
 public class ServicoCicloFolha {
 
     private FolhaMesRepository folhaMesRepository = new MySQLFolhaMesRepository();
     private ControladorEmpresa controladorEmpresa = new ControladorEmpresa();
 
+    /**
+     * @brief Construtor vazio
+     */
     public ServicoCicloFolha() {
     }
 
+    /**
+     * @brief Construtor que recebe o repositório de folhas e a empresa.
+     * @param folhaMesRepository Repositório de folhas.
+     * @param controladorEmpresa Controlador de empresa.
+     */
     public ServicoCicloFolha(FolhaMesRepository folhaMesRepository, ControladorEmpresa controladorEmpresa) {
         this.folhaMesRepository = folhaMesRepository;
         this.controladorEmpresa = controladorEmpresa;
@@ -78,7 +85,7 @@ public class ServicoCicloFolha {
                         folhaMesRepository.atualizarDatas(folha.getId(), novaDataInicio, novaDataFim);
                     }
                 } catch (Exception ex) { // Em caso de erro, lança exceção
-                    throw new RuntimeException("Erro ao recalcular datas da folha: " + folha.getCompetencia(), ex);
+                    throw new IllegalStateException("Erro ao recalcular datas da folha: " + folha.getCompetencia(), ex);
                 }
                 // Verifica se a folha está em transição
                 if ("Em Transição".equals(folha.getStatus())) {
@@ -108,7 +115,7 @@ public class ServicoCicloFolha {
             }
 
         } catch (Exception e) { // Em caso de erro, lança uma exceção
-            throw new RuntimeException("Erro ao gerenciar ciclo de folhas", e);
+            throw new IllegalStateException("Erro ao gerenciar ciclo de folhas", e);
         }
     }
 
@@ -127,14 +134,19 @@ public class ServicoCicloFolha {
             YearMonth mesAtual = YearMonth.now(); // Busca o mês atual
 
             // Avança o mês caso já exista uma folha para a competência atual
-            String competenciaCalculada;
-            while (true) {
+            String competenciaCalculada = null;
+            int tentativas = 0;
+            while (tentativas < 24) {
                 competenciaCalculada = String.format("%02d/%d", mesAtual.getMonthValue(), mesAtual.getYear());
                 FolhaMes folhaExistente = folhaMesRepository.buscarPorCompetencia(competenciaCalculada);
                 if (folhaExistente == null) {
                     break;
                 }
                 mesAtual = mesAtual.plusMonths(1);
+                tentativas++;
+            }
+            if (tentativas >= 24) {
+                throw new IllegalStateException("Limite de tentativas para abrir folha automática excedido.");
             }
 
             LocalDate dataInicioCalculada; // Data de início da folha
@@ -158,7 +170,7 @@ public class ServicoCicloFolha {
             folhaMesRepository.salvar(novaFolha);
             ServicoAuditoria.registrar("Cadastro", "Folha de Pagamento", "Competência: " + competenciaCalculada);
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao abrir folha automática", e);
+            throw new IllegalStateException("Erro ao abrir folha automática", e);
         }
     }
 
@@ -190,7 +202,7 @@ public class ServicoCicloFolha {
             // Gerencia o ciclo de folhas
             gerenciarCicloFolhas();
         } catch (Exception e) { // Em caso de erro, imprime o erro e lança uma exceção
-            throw new RuntimeException("Erro ao resetar folhas: " + e.getMessage(), e);
+            throw new IllegalStateException("Erro ao resetar folhas: " + e.getMessage(), e);
         }
     }
 

@@ -1,22 +1,26 @@
-/**
- * @brief: Implementação da interface FuncionarioRepository para persistência de dados em MySQL
- * CRUD básico para a classe Funcionário e a tabela funcionarios do BD:
- * salvar() - Inserção de novos funcionários no BD.
- * buscarTodos() - Busca todos os funcionários do BD.
- * atualizar() - Atualiza os dados de um funcionário no BD.
- */
-
 package com.sfp.funcionario.infrastructure.persistence;
 
 import com.sfp.core.database.ConexaoBD;
 import com.sfp.funcionario.domain.FuncionarioRepository;
 import com.sfp.funcionario.domain.Funcionario;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * @brief: Implementação da interface FuncionarioRepository para persistência de
+ *         dados em MySQL
+ *         CRUD básico para a classe Funcionário e a tabela funcionarios do BD:
+ *         salvar() - Inserção de novos funcionários no BD.
+ *         buscarTodos() - Busca todos os funcionários do BD.
+ *         atualizar() - Atualiza os dados de um funcionário no BD.
+ */
 
 public class MySQLFuncionarioRepository implements FuncionarioRepository {
     /**
@@ -29,25 +33,24 @@ public class MySQLFuncionarioRepository implements FuncionarioRepository {
         String sql = "INSERT INTO funcionarios (nome, cpf, cargo, data_admissao, salario_bruto, numero_dependentes, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         // Conexão com banco de dados mysql
-        try (Connection conn = ConexaoBD.getConnection()) {
-            // Prepara statement para inserir dados
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+        try (Connection conn = ConexaoBD.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // Setando os valores para o statement
             pstmt.setString(1, funcionario.getNome());
             pstmt.setString(2, funcionario.getCpf());
             pstmt.setString(3, funcionario.getCargo());
-            pstmt.setDate(4, java.sql.Date.valueOf(funcionario.getDataAdmissao()));
+            pstmt.setDate(4, Date.valueOf(funcionario.getDataAdmissao()));
             pstmt.setBigDecimal(5, funcionario.getSalarioBruto());
             pstmt.setInt(6, funcionario.getNumeroDependentes());
             pstmt.setBoolean(7, funcionario.getStatus());
 
             int linhasAfetadas = pstmt.executeUpdate(); // Executa o statement
             if (linhasAfetadas == 0) { // Verifica se foi afetada alguma linha
-                throw new RuntimeException("Erro ao cadastrar funcionário no Banco de Dados");
+                throw new IllegalStateException("Erro ao cadastrar funcionário no Banco de Dados");
             }
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao cadastrar funcionário no Banco de Dados", e);
+            throw new IllegalStateException("Erro ao cadastrar funcionário no Banco de Dados", e);
         }
     }
 
@@ -62,21 +65,19 @@ public class MySQLFuncionarioRepository implements FuncionarioRepository {
         List<Funcionario> funcionarios = new ArrayList<>();
 
         // Conexão com BD
-        try (Connection conn = ConexaoBD.getConnection()) {
-            // Prepara statement para buscar todos os funcionários
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            // Executa o statement
-            ResultSet rs = pstmt.executeQuery();
+        try (Connection conn = ConexaoBD.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) { // Enquanto houver uma linha para ler, executa o código
                 // Pega os dados do funcionário na linha atual
                 String nome = rs.getString("nome");
                 String cpf = rs.getString("cpf");
                 String cargo = rs.getString("cargo");
-                java.sql.Date sqlDate = rs.getDate("data_admissao");
-                java.time.LocalDate dataAdmissao = (sqlDate != null) ? sqlDate.toLocalDate()
-                        : java.time.LocalDate.now();
-                java.math.BigDecimal salarioBruto = rs.getBigDecimal("salario_bruto");
+                Date sqlDate = rs.getDate("data_admissao");
+                LocalDate dataAdmissao = (sqlDate != null) ? sqlDate.toLocalDate()
+                        : LocalDate.now();
+                BigDecimal salarioBruto = rs.getBigDecimal("salario_bruto");
                 int numeroDependentes = rs.getInt("numero_dependentes");
                 boolean status = rs.getBoolean("status");
 
@@ -86,7 +87,7 @@ public class MySQLFuncionarioRepository implements FuncionarioRepository {
                 funcionarios.add(funcionario);
             }
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar funcionários", e);
+            throw new IllegalStateException("Erro ao buscar funcionários", e);
         }
 
         return funcionarios; // Retorna a lista de funcionários
@@ -101,13 +102,12 @@ public class MySQLFuncionarioRepository implements FuncionarioRepository {
         // Script sql para atualizar um funcionário na tabela funcionarios
         String sql = "UPDATE funcionarios SET nome = ?, cargo = ?, data_admissao = ?, salario_bruto = ?, numero_dependentes = ?, status = ? WHERE cpf = ?";
         // Conexão com o BD
-        try (Connection conn = ConexaoBD.getConnection()) {
-            // Prepara statement para atualizar um funcionário
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+        try (Connection conn = ConexaoBD.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
             // Setando os valores para o statement
             pstmt.setString(1, funcionario.getNome());
             pstmt.setString(2, funcionario.getCargo());
-            pstmt.setDate(3, java.sql.Date.valueOf(funcionario.getDataAdmissao()));
+            pstmt.setDate(3, Date.valueOf(funcionario.getDataAdmissao()));
             pstmt.setBigDecimal(4, funcionario.getSalarioBruto());
             pstmt.setInt(5, funcionario.getNumeroDependentes());
             pstmt.setBoolean(6, funcionario.getStatus());
@@ -116,7 +116,7 @@ public class MySQLFuncionarioRepository implements FuncionarioRepository {
             // Executa o statement
             pstmt.executeUpdate();
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao atualizar funcionário", e);
+            throw new IllegalStateException("Erro ao atualizar funcionário", e);
         }
     }
 }

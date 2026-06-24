@@ -63,7 +63,7 @@ public class FaixaIRRF {
      * @return boolean: true se o salário está na faixa, false caso contrário
      */
     public boolean isSalarioNaFaixa(BigDecimal baseCalculo) {
-        return baseCalculo.compareTo(teto) <= 0;
+        return baseCalculo.compareTo(piso) >= 0 && baseCalculo.compareTo(teto) <= 0;
     }
 
     /**

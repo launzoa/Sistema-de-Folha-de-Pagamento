@@ -1,8 +1,3 @@
-/**
- * @brief Classe responsável por gerenciar a tela de lançamentos da folha de pagamento
- *        Permite visualizar, pesquisar e gerenciar os lançamentos dinâmicos
- *        associados aos funcionários na competência (folha) atualmente aberta.
- */
 package com.sfp.folha.ui;
 
 import javafx.collections.FXCollections;
@@ -37,6 +32,12 @@ import com.sfp.rubrica.infrastructure.persistence.MySQLRubricaRepository;
 import com.sfp.folha.application.ServicoCicloFolha;
 import com.sfp.folha.domain.FolhaMes;
 
+/**
+ * @brief Classe responsável por gerenciar a tela de lançamentos da folha de
+ *        pagamento
+ *        Permite visualizar, pesquisar e gerenciar os lançamentos dinâmicos
+ *        associados aos funcionários na competência (folha) atualmente aberta.
+ */
 public class TelaLancamento {
     @FXML
     private Label labelCompetencia; // Label para exibir a competência atual
@@ -320,8 +321,8 @@ public class TelaLancamento {
             tabelaLancamento.setItems(rows);
 
         } catch (Exception e) { // Caso ocorra um erro ao atualizar a tabela
-            System.err.println("Erro ao atualizar tabela de Lançamentos: " + e.getMessage());
-            e.printStackTrace();
+            java.util.logging.Logger.getGlobal().severe("Erro ao atualizar tabela de Lançamentos: " + e.getMessage());
+            java.util.logging.Logger.getGlobal().severe(e.getMessage());
         }
     }
 
@@ -350,6 +351,13 @@ public class TelaLancamento {
      */
     @FXML
     public void excluirLancamento() {
+        // Verifica se a folha atual está fechada antes de permitir exclusão
+        FolhaMes f = comboFolha.getValue();
+        if (f != null && "Fechada".equals(f.getStatus())) {
+            mostrarAlerta("Operação Inválida: Não é possível excluir lançamentos de uma folha que já foi fechada.");
+            return;
+        }
+
         // Busca o lançamento selecionado
         LancamentoRow row = tabelaLancamento.getSelectionModel().getSelectedItem();
         // Verifica se há um lançamento selecionado
@@ -400,7 +408,7 @@ public class TelaLancamento {
             // Atualiza a tabela com os novos dados
             atualizarTabela(comboBuscaFuncionario.getValue());
         } catch (Exception e) { // Caso ocorra um erro ao abrir o formulário
-            e.printStackTrace();
+            java.util.logging.Logger.getGlobal().severe(e.getMessage());
         }
     }
 

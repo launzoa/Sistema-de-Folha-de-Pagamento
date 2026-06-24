@@ -17,12 +17,12 @@ import java.time.LocalDate;
 
 import com.sfp.empresa.domain.Empresa;
 
-public class CalculadoraINSSTest {
+class CalculadoraINSSTest {
 
         private CalculadoraINSS calculadora;
 
         @BeforeEach
-        public void setup() {
+        void setup() {
                 // Arrange: Nossa Tabela de INSS Fictícia (baseada em 2024/2025 com Parcela a
                 // Deduzir)
                 // Faixa 1: Até 1.412,00 (7,5% - Parcela 0,00)
@@ -58,7 +58,7 @@ public class CalculadoraINSSTest {
                         "10000.00, 908.86" // Acima do teto (limita ao máximo legal)
         })
         @DisplayName("Deve calcular INSS progressivo aplicando a parcela a deduzir e o teto máximo")
-        public void testCalcularINSSCorretamente(String salarioBrutoStr, String descontoEsperadoStr) {
+        void testCalcularINSSCorretamente(String salarioBrutoStr, String descontoEsperadoStr) {
                 BigDecimal salarioBruto = new BigDecimal(salarioBrutoStr);
                 Funcionario funcionario = new Funcionario("Teste", "000", "Cargo", LocalDate.now(), salarioBruto, true, 1);
                 Empresa empresa = new Empresa("00.000.000/0001-00", "Test", "test@test.com", "Admin", 30);

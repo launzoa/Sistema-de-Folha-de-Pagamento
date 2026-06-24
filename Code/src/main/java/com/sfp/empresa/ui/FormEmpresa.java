@@ -1,7 +1,3 @@
-/**
- * @brief Classe responsavel por gerenciar o formulario de cadastro de empresas
- 
- */
 package com.sfp.empresa.ui;
 
 import javafx.fxml.FXML;
@@ -14,6 +10,9 @@ import javafx.stage.Stage;
 import com.sfp.empresa.domain.Empresa;
 import com.sfp.empresa.application.ControladorEmpresa;
 
+/**
+ * @brief Classe responsavel por gerenciar o formulario de cadastro de empresas
+ */
 public class FormEmpresa {
     @FXML
     private Label labelTitulo; // Label para exibir o título do formulário
@@ -71,31 +70,31 @@ public class FormEmpresa {
             exibirAlerta("Informe o responsável legal.");
             return;
         }
-        if (diaFechamento == null) {
+        if (diaFechamento == null) { // Se não tiver dia de fechamento, define como 30
             diaFechamento = 30;
         }
 
         // Tenta criar ou atualizar a empresa
-            if (empresaEdicao == null) { // Se não tiver empresa para editar, cadastra nova
-                Empresa empresa = new Empresa(
-                        cnpj,
-                        razaoSocial,
-                        email,
-                        respLegal,
-                        diaFechamento);
-                controladorEmpresa.cadastrarEmpresa(empresa);
-            } else { // Se tiver empresa para editar, atualiza
-                Empresa empresa = new Empresa(
-                        cnpj,
-                        razaoSocial,
-                        email,
-                        respLegal,
-                        diaFechamento);
-                controladorEmpresa.atualizarEmpresa(empresa);
-            }
+        if (empresaEdicao == null) { // Se não tiver empresa para editar, cadastra nova
+            Empresa empresa = new Empresa(
+                    cnpj,
+                    razaoSocial,
+                    email,
+                    respLegal,
+                    diaFechamento);
+            controladorEmpresa.cadastrarEmpresa(empresa);
+        } else { // Se tiver empresa para editar, atualiza
+            Empresa empresa = new Empresa(
+                    cnpj,
+                    razaoSocial,
+                    email,
+                    respLegal,
+                    diaFechamento);
+            controladorEmpresa.atualizarEmpresa(empresa);
+        }
 
-            salvoComSucesso = true;
-            fecharJanela();
+        salvoComSucesso = true;
+        fecharJanela();
     }
 
     /**

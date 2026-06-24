@@ -38,7 +38,7 @@ public class MySQLRubricaRepository implements RubricaRepository {
             // Executa o statement
             ps.executeUpdate();
         } catch (Exception e) {// Captura a exceção
-            throw new RuntimeException("Erro ao cadastrar Rubrica no Banco de Dados", e);
+            throw new IllegalStateException("Erro ao cadastrar Rubrica no Banco de Dados", e);
         }
     }
 
@@ -65,7 +65,7 @@ public class MySQLRubricaRepository implements RubricaRepository {
             // Executa o statement
             ps.executeUpdate();
         } catch (Exception e) {// Captura a exceção
-            throw new RuntimeException("Erro ao editar Rubrica no Banco de Dados", e);
+            throw new IllegalStateException("Erro ao editar Rubrica no Banco de Dados", e);
         }
     }
 
@@ -85,7 +85,7 @@ public class MySQLRubricaRepository implements RubricaRepository {
             // Executa o statement
             ps.executeUpdate();
         } catch (Exception e) {// Captura a exceção
-            throw new RuntimeException("Erro ao excluir Rubrica no Banco de Dados", e);
+            throw new IllegalStateException("Erro ao excluir Rubrica no Banco de Dados", e);
         }
     }
 
@@ -117,7 +117,7 @@ public class MySQLRubricaRepository implements RubricaRepository {
                         rs.getBoolean("ativo")));
             }
         } catch (Exception e) {// Captura a exceção
-            throw new RuntimeException("Erro ao listar rubricas ativas", e);
+            throw new IllegalStateException("Erro ao listar rubricas ativas", e);
         }
         return lista; // Retorna a lista de rubricas ativas
     }
@@ -153,7 +153,7 @@ public class MySQLRubricaRepository implements RubricaRepository {
             }
 
         } catch (Exception e) {// Captura a exceção
-            throw new RuntimeException("Erro ao buscar todas as rubricas", e);
+            throw new IllegalStateException("Erro ao buscar todas as rubricas", e);
         }
         return rubricas;// Retorna a lista de rubricas
     }
@@ -191,7 +191,7 @@ public class MySQLRubricaRepository implements RubricaRepository {
             }
 
         } catch (Exception e) {// Captura a exceção
-            throw new RuntimeException("Erro ao buscar rubrica por código", e);
+            throw new IllegalStateException("Erro ao buscar rubrica por código", e);
         }
         return null; // Retorna null se a rubrica não for encontrada
     }

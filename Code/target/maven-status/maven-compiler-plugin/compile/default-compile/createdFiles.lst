@@ -62,7 +62,6 @@ com/sfp/empresa/ui/FormEndereco.class
 com/sfp/auditoria/ui/TelaLog$1.class
 com/sfp/rubrica/ui/TelaRubrica$1.class
 com/sfp/core/ui/GerenciadorTema.class
-com/sfp/TesteMesaBug.class
 com/sfp/funcionario/ui/TelaFuncionario.class
 com/sfp/folha/infrastructure/persistence/MySQLFolhaMesRepository.class
 com/sfp/folha/ui/TelaHoleriteController$ItemHolerite.class

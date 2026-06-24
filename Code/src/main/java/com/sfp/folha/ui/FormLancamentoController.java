@@ -1,9 +1,3 @@
-/**
- * @brief Controller do Modal (Formulário) de criação e edição de Lançamentos.
- *        Responsável pela lógica dinâmica de exibição de campos dependendo da
- *        Modalidade
- *        escolhida (Valor Absoluto, Porcentagem ou Quantidade).
- */
 package com.sfp.folha.ui;
 
 import javafx.util.StringConverter;
@@ -16,7 +10,7 @@ import java.time.LocalDate;
 import java.util.stream.Collectors;
 
 import java.math.BigDecimal;
-
+import java.math.RoundingMode;
 import java.util.List;
 import com.sfp.folha.domain.Lancamento;
 import com.sfp.folha.domain.LancamentoRepository;
@@ -30,9 +24,13 @@ import com.sfp.funcionario.infrastructure.persistence.MySQLFuncionarioRepository
 import com.sfp.rubrica.domain.Rubrica;
 import com.sfp.rubrica.domain.RubricaRepository;
 import com.sfp.rubrica.infrastructure.persistence.MySQLRubricaRepository;
-import com.sfp.folha.application.ServicoCicloFolha;
-import com.sfp.rubrica.application.ControladorRubrica;
 
+/**
+ * @brief Controller do Modal (Formulário) de criação e edição de Lançamentos.
+ *        Responsável pela lógica dinâmica de exibição de campos dependendo da
+ *        Modalidade
+ *        escolhida (Valor Absoluto, Porcentagem ou Quantidade).
+ */
 public class FormLancamentoController {
     @FXML
     private ComboBox<Funcionario> comboFuncionario; // Box para seleção do funcionário
@@ -143,9 +141,11 @@ public class FormLancamentoController {
                 return null;
             }
         });
-        // Busca apenas as rubricas ativas e que NÃO são padrão (evita dupla tributação de impostos estruturais manuais)
+        // Busca as rubricas ativas, mas OMITINDO as puramente estruturais (1=Salário,
+        // 100=INSS, 101, 102=IRRF, 103=DSR automático)
+        List<Integer> estruturais = java.util.Arrays.asList(1, 100, 101, 102, 103);
         List<Rubrica> rubricas = rubricaRepo.buscarTodas().stream()
-                .filter(r -> !r.isPadrao() && r.isAtivo())
+                .filter(r -> !estruturais.contains(r.getCodigo()) && r.isAtivo())
                 .collect(Collectors.toList());
 
         // Adiciona as rubricas ao comboRubrica
@@ -170,10 +170,12 @@ public class FormLancamentoController {
                 return null;
             }
         });
-        // Adiciona as modalidades ao comboModalidade
+        // Adiciona as modalidades ao comboModalidade (o listener abaixo irá ajustar
+        // isso dinamicamente)
         cbModalidade.getItems().addAll("Valor", "Porcentagem", "Quantidade");
-        // Adiciona as bases de cálculo ao comboBaseCalculo
-        cbBaseCalculo.getItems().addAll("Salário Bruto", "Salário Líquido", "Livre");
+        // Adiciona as bases de cálculo ao comboBaseCalculo (Removido o Salário Líquido
+        // a pedido)
+        cbBaseCalculo.getItems().addAll("Salário Bruto", "Livre");
         // Listener para alterar a visibilidade do campo txtBaseLivre
         cbBaseCalculo.valueProperty().addListener((obs, oldVal, newVal) -> {
             // Verifica se a base de cálculo é Livre
@@ -199,14 +201,29 @@ public class FormLancamentoController {
         chkDescontoDSR.setManaged(false);
         // Listener para alterar a visibilidade do checkbox descontoDSR
         comboRubrica.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            // Verifica se a rubrica contém "falta"
-            if (newVal != null && newVal.getDescricao().toLowerCase().contains("falta")) {
+            // Verifica se a rubrica contém "falta" ou "atraso"
+            if (newVal != null && (newVal.getDescricao().toLowerCase().contains("falta") || newVal.getDescricao().toLowerCase().contains("atraso"))) {
                 chkDescontoDSR.setVisible(true);
                 chkDescontoDSR.setManaged(true);
-            } else { // Se a rubrica não contém "falta", oculta e gerencia o checkbox descontoDSR
+            } else { // Se a rubrica não contém "falta" nem "atraso", oculta e gerencia o checkbox descontoDSR
                 chkDescontoDSR.setVisible(false);
                 chkDescontoDSR.setManaged(false);
                 chkDescontoDSR.setSelected(false);
+            }
+
+            // Regra: APENAS as rubricas pré-cadastradas 2, 3, 4 e 5 podem ter a opção
+            // "Quantidade" e DEVE ser a ÚNICA opção
+            if (newVal != null) {
+                int cod = newVal.getCodigo();
+                if (cod == 2 || cod == 3 || cod == 4 || cod == 5) {
+                    cbModalidade.getItems().setAll("Quantidade");
+                    cbModalidade.setValue("Quantidade");
+                } else {
+                    cbModalidade.getItems().setAll("Valor", "Porcentagem");
+                    if ("Quantidade".equals(cbModalidade.getValue()) || cbModalidade.getValue() == null) {
+                        cbModalidade.setValue("Valor");
+                    }
+                }
             }
         });
     }
@@ -259,15 +276,16 @@ public class FormLancamentoController {
             // Tenta converter o valor inserido para double
             double numInserido = Double.parseDouble(valorQtdStr.replace(",", "."));
             double quantidade = 0.0;
-            java.math.BigDecimal valor = null;
+            BigDecimal valor = null;
             String baseCalculo = null;
             // Se a modalidade for Quantidade
             if ("Quantidade".equals(modalidade)) {
                 quantidade = numInserido;
-                // A rubrica 103 (DSR) será lançada separadamente no final, se o checkbox estiver marcado.
+                // A rubrica 103 (DSR) será lançada separadamente no final, se o checkbox
+                // estiver marcado.
             } else if ("Porcentagem".equals(modalidade)) {
                 // Se a modalidade for Porcentagem, converte o valor inserido para BigDecimal
-                valor = new java.math.BigDecimal(numInserido).setScale(2, java.math.RoundingMode.HALF_UP);
+                valor = BigDecimal.valueOf(numInserido).setScale(2, RoundingMode.HALF_UP);
                 // Se a base de cálculo for Livre
                 if ("Livre".equals(cbBaseCalculo.getValue())) {
                     String valLivre = txtBaseLivre.getText();
@@ -290,8 +308,42 @@ public class FormLancamentoController {
             } else {
                 // Se a modalidade não for Porcentagem nem Quantidade, converte o valor inserido
                 // para BigDecimal
-                valor = new java.math.BigDecimal(numInserido).setScale(2, java.math.RoundingMode.HALF_UP);
+                valor = BigDecimal.valueOf(numInserido).setScale(2, RoundingMode.HALF_UP);
             }
+
+            // Validação de teto para VT e PAT
+            if (r.getCodigo() == 901 || r.getCodigo() == 902) {
+                BigDecimal limiteMax;
+                String nomeBen;
+                if (r.getCodigo() == 901) {
+                    limiteMax = f.getSalarioBruto().multiply(new BigDecimal("0.06")).setScale(2, RoundingMode.HALF_UP);
+                    nomeBen = "Vale Transporte (6%)";
+                } else {
+                    limiteMax = f.getSalarioBruto().multiply(new BigDecimal("0.20")).setScale(2, RoundingMode.HALF_UP);
+                    nomeBen = "Vale Alimentação (20%)";
+                }
+
+                BigDecimal valorSimulado = BigDecimal.ZERO;
+                if ("Valor".equals(modalidade) && valor != null) {
+                    valorSimulado = valor;
+                } else if ("Porcentagem".equals(modalidade) && valor != null) {
+                    BigDecimal baseCalcVal = f.getSalarioBruto();
+                    if ("Livre".equals(cbBaseCalculo.getValue()) && baseCalculo != null) {
+                         try { baseCalcVal = new BigDecimal(baseCalculo); } catch(Exception ignored){}
+                    }
+                    valorSimulado = baseCalcVal.multiply(valor).divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
+                }
+
+                if (valorSimulado.compareTo(limiteMax) > 0) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Teto Ultrapassado");
+                    alert.setHeaderText("Limite Legal Excedido");
+                    alert.setContentText("O valor projetado de desconto (R$ " + valorSimulado + ") ultrapassa o teto legal permitido para " + nomeBen + " que é de R$ " + limiteMax + " para este funcionário.");
+                    alert.showAndWait();
+                    return;
+                }
+            }
+
             // Se o lançamento não estiver editado
             if (lancamentoEditado == null) {
                 // Cria um novo lançamento
@@ -309,9 +361,9 @@ public class FormLancamentoController {
                 lancamentoEditado.setDataClt(data);
                 lancamentoRepo.atualizar(lancamentoEditado);
             }
-            
+
             // Verifica se o desconto DSR deve ser lançado como rubrica independente (103)
-            if (chkDescontoDSR.isSelected() && r.getDescricao().toLowerCase().contains("falta")) {
+            if (chkDescontoDSR.isSelected() && (r.getDescricao().toLowerCase().contains("falta") || r.getDescricao().toLowerCase().contains("atraso"))) {
                 // Cria um lançamento separado para a rubrica 103 (DSR)
                 Lancamento lDsr = new Lancamento(0, folhaAtual.getId(), f.getCpf(), 103, 1.0, data, null,
                         "Quantidade", "Salário Bruto", null, null);

@@ -1,12 +1,12 @@
-/**
- * @brief Classe que representa um lançamento
- */
 package com.sfp.folha.domain;
 
 import java.math.BigDecimal;
 
 import java.time.LocalDate;
 
+/**
+ * @brief Classe que representa um lançamento
+ */
 public class Lancamento {
     private int id;
     private int idFolha;

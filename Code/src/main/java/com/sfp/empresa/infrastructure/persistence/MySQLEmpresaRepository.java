@@ -1,6 +1,3 @@
-/** 
- * @brief Classe responsável por implementar a interface EmpresaRepository
- */
 package com.sfp.empresa.infrastructure.persistence;
 
 import com.sfp.core.database.ConexaoBD;
@@ -14,6 +11,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @brief Classe responsável por implementar a interface EmpresaRepository
+ */
 public class MySQLEmpresaRepository implements EmpresaRepository {
 
     /**
@@ -39,7 +39,7 @@ public class MySQLEmpresaRepository implements EmpresaRepository {
                 // Executa a query
                 ps.executeUpdate();
             } catch (Exception e) {
-                throw new RuntimeException("Erro ao inserir nova empresa", e);
+                throw new IllegalStateException("Erro ao inserir nova empresa", e);
             }
         } else { // Se existir empresa, atualiza
             // SQL para atualizar empresa preservando as colunas
@@ -57,7 +57,7 @@ public class MySQLEmpresaRepository implements EmpresaRepository {
                 // Executa a query
                 ps.executeUpdate();
             } catch (Exception e) {
-                throw new RuntimeException("Erro ao atualizar empresa", e);
+                throw new IllegalStateException("Erro ao atualizar empresa", e);
             }
         }
     }
@@ -78,7 +78,7 @@ public class MySQLEmpresaRepository implements EmpresaRepository {
             // Executa a query
             ps.executeUpdate();
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao excluir empresa", e);
+            throw new IllegalStateException("Erro ao excluir empresa", e);
         }
     }
 
@@ -104,7 +104,7 @@ public class MySQLEmpresaRepository implements EmpresaRepository {
                         rs.getInt("dia_fechamento_ponto"));
             }
         } catch (Exception ex) {
-            throw new RuntimeException("Erro ao buscar empresa única", ex);
+            throw new IllegalStateException("Erro ao buscar empresa única", ex);
         }
         return null;
     }
@@ -131,7 +131,7 @@ public class MySQLEmpresaRepository implements EmpresaRepository {
                 // Executa a query
                 ps.executeUpdate();
             } catch (Exception e) {
-                throw new RuntimeException("Erro ao inserir endereço da empresa", e);
+                throw new IllegalStateException("Erro ao inserir endereço da empresa", e);
             }
         } else {
             // Se o endereço existir, atualiza
@@ -149,7 +149,7 @@ public class MySQLEmpresaRepository implements EmpresaRepository {
                 // Executa a query
                 ps.executeUpdate();
             } catch (Exception e) {
-                throw new RuntimeException("Erro ao atualizar endereço da empresa", e);
+                throw new IllegalStateException("Erro ao atualizar endereço da empresa", e);
             }
         }
     }
@@ -170,7 +170,7 @@ public class MySQLEmpresaRepository implements EmpresaRepository {
             // Executa a query
             ps.executeUpdate();
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao excluir endereço da empresa", e);
+            throw new IllegalStateException("Erro ao excluir endereço da empresa", e);
         }
     }
 
@@ -203,7 +203,7 @@ public class MySQLEmpresaRepository implements EmpresaRepository {
                 }
             }
         } catch (Exception e) { // Caso ocorra um erro
-            throw new RuntimeException("Erro ao listar endereços da empresa", e);
+            throw new IllegalStateException("Erro ao listar endereços da empresa", e);
         }
         return enderecos;
     }

@@ -1,10 +1,10 @@
-/**
- * @brief Interface que define as operações de persistência para FolhaMes
- */
 package com.sfp.folha.domain;
 
 import java.util.List;
 
+/**
+ * @brief Interface que define as operações de persistência para FolhaMes
+ */
 public interface FolhaMesRepository {
     /**
      * @brief Salva uma folha de pagamento

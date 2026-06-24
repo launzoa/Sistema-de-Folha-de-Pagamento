@@ -1,11 +1,11 @@
-/**
- * @brief: Interface que representa o repositório de funcionários (interação com banco de dados)
- */
-
 package com.sfp.funcionario.domain;
 
 import java.util.List;
 
+/**
+ * @brief: Interface que representa o repositório de funcionários (interação com
+ *         banco de dados)
+ */
 public interface FuncionarioRepository {
     /**
      * @brief: Salva um funcionário no banco de dados

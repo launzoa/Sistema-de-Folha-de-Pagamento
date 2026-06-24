@@ -1,6 +1,3 @@
-/**
- * @brief Classe responsável por representar o holerite de um funcionário.
- */
 package com.sfp.folha.domain;
 
 import java.util.List;
@@ -9,6 +6,9 @@ import java.math.BigDecimal;
 import com.sfp.funcionario.domain.Funcionario;
 import com.sfp.empresa.domain.Empresa;
 
+/**
+ * @brief Classe responsável por representar o holerite de um funcionário.
+ */
 public class Holerite {
     private final Empresa empresa;
     private final Funcionario funcionario;

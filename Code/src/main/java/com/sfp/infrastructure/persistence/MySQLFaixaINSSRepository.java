@@ -1,9 +1,6 @@
-/**
- * @brief Classe que implementa a interface FaixaINSSRepository.
- */
-
 package com.sfp.infrastructure.persistence;
 
+import com.sfp.core.database.ConexaoBD;
 import com.sfp.core.domain.FaixaINSS;
 import com.sfp.core.domain.FaixaINSSRepository;
 
@@ -14,6 +11,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+/**
+ * @brief Classe que implementa a interface FaixaINSSRepository.
+ */
 public class MySQLFaixaINSSRepository implements FaixaINSSRepository {
 
     /**
@@ -27,7 +27,7 @@ public class MySQLFaixaINSSRepository implements FaixaINSSRepository {
 
         // Conexão com banco de dados mysql
         try (Connection conn = com.sfp.core.database.ConexaoBD.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // Setando os valores para o statement
             pstmt.setBigDecimal(1, faixaINSS.getPiso());
@@ -39,10 +39,10 @@ public class MySQLFaixaINSSRepository implements FaixaINSSRepository {
             int linhasAfetadas = pstmt.executeUpdate();
 
             if (linhasAfetadas == 0) {
-                throw new RuntimeException("Nenhuma linha foi inserida ao cadastrar faixa de alíquota do INSS.");
+                throw new IllegalStateException("Nenhuma linha foi inserida ao cadastrar faixa de alíquota do INSS.");
             }
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao cadastrar Faixa INSS no Banco de Dados", e);
+            throw new IllegalStateException("Erro ao cadastrar Faixa INSS no Banco de Dados", e);
         }
     }
 
@@ -57,8 +57,8 @@ public class MySQLFaixaINSSRepository implements FaixaINSSRepository {
         String sql = "SELECT * FROM faixa_inss";
 
         // Conexão com banco de dados mysql
-        try (Connection conn = com.sfp.core.database.ConexaoBD.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexaoBD.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
             // Executa o statement
             ResultSet rs = pstmt.executeQuery();
             // Percorre o resultset
@@ -70,7 +70,7 @@ public class MySQLFaixaINSSRepository implements FaixaINSSRepository {
                 faixas.add(faixa);
             }
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar faixas de INSS no Banco de Dados", e);
+            throw new IllegalStateException("Erro ao buscar faixas de INSS no Banco de Dados", e);
         }
         return faixas;
     }
@@ -85,8 +85,8 @@ public class MySQLFaixaINSSRepository implements FaixaINSSRepository {
         // Script sql para atualizar uma faixa de aliquota do INSS
         String sql = "UPDATE faixa_inss SET piso = ?, teto = ?, aliquota = ?, parcela_deduzir = ? WHERE piso = ? AND teto = ?";
         // Conexão com banco de dados mysql
-        try (Connection conn = com.sfp.core.database.ConexaoBD.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexaoBD.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
             // Setando os valores para o statement
             pstmt.setBigDecimal(1, nova.getPiso());
             pstmt.setBigDecimal(2, nova.getTeto());
@@ -97,7 +97,7 @@ public class MySQLFaixaINSSRepository implements FaixaINSSRepository {
             // Executa o statement
             pstmt.executeUpdate();
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao atualizar Faixa INSS", e);
+            throw new IllegalStateException("Erro ao atualizar Faixa INSS", e);
         }
     }
 }

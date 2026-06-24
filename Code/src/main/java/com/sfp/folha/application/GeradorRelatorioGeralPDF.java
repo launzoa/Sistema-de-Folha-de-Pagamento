@@ -1,6 +1,3 @@
-/**
- * @brief Classe responsável por gerar o arquivo PDF físico do Relatório Geral da Folha.
- */
 
 package com.sfp.folha.application;
 
@@ -15,15 +12,20 @@ import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.Rectangle;
 
+import java.awt.Color;
 import java.util.List;
 import java.io.FileOutputStream;
+import java.util.logging.Logger;
 
 import com.sfp.empresa.domain.Empresa;
-import com.sfp.empresa.domain.EmpresaRepository;
-import com.sfp.empresa.infrastructure.persistence.MySQLEmpresaRepository;
 import com.sfp.folha.domain.Holerite;
 
+/**
+ * @brief Classe responsável por gerar o arquivo PDF físico do Relatório Geral
+ *        da Folha.
+ */
 public class GeradorRelatorioGeralPDF {
 
     /**
@@ -39,7 +41,7 @@ public class GeradorRelatorioGeralPDF {
      */
     public void gerarPdf(List<Holerite> holerites, String competencia, String diretorioSaida,
             String totalBase, String totalProv, String totalDesc, String totalLiq, String totalFgts,
-            com.sfp.empresa.domain.Empresa empresaConfigurada) {
+            Empresa empresaConfigurada) {
         // Nome do arquivo PDF com a competência.
         String nomeArquivo = diretorioSaida + "/Relatorio_Geral_Empresa_" + competencia.replaceAll("/", "_") + ".pdf";
         // Cria o documento.
@@ -64,16 +66,20 @@ public class GeradorRelatorioGeralPDF {
             PdfPTable tableCabecalho = new PdfPTable(2);
             tableCabecalho.setWidthPercentage(100);
             // Busca os dados da empresa (Injetado em vez de pesquisar no BD)
-            String nomeEmpresa = (empresaConfigurada != null && empresaConfigurada.getRazaoSocial() != null) ? empresaConfigurada.getRazaoSocial() : "SFP Corporation LTDA";
-            String cnpjEmpresa = (empresaConfigurada != null && empresaConfigurada.getCnpj() != null) ? empresaConfigurada.getCnpj() : "00.000.000/0001-00";
+            String nomeEmpresa = (empresaConfigurada != null && empresaConfigurada.getRazaoSocial() != null)
+                    ? empresaConfigurada.getRazaoSocial()
+                    : "SFP Corporation LTDA";
+            String cnpjEmpresa = (empresaConfigurada != null && empresaConfigurada.getCnpj() != null)
+                    ? empresaConfigurada.getCnpj()
+                    : "00.000.000/0001-00";
             // Cria a célula com os dados da empresa
             PdfPCell cellEmpresa = new PdfPCell(
                     new Phrase("EMPRESA: " + nomeEmpresa + "\nCNPJ: " + cnpjEmpresa, fontNormal));
-            cellEmpresa.setBorder(PdfPCell.NO_BORDER);
+            cellEmpresa.setBorder(Rectangle.NO_BORDER);
             tableCabecalho.addCell(cellEmpresa);
             // Cria a célula com os dados da competência
             PdfPCell cellMes = new PdfPCell(new Phrase("COMPETÊNCIA: " + competencia, fontBold));
-            cellMes.setBorder(PdfPCell.NO_BORDER);
+            cellMes.setBorder(Rectangle.NO_BORDER);
             cellMes.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tableCabecalho.addCell(cellMes);
             // Adiciona a tabela de cabeçalho ao documento
@@ -87,7 +93,7 @@ public class GeradorRelatorioGeralPDF {
             PdfPCell cTit = new PdfPCell(new Phrase("RESUMO CONSOLIDADO", fontSubTitulo));
             cTit.setColspan(2);
             cTit.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cTit.setBackgroundColor(new java.awt.Color(230, 230, 230));
+            cTit.setBackgroundColor(new Color(230, 230, 230));
             tableResumo.addCell(cTit);
             // Método auxiliar para adicionar linhas ao resumo
             adicionarLinhaResumo(tableResumo, "Total Salário Base:", totalBase, fontNormal);
@@ -125,10 +131,10 @@ public class GeradorRelatorioGeralPDF {
             document.add(tableFuncs);
 
         } catch (DocumentException e) { // Exceções relacionadas ao PDF
-            e.printStackTrace();
-            System.err.println("Erro ao gerar PDF Geral: " + e.getMessage());
+            Logger.getGlobal().severe(e.getMessage());
+            Logger.getGlobal().severe("Erro ao gerar PDF Geral: " + e.getMessage());
         } catch (Exception e) { // Exceções gerais
-            e.printStackTrace();
+            Logger.getGlobal().severe(e.getMessage());
         } finally { // Fecha o documento
             document.close();
         }

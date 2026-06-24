@@ -1,6 +1,7 @@
 package com.sfp.core.domain;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * @brief Classe que representa as faixas de INSS
@@ -63,7 +64,7 @@ public class FaixaINSS {
      * @return boolean: true se o salário estiver na faixa, false caso contrário
      */
     public boolean isSalarioNaFaixa(BigDecimal salario) {
-        return salario.compareTo(teto) <= 0;
+        return salario.compareTo(piso) >= 0 && salario.compareTo(teto) <= 0;
     }
 
     /**
@@ -72,7 +73,7 @@ public class FaixaINSS {
      * @return BigDecimal: desconto
      */
     public BigDecimal calcularDesconto(BigDecimal salario) {
-        BigDecimal aliquotaDecimal = aliquota.divide(new BigDecimal("100"), 4, java.math.RoundingMode.HALF_UP);
+        BigDecimal aliquotaDecimal = aliquota.divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP);
         return salario.multiply(aliquotaDecimal).subtract(parcelaADeduzir);
     }
 

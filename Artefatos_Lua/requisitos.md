@@ -10,7 +10,7 @@
 Esta seção contextualiza o leitor sobre o propósito do documento de requisitos, quais as funcionalidades que entram no escopo do projeto e quais são desconsideradas, as premissas e limitações consideras, bem como um glossário que define alguns jargões adotados no decorrer do documento. 
 ### 1.1 Propósito do Documento
 
-Este documento de requisitos constitui a especificação completa e definitiva dos requisitos de negócios para o Sistema de Folha de Pagamento (SFP). Ele serve como o contrato universal entre os idealizadores do produto, os gestores operacionais (Recursos Humanos e Contabilidade) e as equipes de construção técnica (Desenvolvedores do Sistema). Ele descreve estritamente **o que** o sistema fará pelas pessoas, **quais** problemas ele resolve e **como** as regras do mundo real (Leis Trabalhistas, políticas corporativas) impõem limites e condições à operação da plataforma.
+Este documento de requisitos constitui a especificação completa e definitiva dos requisitos de negócios para o Sistema de Folha de Pagamento (SFP). Ele serve como o contrato universal entre os idealizadores do produto, os gestores operacionais (Recursos Humanos e Contabilidade) e as equipes de construção técnica (Desenvolvedores do Sistema). Ele descreve estritamente o que o sistema fará pelas pessoas, quais problemas ele resolve e como as regras do mundo real (Leis Trabalhistas, políticas corporativas) impõem limites e condições à operação da plataforma.
 
 ### 1.2 Escopo do Produto
 
@@ -22,7 +22,8 @@ O Sistema de Folha de Pagamento atua como um facilitar e orquestrador das obriga
 *   A operação fluida e mensal de apontamento de lançamentos (controle de faltas injustificadas, atrasos proporcionais, e abonos) e horas extras.
 *   A execução financeira matemática da conversão de salário bruto para líquido, deduzindo progressivamente as alíquotas oficiais de INSS e bloqueando operações financeiras proibitivas (como gerar dívida/salário negativo ao trabalhador).
 *   A proteção patrimonial da empresa através de auditoria imutável e fechamentos de folhas que congelam o passado de forma irrefutável para defesa jurídica.
-*   A geração dos documentos oficiais de comprovação, destacando-se o contracheque legal (Holerite) formatado e projetado para validade documental digital.  
+*   A geração dos documentos oficiais de comprovação, destacando-se o contracheque legal (Holerite) formatado e projetado para validade documental digital.
+*   Barreiras rígidas de autenticação (Login e Senha) com perfis de acesso apartados, utilizando criptografia forte em banco de dados para proteção e conformidade do sistema perante a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018), categorizando e protegendo a manipulação de "Dados Sensíveis" da companhia.
 
 **Fora do Escopo:**
 *   Pagamento e emissão de notas para profissionais autônomos (Pessoa Jurídica), Freelancers, Estagiários e Menores Aprendizes.
@@ -30,12 +31,10 @@ O Sistema de Folha de Pagamento atua como um facilitar e orquestrador das obriga
 *   Repasse direto de valores interbancários automatizados (integração eletrônica automática de contas correntes); a ferramenta fornece os valores a serem depositados, mas não movimenta as contas dos bancos ativamente.
 *   Cálculo de eventos de longo prazo como o pagamento de fim de ano, regido pelo 13º salário, e férias acumulativas. 
 *   Validação de faltas ou atrasos pela apresentação de atestados ou abonos médicos.
-*   Barreiras de bloqueio (Login e Senha inquebráveis por terceiros, bem como senhas criptografadas) ditadas pela Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018), onde o sistema é categorizado por manipulador "Dados Sensíveis".
 
 ### 1.3 Glossário e Definições de Negócio
 
 Para garantir que os interessados no sistema (Diretores, Advogados ou Operadores de RH) interpretem os requisitos da mesma forma, são apresentadas as seguintes definições de jargões e termos usados no decorrer deste documento:
-
 *   **Abono Médico:** A neutralização contábil de uma falta ou punição de frequência devido à entrega e registro de atestado médico com validade legal.
 *   **Auditoria (Log):** O recurso interno de governança corporativa que grava quem, quando e qual dado exato foi alterado por um usuário na plataforma, usado exclusivamente para averiguação de fraudes ou erros.
 *   **Base de Cálculo:** O somatório parcial de dinheiro sobre o qual o governo ou a empresa aplica uma porcentagem de imposto. (Ex: O INSS não recai sobre tudo que o funcionário ganha, mas apenas sobre as verbas listadas como "Base de Cálculo do INSS").
@@ -115,6 +114,11 @@ Premissas adotadas que precisam existir no mundo físico para que as promessas d
 
 Esta seção detalha o comportamento estrito e exaustivo da plataforma, mapeando cada obrigação mínima que o sistema precisa cumprir perante o cenário empresarial. A categorização segue a modelagem padrão do framework FURPS+ de Craig Larman, dissecando as interações em Funcionalidade, Usabilidade, Confiabilidade, Desempenho, Suportabilidade e Restrições Físicas.
 
+**Legenda para classificação dos requisitos:**
+*   **`[E]` Evidente:** Requisitos frontais. Operações visuais, formulários, botões e telas ativamente manuseados pelo usuário.
+*   **`[O]` Oculto:** Requisitos de retaguarda. Regras de negócio, restrições algorítmicas, bloqueios de banco de dados e auditoria de fundo.
+*   **`[D]` Opcional:** Requisitos afrouxados (Despriorizados). Idealizações documentais que se curvaram a uma implementação mais leve e orgânica na versão final do código.
+
 ### 3.1 Requisitos de Funcionalidade 
 
 As capacidades primordiais da plataforma. Abordam os fluxos de trabalho centrais gerenciais e operacionais para a execução correta da legislação trabalhista e controle interno do caixa.
@@ -187,8 +191,8 @@ As capacidades primordiais da plataforma. Abordam os fluxos de trabalho centrais
 
 * **3.1.8.1 [E]** — O sistema deve exportar de forma vetorizada, profissional e formatada, o Recibo Estendido Documental Trabalhista Final assinado por via das telas: O "Holerite".
 * **3.1.8.2 [E]** — O sistema deve desenhar o Holerite com o cabeçalho base informando o nome completo do contratante da praça (A Empresa com seu CNPJ fiscal contábil), e em seção dedicada logo abaixo, a identidade física demográfica admissional do favorecido em si (Nome exato do sujeito, CPF e Cargo ocupado).
-* **3.1.8.3 [E]** — O sistema deve diagramar o Holerite organizando o miolo descritivo principal dividindo os Proventos injetados e listando as alíquotas com as bases onde se incidiram as leis previdenciárias estatais federais.
-* **3.1.8.4 [E]** — O sistema deve incluir uma declaração sumária afixada no rodapé do documento impressso informando o "FGTS do Mês" e sua "Base de Cálculo", evidenciando os depósitos do Fundo de Garantia ao funcionário de forma indissociável.
+* **3.1.8.3 [D]** — (Opcional) A listagem estrita em colunas de Alíquotas e Bases de Incidência separadas visualmente. O sistema prioriza a exibição de resultados consolidados diretos (Valor do Provento e Valor Final do Desconto), simplificando a interface física do Holerite e abrindo mão de detalhamentos de bases.
+* **3.1.8.4 [D]** — (Opcional) O sistema não é obrigado a destacar de forma isolada e visual no rodapé do espelho mensal as bases do "FGTS do Mês". A entrega inicial consolidou a geração dos recibos sem exigir blocos apartados específicos pro recolhimento patronal, mantendo o foco do documento estritamente na composição líquida de fato do trabalhador.
 
 #### 3.1.9 Módulo de Auditoria e o Histórico Universal
 
@@ -201,31 +205,32 @@ As capacidades primordiais da plataforma. Abordam os fluxos de trabalho centrais
 
 Fatores atrelados à ergonomia visual profunda e à mitigação de catástrofes manuais provocadas pela fadiga ocupacional nas rotinas administrativas massivas da equipe.
 
-* **3.2.1.1 [E]** — O sistema deve automatizar a inteligência da digitação das rotinas densas contábeis; a inserção crua repetitiva numeral deve auto converter o alinhamento com pontos nos CPFs contínuos, trançar números no documento corporativo estendido matriz federal contínuo em CNPJs sem esforço braçal auxiliar ("000" para "000.") e defender visualmente a quebra do centavo fracionado final sempre através da base indicadora de moeda brasileira contínua global formatada por uma vírgula exata sem uso falho crônico do ponto base decimal alienígena estrangeiro comum em interfaces obsoletas rústicas sem padronizações no Brasil corporativo comercial geral.
-* **3.2.1.2 [E]** — O sistema deve comunicar através do viés das "Sinalizações Semafóricas de Restrição Legal"; campos cadastrais essenciais pra admissão ou geração financeira contínua de guias obrigatórias possuirão ícones ou indicações avermelhadas persistentes no visor, engessando qualquer salvamento forçado apressado e acusando exatamente quais laudas restam vazias no preenchimento falho dos novatos apressados logados sem supervisão direta no departamento naquelas longas exaustões dos turnos laborais civis perante fim do mês temporal na RH.
-* **3.2.1.3 [E]** — O sistema deve mitigar a cultura e erro base da colisão catastrófica acidental perante cliques compulsivos ("Double-click habits"). Uma barreira imperativa e visual intrusiva central ("Deseja definitivamente irreversivelmente aplicar essa penalidade financeira no alvo ou congelar toda uma massa corporativa do mês para sempre e vitalício? - CONFIRMAR/CANCELAR") deve surgir saltando do eixo, impedindo que o nervosismo custe falhas irreparáveis irreparáveis contábeis a empresa implementadora base ali do fato na execução do painel rotineiro apressado.
-* **3.2.1.4 [E]** — O sistema deve abrigar, permanentemente afixado no cume central orientador ininterrupto sem ser tampado das interfaces perante os menus e abas e formulários exaustivos do fluxo do uso diário estafante de ocorrências; um farol ou placa luminosa global resumindo sem dúvidas o destino ou a fenda temporal que a pessoa atual operadora se afunda na rotina de lançamento hoje; exclamando abertamente o Status Matriz Global Geral "COMPETÊNCIA VIGENTE AGORA 12/2026 - MÊS ABERTO AO EDITAL DE MODIFICAÇÕES FINAIS APROVADAS" baseando-se a tranquilidade.
-* **3.2.1.5 [E]** — O sistema deve tratar todos os comunicados gerados através da falha computacional e lógicas sob linguajar leigo e compassivo, estirpando da face corporativa códigos arcanos ilegíveis ("Exceção fatal nula nas entidades 04 da JVM do Hibernate"); traduzindo o desvio em conselhos: "As informações bancárias digitadas encontram-se fora de um parâmetro aceito comercialmente. Refaça a checagem no formulário."  
+* **3.2.1.1 [D]** — O sistema lida internamente com a conversão matemática monetária do padrão local fracionário brasileiro de casas decimais (utilizando a vírgula do usuário de forma amigável ao fundo para o formato aceitável computacional) com tolerância, além de tratar validação em CPFs crus no sistema. (Nota: máscaras estéticas de auto-formatação visual instantânea nos campos CPF/CNPJ durante a digitação foram consideradas opcionais para o escopo inicial da aplicação).
+* **3.2.1.2 [E]** — O sistema deve comunicar faltas na operação através de painéis indicativos de erro; campos cadastrais essenciais que restem vazios no preenchimento engessam salvamentos forçados e são acusados na tela com uma sinalização amigável de texto vermelho, alertando pontualmente o operador.
+* **3.2.1.3 [E]** — O sistema deve mitigar acidentes por cliques impulsivos nas operações destrutivas. Ações de exclusão corporativas (como exclusão de dados diretos) gerarão uma barreira protetiva imperativa e visual de confirmação (Dialog/Alert) perguntando sobre a certeza da deleção, enquanto processos diários normais de salvamentos adotam fluidez imediata sem travas obstrutivas extras.
+* **3.2.1.4 [D]** — (Opcional) A ferramenta priorizará a clareza da temporalidade diretamente no interior da tela do módulo processador da folha (onde existe a seleção ativa e a listagem daquela competência), não tornando mandatório um banner/farol central permanente no topo da interface global para as demais operações.
+* **3.2.1.5 [E]** — O sistema deve tratar todos os comunicados gerados através de falha sob linguajar leigo e compassivo, excluída da face corporativa códigos técnicos ("Exceção fatal nula nas entidades..."); traduzindo o desvio em mensagens tratadas e isoladas via sistema central de alerta ou componentes textuais integrados à interface.  
 
 ### 3.3 Requisitos de Confiabilidade (Reliability)
 
-Mecanismos enraizados no algoritmo para barrar fraudes corporativas internas baseadas no apodrecimento moral das regras de negócio do dinheiro real sob pressões e conchavos e o combate base à obsolescência dos fatos gravados passados inquestionáveis por justiça estatal.
+Mecanismos adotados para flexibilizar a operação da equipe, preterindo a trava extrema pela maleabilidade das correções corporativas diárias no processamento da folha.
 
-* **3.3.1.1 [O]** — O sistema deve consolidar o Pacto do Passado Cristalizado inabalável nas execuções globais financeiras de prestação de verbas civis; Nenhuma medida ou sentença de recomposição de verbas que adicione aumentos num contrato feito ativamente na janela corrente operada da "Folha de hoje mês tal" refletirá, espalhará ou arruinará de modo fantasmagórico o saldo retroativo depositado consolidado fiscal legal lacrado guardado selado das inúmeras folhas trancadas guardadas com códigos bases das vidas extintas guardadas passadas temporais inquestionáveis.
-* **3.3.1.2 [O]** — O sistema deve amparar a indestrutibilidade base legal nas atas das edições. Como não há lixeira, exclusões limpas perfeitas intocáveis contínuas em atitudes nefastas nas alterações financeiras efetuadas; o sistema assume um posicionamento jurídico vital contábil impositivo para os gestores finais: Não existindo como varrer lixo financeiro por debaixo de tapetes logísticos de TI, os donos ganham provas cabais documentais imaculadas plenas em juízos judiciais da comarca fiscal do Brasil contra o funcionário da base financeira estipulada em roubos de dinheiro ou reajustes combinados maliciosos contínuos.
+* **3.3.1.1 [D]** — (Opcional) O Pacto do Passado Cristalizado inabalável. A versão base do sistema opera seus recursos matemáticos exclusivamente de forma dinâmica em tempo real (*on-the-fly*), projetando a tela e o PDF dos espelhos através dos valores salariais e tributários atuais do colaborador. A cristalização retroativa de Holerites no repositório com valores de anos passados exatos não foi implementada como mandatória para essa entrega.
+* **3.3.1.2 [D]** — (Opcional) Indestrutibilidade Legal ("Fim da Lixeira"). O sistema assume uma postura operacional mais amigável, fornecendo deleções efetivas do banco de dados na tela de Lançamentos Diários (`DELETE FROM SQL`). Em vez de gerar engessamentos em logs de estorno contábil para erros simples, permite varrer os equívocos digitados pelo operador sem registrar a deleção.
 
 ### 3.4 Requisitos de Desempenho (Performance)
+
 Expectativas relativas à capacidade tangível perante carga exaustiva pesada massiva bruta laboratorial base de tempo contínuo contábil nos fechamentos de prazos estrangulados apertados da equipe.
 
-* **3.4.1.1 [O]** — O sistema deve gerenciar a varredura base dos cadastros operantes dos talentos corporativos contratados através de técnicas da leitura interna paginada imediata rápida e listagens tabulares precisas sem exaurir recursos primários computadores básicos base estipulados e previstos de uso pela firma sem causar paralisia total ("travamentos gerais das janelas de Java") das telas locais do trabalhador perante bases com 1.500 trabalhadores ativos ao longo de anos extensos corporativos baseados globais ali arquivados.
-* **3.4.1.2 [O]** — O sistema deve reter na fundação da arquitetura isolada toda a engrenagem matemática complexa abstrata bruta contábil necessária para triturar valores e devolver cálculos exatos líquidos federais para holerites independentemente estritamente sem se curvar para consultar internet contínua mundial de fibra-ótica paralela; o cérebro processador está residente ali local, garantindo execução ininterrupta de velocidade mesmo que galpões base percam acesso e torres de sinais telefônicas globais contínuas parem nas bases matrizes isoladas distantes em fábricas industriais regionais pesadas de montadoras afastadas sem redes.
+* **3.4.1.1 [D]** — (Opcional) O sistema lidará com as listagens base de cadastros (dezenas ou centenas de funcionários) aproveitando a otimização nativa de interface visual (pelo JavaFX) combinada a retornos simples em massa do banco de dados, sem tornar obrigatório no momento inicial o uso rigoroso de paginação em nível de SQL.
+* **3.4.1.2 [O]** — O sistema deve reter na fundação da arquitetura isolada toda a engrenagem matemática complexa abstrata bruta contábil necessária para triturar valores e devolver cálculos exatos líquidos federais para holerites independentemente estritamente sem se curvar para consultar internet contínua mundial de fibra-ótica paralela; o cérebro processador está residente ali local, garantindo execução ininterrupta de velocidade mesmo que galpões base percam acesso a redes.
 
 ### 3.5 Requisitos de Suportabilidade (Supportability)
 
 Mecanismos de exportação documental, escalabilidade técnica e manutenções passivas futuras para continuidade.
 
-* **3.5.1.1 [E]** — O sistema deve injetar os Holerites físicos no mundo real usando apenas e tão somente o molde fixo padronizado de forma universal contábil: A formatação PDF (Portable Document Format - Variantes fixadas estendidas imutáveis PDF/A de preservações). Esse pilar garante a aderência dos boletos nas telas dos mais diversos dispositivos eletrônicos (tablets, computadores e smartphones) do colaborador e a exatidão inalterada base de fonte.
-* **3.5.1.2 [O]** — O sistema deve eliminar o desgaste contínuo cognitivo doloroso em massa dos funcionários que necessitam empacotar os recibos gerados para envios isolados nomeando em fúria milhares de recibos exatos por mês; aplicando a tecnologia estrita base para que a gravação já nasça salva nomeada categoricamente na matriz contínua da empresa (Combinando Nomenclaturas como "CPF + MES_E_ANO + RECIBO.pdf" unificado nas raízes estendidas do arquivamento do sistema de arquivos operacionais global limpo e lógico corporativo).
+* **3.5.1.1 [D]** — (Opcional) A geração em variante técnica restritiva de arquivística imutável (PDF/A). O sistema foca em prover a exportação universal convencional limpa na extensão padrão de PDF legível, garantindo a visualização em todos os dispositivos comuns do mercado sem injetar travas extremas e engessadas no motor de renderização da interface local.
+* **3.5.1.2 [D]** — (Opcional) O empacotamento com identificadores primários desumanizados restritos (ex: nome do arquivo em "CPF + MES_E_ANO.pdf"). A arquitetura privilegia a leitura mental direta ao salvar os recibos automaticamente priorizando o título amigável: `"Holerite_NomeDoFuncionario_Mes_Ano.pdf"`, cortando dores cognitivas ao gerenciar arquivos dentro de pastas.
 
 ### 3.6 Restrições Físicas e de Design (+)
 
@@ -240,6 +245,7 @@ Fundamentos técnicos imperativos escolhidos por segurança corporativa nacional
 ## 4. Apêndices
 
 ### 4.1 Glossário de Termos e Jargões Financeiros
+
 Abaixo constam os jargões utilizados no ambiente corporativo e nos processamentos matemáticos da plataforma:
 *   **Alíquota:** Percentual (taxa) aplicado sobre uma Base de Cálculo para encontrar o valor do imposto. (Ex: Alíquota patronal de 8% para FGTS).
 *   **Base de Cálculo:** Montante estrito sobre o qual se aplica um imposto. (Ex: Se o INSS incide apenas sobre Salário + Horas Extras, a Base de Cálculo do INSS ignorará o Valor do Vale Transporte).
@@ -255,26 +261,24 @@ Abaixo constam os jargões utilizados no ambiente corporativo e nos processament
 *   **Rubrica:** Etiqueta contábil numérica e alfabética que abriga a regra de incidência de um valor (Ex: A Rubrica Oficial nº 2 carrega sempre e apenas as lógicas financeiras de repasse da "Hora Extra 50%").
 
 ### 4.2 Documentação das Rubricas Nativas (Matriz de Cadastros)
-Baseando-se no coração do repositório de rubricas padronizadas e cravadas no sistema SQL no momento zero da operação da plataforma (Catálogo Oficial Protetivo):
 
-| Código | Descrição Oficial     | Natureza | Tipo Contábil | Incide INSS | Incide FGTS | Incide IRRF |
-| ------ | --------------------- | -------- | ------------- | ----------- | ----------- | ----------- |
-| 1      | Salário Base          | Provento | Fixo          | SIM         | SIM         | SIM         |
-| 2      | Hora Extra 50%        | Provento | Variável      | SIM         | SIM         | SIM         |
-| 3      | Hora Extra 100%       | Provento | Variável      | SIM         | SIM         | SIM         |
-| 4      | Bônus / Gratificação  | Provento | Variável      | SIM         | SIM         | NÃO         |
-| 5      | Cesta Básica          | Provento | Fixo          | NÃO         | NÃO         | NÃO         |
-| 6      | PLR (Part. Lucros)    | Provento | Variável      | NÃO         | NÃO         | NÃO         |
-| 7      | Adiantamento Salarial | Desconto | Variável      | NÃO         | NÃO         | NÃO         |
-| 8      | Outros Proventos      | Provento | Variável      | NÃO         | NÃO         | NÃO         |
-| 101    | Desconto INSS         | Desconto | Fixo          | NÃO         | NÃO         | NÃO         |
-| 102    | Desconto por Falta    | Desconto | Variável      | NÃO         | NÃO         | NÃO         |
-| 103    | Desconto por Atraso   | Desconto | Variável      | NÃO         | NÃO         | NÃO         |
-| 104    | Desconto DSR          | Desconto | Variável      | NÃO         | NÃO         | NÃO         |
-| 105    | Desconto Atestado     | Desconto | Variável      | NÃO         | NÃO         | NÃO         |
-| 106    | Outros Descontos      | Desconto | Variável      | NÃO         | NÃO         | NÃO         |
+Baseando-se no coração do repositório de rubricas padronizadas e cravadas no sistema (banco de dados) no momento zero da operação da plataforma (Catálogo Oficial Protetivo):
 
-*(Nota de Negócio: Rubricas entre 1 e 499 nascem trancadas e são blindadas contra manipulações tributárias pela gestão para que o motor não desmonte, mantendo a conformidade do Ministério do Trabalho).*
+| Código | Descrição Oficial       | Natureza | Tipo Contábil | Incide INSS | Incide FGTS | Incide IRRF |
+| ------ | ----------------------- | -------- | ------------- | ----------- | ----------- | ----------- |
+| 1      | Salário Padrão          | Provento | Fixo          | SIM         | SIM         | SIM         |
+| 2      | Horas Extras 50%        | Provento | Variável      | SIM         | SIM         | SIM         |
+| 3      | Horas Extras 100%       | Provento | Variável      | SIM         | SIM         | SIM         |
+| 4      | Atraso por hora         | Desconto | Variável      | NÃO         | NÃO         | NÃO         |
+| 5      | Falta por dia           | Desconto | Variável      | NÃO         | NÃO         | NÃO         |
+| 100    | Desconto INSS           | Desconto | Fixo          | NÃO         | NÃO         | NÃO         |
+| 101    | Desconto IRRF           | Desconto | Fixo          | NÃO         | NÃO         | NÃO         |
+| 102    | Recolhimento FGTS       | Desconto | Fixo          | NÃO         | NÃO         | NÃO         |
+| 103    | Desconto DSR            | Desconto | Variável      | NÃO         | NÃO         | NÃO         |
+| 901    | Vale Transporte (VT)    | Desconto | Fixo          | NÃO         | NÃO         | NÃO         |
+| 902    | Vale Alimentação (PAT)  | Desconto | Fixo          | NÃO         | NÃO         | NÃO         |
+
+*(Nota de Negócio: As rubricas nativas estruturais não constam para edição livre do operador de RH na tela de interface. Sua existência é a espinha dorsal garantida para cálculos padronizados de folha. A equipe está liberada para criar novas de forma customizada preenchendo as demais numerações do catálogo livremente).*
 
 ### 4.3 Fórmulas Matemáticas e Mecânica Contábil de Código
 
@@ -308,10 +312,13 @@ Após forjar a Base do IRRF pura e isenta, a arquitetura cruza o valor remanesce
 `Corte Retaliatório de DSR = Na condição algorítmica onde existam Faltas > 0, dispara-se o confisco aditivo severo:  Corte DSR extra = (Salário Base Fixo / 30 Dias Civis)`
 *(Isso embute a norma vital do mundo corporativo: O cidadão que se ausenta sem atestar numa quinta-feira é ferido em duas vias contábeis brutais e imediatas — O dia em que não se apresentou perante o ponto e o descanso do respectivo domingo cortado em retaliação algorítmica e legal imediata).*
 
-### 4.4 Matriz de Tabelas Operacionais Governamentais (Referência Embutida: 2024/2025)
+### 4.4 Matriz de Tabelas Operacionais Governamentais (Guia de Referência Didática do Ano Base)
 
-**A Estrutura Federal Progressiva do INSS**
-*(Alocadas na classe `FaixaINSS` do repositório núcleo central)*
+A arquitetura do Sistema de Folha de Pagamento foi projetada priorizando a autonomia máxima do Administrador local. Por isso, a plataforma inicializa com os módulos de cálculos de **Tabelas do INSS e do IRRF completamente vazios** no banco de dados.
+As tabelas expostas abaixo (Ano Base: 2024/2025) são meramente um Guia de Referência Didática. Todo início de ciclo contábil, é responsabilidade do operador preencher, parametrizar e atualizar manualmente na "Tela de Parâmetros / Rubricas" as alíquotas reais vigentes expedidas pelo Ministério do Trabalho naquele ano governamental, para que só então o sistema passe a efetuar as progressões numéricas nos Holerites.
+
+**A Estrutura Federal Progressiva do INSS (Exemplo Histórico)**
+*(Tabela de referência para parametrização humana na interface)*
 | Faixa Temporal de Salário (Base do Imposto) | Alíquota Escalável | Parcela Estática de Dedução Oficial |
 |---------------------------------|----------|-------------------|
 | Patamar 1: Até o teto de R$ 1.412,00 | 7,5% (Base Zero) | Isenção Plena (R$ 0,00) |
@@ -319,10 +326,10 @@ Após forjar a Base do IRRF pura e isenta, a arquitetura cruza o valor remanesce
 | Patamar 3: De R$ 2.666,69 saltando até R$ 4.000,03 | 12,0% Ativos | R$ 101,18 (Alívio Federal) |
 | Patamar 4: De R$ 4.000,04 saltando até o teto máximo pátrio fixado em R$ 7.786,02 | 14,0% Pesados | R$ 181,18 (Alívio Federal) |
 
-*(Nota Administrativa: O Teto final teto superior previdenciário base no Brasil estipula um bloqueio para quem ganha dezenas de milhares de reais; o imposto do SFP trancará inexoravelmente sua subida caso os cálculos de renda superem as margens de teto oficiais apontadas pelo executivo).*
+*(Nota Administrativa: O Teto final superior previdenciário base no Brasil estipula um bloqueio para quem ganha dezenas de milhares de reais; o imposto do SFP trancará inexoravelmente sua subida de desconto caso os cálculos de renda superem as margens de teto oficiais alimentadas no sistema).*
 
-**A Tabela Estrita Nacional do Imposto de Renda (IRRF)**
-*(Engrenada na classe computacional `CalculadoraIRRF` em execução)*
+**A Tabela Estrita Nacional do Imposto de Renda - IRRF (Exemplo Histórico)**
+*(Tabela de referência para parametrização humana na interface)*
 | Base Apurada e Limpa para o IRRF Oficial | Alíquota Tributável de Confisco | Parcela Estática a Deduzir de Ajuda do IR |
 |---------------------------------|----------|-------------------------|
 | Isenção Primordial: Rendimentos enxutos limitados em R$ 2.259,20 | 0% Imunes | R$ 0,00 (Não Tributado) |
@@ -331,7 +338,7 @@ Após forjar a Base do IRRF pura e isenta, a arquitetura cruza o valor remanesce
 | Escada Avassaladora: De R$ 3.751,06 em diante com parada e freio final no teto abstrato de R$ 4.664,68 | 22,5% Severos | R$ 662,77 Subtraídos |
 | Confisco Supremo e Marginal: Qualquer ganho avulso financeiro excedente à marca final e teto de R$ 4.664,68 ao mês | 27,5% Mortais | R$ 896,00 Subtraídos de Ajuda |
 
-*(Alerta de Redução por Laço Sanguíneo: Para cada menino, menina ou adulto dependente legal cravado ativamente no cadastro primário temporal do titular no sistema corporativo, o motor garantirá a imposição da ajuda social abatendo exatos e adicionais R$ 189,59 fixos diretamente do núcleo base do cálculo perante o tribunal da receita, aliviando consideravelmente as amarras do imposto para pais nutridos das companhias instaladoras do SFP).*
+*(Alerta de Redução por Laço Sanguíneo: Para cada dependente legal cravado ativamente no cadastro do titular, o motor garantirá a imposição da ajuda social abatendo exatos e adicionais valores fixos (ex: R$ 189,59) diretamente do núcleo base do cálculo perante o tribunal da receita. Esse valor por dependente também deve ser parametrizado pelo RH).*
 
 ---
 

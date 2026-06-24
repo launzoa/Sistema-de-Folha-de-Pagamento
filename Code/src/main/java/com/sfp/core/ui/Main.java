@@ -1,19 +1,19 @@
-/**
- * @brief Arquivo responsável por iniciar a aplicação.
- * Ele lê o fxml da tela de login e inicia o sistema.
- */
-
 package com.sfp.core.ui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.logging.Logger;
 
-// @brief Classe principal responsavel por iniciar a aplicação
+/**
+ * @brief Classe responsável por iniciar a aplicação.
+ *        Ele lê o fxml da tela de login e inicia o sistema.
+ */
 public class Main extends Application {
 
     /**
@@ -36,9 +36,9 @@ public class Main extends Application {
         // Define o icone da janela (Barra de tarefas)
         URL iconLocation = getClass().getResource("/com/sfp/core/ui/gato.png");
         if (iconLocation != null) { // Adiciona o icone à janela
-            primaryStage.getIcons().add(new javafx.scene.image.Image(iconLocation.toExternalForm()));
+            primaryStage.getIcons().add(new Image(iconLocation.toExternalForm()));
         } else { // Se o icone não for encontrado, lança um aviso
-            System.err.println("Aviso: Icone gato.png nao encontrado no pacote core/ui!");
+            Logger.getGlobal().severe("Aviso: Icone gato.png nao encontrado no pacote core/ui!");
         }
 
         // Define o tamanho inicial da tela

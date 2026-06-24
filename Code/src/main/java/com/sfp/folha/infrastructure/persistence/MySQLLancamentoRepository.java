@@ -1,7 +1,3 @@
-/**
- * @brief Classe responsável pela persistência dos lançamentos no banco de dados
- */
-
 package com.sfp.folha.infrastructure.persistence;
 
 import java.math.BigDecimal;
@@ -17,6 +13,10 @@ import java.util.List;
 import com.sfp.core.database.ConexaoBD;
 import com.sfp.folha.domain.Lancamento;
 import com.sfp.folha.domain.LancamentoRepository;
+
+/**
+ * @brief Classe responsável pela persistência dos lançamentos no banco de dados
+ */
 
 public class MySQLLancamentoRepository implements LancamentoRepository {
 
@@ -40,7 +40,7 @@ public class MySQLLancamentoRepository implements LancamentoRepository {
             // Se a data CLT não for nula, insere a data CLT
             // Caso contrário, insere NULL no banco
             if (lancamento.getDataClt() != null) {
-                pstmt.setDate(5, java.sql.Date.valueOf(lancamento.getDataClt()));
+                pstmt.setDate(5, Date.valueOf(lancamento.getDataClt()));
             } else {
                 pstmt.setNull(5, Types.DATE);
             }
@@ -56,14 +56,14 @@ public class MySQLLancamentoRepository implements LancamentoRepository {
             // Se a data de início não for nula, insere a data de início
             // Caso contrário, insere NULL no banco
             if (lancamento.getDataInicio() != null) {
-                pstmt.setDate(9, java.sql.Date.valueOf(lancamento.getDataInicio()));
+                pstmt.setDate(9, Date.valueOf(lancamento.getDataInicio()));
             } else {
                 pstmt.setNull(9, Types.DATE);
             }
             // Se a data final não for nula, insere a data final
             // Caso contrário, insere NULL no banco
             if (lancamento.getDataFim() != null) {
-                pstmt.setDate(10, java.sql.Date.valueOf(lancamento.getDataFim()));
+                pstmt.setDate(10, Date.valueOf(lancamento.getDataFim()));
             } else {
                 pstmt.setNull(10, Types.DATE);
             }
@@ -72,7 +72,7 @@ public class MySQLLancamentoRepository implements LancamentoRepository {
             pstmt.executeUpdate();
 
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao salvar lançamento", e);
+            throw new IllegalStateException("Erro ao salvar lançamento", e);
         }
     }
 
@@ -122,7 +122,7 @@ public class MySQLLancamentoRepository implements LancamentoRepository {
             }
 
         } catch (Exception e) { // Se der erro, lança uma exceção
-            throw new RuntimeException("Erro ao buscar lançamentos por folha e funcionário", e);
+            throw new IllegalStateException("Erro ao buscar lançamentos por folha e funcionário", e);
         }
         return lancamentos; // Retorna a lista de lançamentos
     }
@@ -144,7 +144,7 @@ public class MySQLLancamentoRepository implements LancamentoRepository {
             // Executando o statement
             pstmt.executeUpdate();
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao deletar lançamento", e);
+            throw new IllegalStateException("Erro ao deletar lançamento", e);
         }
     }
 
@@ -184,35 +184,44 @@ public class MySQLLancamentoRepository implements LancamentoRepository {
                 lancamentos.add(lancamento);
             }
         } catch (Exception e) { // Se der erro, lança uma exceção
-            throw new RuntimeException("Erro ao buscar todos os lançamentos", e);
+            throw new IllegalStateException("Erro ao buscar todos os lançamentos", e);
         }
         return lancamentos; // Retorna a lista de lançamentos
     }
 
+    /**
+     * @brief Busca todos os lançamentos de uma folha
+     * @param idFolha ID da folha
+     * @return List<Lancamento>
+     */
     @Override
     public List<Lancamento> buscarPorFolha(int idFolha) {
         List<Lancamento> lancamentos = new ArrayList<>();
+        // Comando SQL para buscar lançamentos por folha
         String sql = "SELECT * FROM lancamento WHERE id_folha = ?";
-        
+
+        // Conexão com o banco de dados, preparo do statement
         try (Connection conn = ConexaoBD.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            // Setando o parâmetro do statement
             pstmt.setInt(1, idFolha);
-            ResultSet rs = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery(); // Executa o statement e retorna os resultados
+            // Enquanto houver resultados, executa o bloco
             while (rs.next()) {
+                // Criando um novo objeto Lancamento com os dados que puxou
                 Lancamento l = new Lancamento(
-                    rs.getInt("id"), rs.getInt("id_folha"), rs.getString("cpf_funcionario"),
-                    rs.getInt("codigo_rubrica"), rs.getDouble("quantidade"), 
-                    rs.getDate("data_clt") != null ? rs.getDate("data_clt").toLocalDate() : null,
-                    rs.getBigDecimal("valor"), rs.getString("modalidade"), rs.getString("base_calculo"),
-                    rs.getDate("data_inicio") != null ? rs.getDate("data_inicio").toLocalDate() : null,
-                    rs.getDate("data_fim") != null ? rs.getDate("data_fim").toLocalDate() : null
-                );
-                lancamentos.add(l);
+                        rs.getInt("id"), rs.getInt("id_folha"), rs.getString("cpf_funcionario"),
+                        rs.getInt("codigo_rubrica"), rs.getDouble("quantidade"),
+                        rs.getDate("data_clt") != null ? rs.getDate("data_clt").toLocalDate() : null,
+                        rs.getBigDecimal("valor"), rs.getString("modalidade"), rs.getString("base_calculo"),
+                        rs.getDate("data_inicio") != null ? rs.getDate("data_inicio").toLocalDate() : null,
+                        rs.getDate("data_fim") != null ? rs.getDate("data_fim").toLocalDate() : null);
+                lancamentos.add(l); // Adicionando o lançamento na lista
             }
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar lançamentos por folha", e);
+        } catch (Exception e) { // Se der erro, lança uma exceção
+            throw new IllegalStateException("Erro ao buscar lançamentos por folha", e);
         }
-        return lancamentos;
+        return lancamentos; // Retorna a lista de lançamentos
     }
 
     /**
@@ -255,7 +264,7 @@ public class MySQLLancamentoRepository implements LancamentoRepository {
                 }
             }
         } catch (Exception e) { // Se der erro, lança uma exceção
-            throw new RuntimeException("Erro ao buscar lançamento por ID", e);
+            throw new IllegalStateException("Erro ao buscar lançamento por ID", e);
         }
         return lancamento; // Retorna o lançamento
     }
@@ -279,7 +288,7 @@ public class MySQLLancamentoRepository implements LancamentoRepository {
             pstmt.setDouble(4, lancamento.getQuantidade());
             // Verificando se a data CLT não é nula para adicionar ao statement
             if (lancamento.getDataClt() != null) {
-                pstmt.setDate(5, java.sql.Date.valueOf(lancamento.getDataClt()));
+                pstmt.setDate(5, Date.valueOf(lancamento.getDataClt()));
             } else {
                 pstmt.setNull(5, Types.DATE);
             }
@@ -291,24 +300,24 @@ public class MySQLLancamentoRepository implements LancamentoRepository {
             }
             pstmt.setString(7, lancamento.getModalidade());
             pstmt.setString(8, lancamento.getBaseCalculo());
-            
+
             if (lancamento.getDataInicio() != null) {
-                pstmt.setDate(9, java.sql.Date.valueOf(lancamento.getDataInicio()));
+                pstmt.setDate(9, Date.valueOf(lancamento.getDataInicio()));
             } else {
                 pstmt.setNull(9, Types.DATE);
             }
-            
+
             if (lancamento.getDataFim() != null) {
-                pstmt.setDate(10, java.sql.Date.valueOf(lancamento.getDataFim()));
+                pstmt.setDate(10, Date.valueOf(lancamento.getDataFim()));
             } else {
                 pstmt.setNull(10, Types.DATE);
             }
-            
+
             pstmt.setInt(11, lancamento.getId());
             // Executando o statement
             pstmt.executeUpdate();
         } catch (Exception e) { // Se der erro, lança uma exceção
-            throw new RuntimeException("Erro ao atualizar lançamento", e);
+            throw new IllegalStateException("Erro ao atualizar lançamento", e);
         }
     }
 }
