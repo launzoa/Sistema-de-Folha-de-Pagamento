@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.sfp.folha.ui.TelaLancamento" styleClass="conteudo" spacing="20">
+    <stylesheets>
+        <URL value="@/com/sfp/core/ui/style.css"/>
+    </stylesheets>
+    <HBox spacing="20">
+       <!-- Card Competência -->
+        <VBox styleClass="card_dash" HBox.hgrow="ALWAYS">
+            <Label text="Competência" styleClass="card_title"/>
+            <Label fx:id="labelCompetencia" text="mes/ano" styleClass="card_label"/>
+        </VBox>
+        
+        <!-- Card Status -->
+        <VBox styleClass="card_dash" HBox.hgrow="ALWAYS">
+            <Label text="Status da folha" styleClass="card_title"/>
+            <Label fx:id="labelStatus" text="Aberta/Fechada" styleClass="card_label"/>
+        </VBox>
+    </HBox>
+    
+    <!-- Selecionar Funcionário -->
+    <HBox spacing="20" alignment="CENTER_LEFT" styleClass="card_dash">
+        <VBox spacing="5">
+            <Label text="Folha (Competência)" styleClass="holerite-section-title"/>
+            <ComboBox fx:id="comboFolha" promptText="Selecione a folha..." prefWidth="250" styleClass="combo_box" onAction="#mudarFolha"/>
+        </VBox>
+        <VBox spacing="5">
+            <Label text="Filtrar por Funcionário" styleClass="holerite-section-title"/>
+            <ComboBox fx:id="comboBuscaFuncionario" promptText="Selecione o funcionário..." prefWidth="250" styleClass="combo_box"/>
+        </VBox>
+        
+        <Region HBox.hgrow="ALWAYS"/>
+        
+        <VBox alignment="BOTTOM_LEFT">
+            <HBox spacing="10">
+                <Button text="Buscar" styleClass="primary-button" onAction="#buscar"/>
+                <Button text="Limpar Filtros" styleClass="secondary-button" onAction="#limparFiltros"/>
+            </HBox>
+        </VBox>
+    </HBox>
+    <!-- Botões -->
+    <HBox spacing="20" alignment="CENTER_RIGHT">
+        <Button text="Registrar Lançamento" styleClass="primary-button" onAction="#registrar"/>
+        <Button text="Editar Lancamento" styleClass="primary-button" onAction="#editarLancamento"/>
+        <Button text="Excluir" styleClass="btn-excluir" onAction="#excluirLancamento"/>
+    </HBox>
+    
+    <!-- Tabela -->
+    <VBox styleClass="card" VBox.vgrow="ALWAYS">
+        <TableView fx:id="tabelaLancamento" styleClass="tabela_dash" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colFunc" text="Funcionário" prefWidth="150"/>
+                <TableColumn fx:id="colTipo" text="Tipo" prefWidth="120"/>
+                <TableColumn fx:id="colVal" text="Valor" prefWidth="110"/>
+                <TableColumn fx:id="colData" text="Data" prefWidth="110"/>
+            </columns>
+        </TableView>
+    </VBox>
+        
+</VBox>

@@ -1,0 +1,255 @@
+package com.sfp.folha.application;
+
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.FontFactory;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.Rectangle;
+
+import java.awt.Color;
+import java.io.FileOutputStream;
+import java.math.BigDecimal;
+import java.util.Map;
+import java.util.logging.Logger;
+
+import com.sfp.folha.domain.Holerite;
+import com.sfp.folha.domain.Lancamento;
+import com.sfp.empresa.domain.Empresa;
+import com.sfp.rubrica.domain.Rubrica;
+
+/**
+ * @brief Classe responsável por gerar o arquivo PDF físico do Holerite do
+ *        funcionário.
+ */
+public class GeradorHoleritePDF {
+
+        /**
+         * @brief Gera o arquivo PDF de um holerite específico.
+         * @param holerite       O holerite processado do funcionário.
+         * @param competencia    Competência do holerite (Mês/Ano).
+         * @param diretorioSaida Caminho onde o PDF será salvo na máquina.
+         * @param mapaRubricas   Dicionário de rubricas em memória para resolução rápida
+         *                       de nomes.
+         */
+        public void gerarPdf(Holerite holerite, String competencia, String diretorioSaida,
+                        Map<Integer, Rubrica> mapaRubricas,
+                        Empresa empresaConfigurada) {
+                // Caminho onde o PDF será salvo
+                String nomeArquivo = diretorioSaida + "/Holerite_"
+                                + holerite.getFuncionario().getNome().replaceAll(" ", "_")
+                                + "_" + competencia.replaceAll("/", "_") + ".pdf";
+                // Cria o documento
+                Document document = new Document(PageSize.A4);
+
+                try {
+                        // Cria o arquivo PDF
+                        PdfWriter.getInstance(document, new FileOutputStream(nomeArquivo));
+                        // Abre o documento
+                        document.open();
+                        // Define as fontes
+                        Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
+                        Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 10);
+                        Font fontBold = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10);
+                        // Cabeçalho
+                        Paragraph titulo = new Paragraph("RECIBO DE PAGAMENTO DE SALÁRIO", fontTitulo);
+                        titulo.setAlignment(Element.ALIGN_CENTER);
+                        document.add(titulo);
+                        document.add(new Paragraph("\n"));
+                        // Informações da Empresa e Mês
+                        PdfPTable tableCabecalho = new PdfPTable(2);
+                        tableCabecalho.setWidthPercentage(100);
+                        // Busca os dados da empresa (Injetado em vez de pesquisar no BD)
+                        String nomeEmpresa = (empresaConfigurada != null && empresaConfigurada.getRazaoSocial() != null)
+                                        ? empresaConfigurada.getRazaoSocial()
+                                        : "SFP Corporation LTDA";
+                        String cnpjEmpresa = (empresaConfigurada != null && empresaConfigurada.getCnpj() != null)
+                                        ? empresaConfigurada.getCnpj()
+                                        : "00.000.000/0001-00";
+                        // Adiciona as informações da empresa na célula
+                        PdfPCell cellEmpresa = new PdfPCell(
+                                        new Phrase("EMPRESA: " + nomeEmpresa + "\nCNPJ: " + cnpjEmpresa, fontNormal));
+                        cellEmpresa.setBorder(Rectangle.NO_BORDER);
+                        tableCabecalho.addCell(cellEmpresa);
+                        // Adiciona a competência na célula
+                        PdfPCell cellMes = new PdfPCell(new Phrase("COMPETÊNCIA: " + competencia, fontBold));
+                        cellMes.setBorder(Rectangle.NO_BORDER);
+                        cellMes.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                        tableCabecalho.addCell(cellMes);
+                        // Adiciona a tabela com as informações da empresa e mês ao documento
+                        document.add(tableCabecalho);
+                        document.add(new Paragraph("\n"));
+                        // Informações do Funcionário
+                        PdfPTable tableFunc = new PdfPTable(1);
+                        tableFunc.setWidthPercentage(100);
+                        PdfPCell cellFuncInfo = new PdfPCell(new Phrase(
+                                        "Funcionário: " + holerite.getFuncionario().getNome() + "\n" +
+                                                        "CPF: " + holerite.getFuncionario().getCpf() + "\n" +
+                                                        "Cargo: " + holerite.getFuncionario().getCargo(),
+                                        fontNormal));
+                        tableFunc.addCell(cellFuncInfo);
+                        document.add(tableFunc);
+                        document.add(new Paragraph("\n"));
+                        // Lançamentos e Eventos
+                        PdfPTable tableEventos = new PdfPTable(5);
+                        tableEventos.setWidthPercentage(100);
+                        tableEventos.setWidths(new float[] { 1.5f, 4f, 1.5f, 1.5f, 1.5f });
+                        // Títulos das colunas
+                        String[] headers = { "Cód", "Descrição", "Referência", "Vencimentos", "Descontos" };
+                        for (String header : headers) {
+                                PdfPCell cell = new PdfPCell(new Phrase(header, fontBold));
+                                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                cell.setBackgroundColor(new Color(230, 230, 230));
+                                tableEventos.addCell(cell);
+                        }
+                        // Lançamento Base (Salário Mês)
+                        adicionarLinhaTabela(tableEventos, "001", "Salário Base Mensal",
+                                        String.valueOf(holerite.getQuantidadeDiasUteis()),
+                                        "R$ " + holerite.getFuncionario().getSalarioBruto().toString(), "", fontNormal);
+                        // Variáveis / Outros Lançamentos
+                        if (holerite.getLancamentos() != null) {
+                                for (Lancamento l : holerite.getLancamentos()) {
+                                        Rubrica r = mapaRubricas.get(l.getCodigoRubrica());
+                                        String desc = r != null ? r.getDescricao() : "Rubrica " + l.getCodigoRubrica();
+                                        String ref = l.getQuantidade() > 0 ? l.getQuantidade() + " un" : "-";
+                                        String vencimento = "";
+                                        String desconto = "";
+                                        if (l.getValor() != null) {
+                                                // Verifica se é desconto
+                                                if (r != null && "Desconto".equalsIgnoreCase(r.getNatureza())) {
+                                                        desconto = "R$ " + l.getValor().toString();
+                                                } else { // Caso contrário, é vencimento
+                                                        vencimento = "R$ " + l.getValor().toString();
+                                                }
+                                        }
+                                        // Adiciona a linha com os dados do lançamento
+                                        adicionarLinhaTabela(tableEventos, String.format("%03d", l.getCodigoRubrica()),
+                                                        desc, ref,
+                                                        vencimento, desconto, fontNormal);
+                                }
+                        }
+                        // INSS e IRRF
+                        if (holerite.getDescontoINSS() != null
+                                        && holerite.getDescontoINSS().compareTo(BigDecimal.ZERO) > 0) {
+                                String aliquotaINSS = holerite.getAliquotaEfetivaINSS() != null
+                                                ? holerite.getAliquotaEfetivaINSS().toString()
+                                                : "0.0";
+                                String refINSS = holerite.getBaseINSS() != null
+                                                ? "Base R$ " + holerite.getBaseINSS().toString() + " (" + aliquotaINSS
+                                                                + "%)"
+                                                : "-";
+                                adicionarLinhaTabela(tableEventos, "002", "Desconto INSS", refINSS, "",
+                                                "R$ " + holerite.getDescontoINSS().toString(), fontNormal);
+                        }
+                        if (holerite.getDescontoIRRF() != null
+                                        && holerite.getDescontoIRRF().compareTo(BigDecimal.ZERO) > 0) {
+                                String aliquotaIRRF = holerite.getAliquotaEfetivaIRRF() != null
+                                                ? holerite.getAliquotaEfetivaIRRF().toString()
+                                                : "0.0";
+                                String refIRRF = holerite.getBaseIRRF() != null
+                                                ? "Base R$ " + holerite.getBaseIRRF().toString() + " (" + aliquotaIRRF
+                                                                + "%)"
+                                                : "-";
+                                adicionarLinhaTabela(tableEventos, "003", "Desconto IRRF", refIRRF, "",
+                                                "R$ " + holerite.getDescontoIRRF().toString(), fontNormal);
+                        }
+                        if (holerite.getDividaResidual() != null
+                                        && holerite.getDividaResidual().compareTo(BigDecimal.ZERO) > 0) {
+                                adicionarLinhaTabela(tableEventos, "997", "Dívida a Abater Próx. Mês", "-", "",
+                                                "R$ " + holerite.getDividaResidual().toString(), fontNormal);
+                        }
+                        // Adiciona a tabela com os lançamentos e eventos ao documento
+                        document.add(tableEventos);
+                        document.add(new Paragraph("\n"));
+                        // Totais
+                        PdfPTable tableTotais = new PdfPTable(3);
+                        tableTotais.setWidthPercentage(100);
+                        tableTotais.setWidths(new float[] { 6f, 2f, 2f });
+                        // Adiciona célula em branco
+                        PdfPCell cBranca = new PdfPCell(new Phrase(" "));
+                        cBranca.setBorder(Rectangle.NO_BORDER);
+                        tableTotais.addCell(cBranca);
+                        // Adiciona célula com o total de vencimentos
+                        PdfPCell cTotVenc = new PdfPCell(
+                                        new Phrase("Total Vencimentos\nR$ " + holerite.getTotalProventos().toString(),
+                                                        fontBold));
+                        cTotVenc.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        tableTotais.addCell(cTotVenc);
+                        // Adiciona célula com o total de descontos
+                        PdfPCell cTotDesc = new PdfPCell(
+                                        new Phrase("Total Descontos\nR$ " + holerite.getTotalDescontos().toString(),
+                                                        fontBold));
+                        cTotDesc.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        tableTotais.addCell(cTotDesc);
+                        // Adiciona a tabela com os totais ao documento
+                        document.add(tableTotais);
+                        document.add(new Paragraph("\n"));
+                        // Líquido e FGTS
+                        PdfPTable tableLiq = new PdfPTable(2);
+                        tableLiq.setWidthPercentage(100);
+                        tableLiq.setWidths(new float[] { 7f, 3f });
+                        // Adiciona célula com mensagem
+                        PdfPCell cMsg = new PdfPCell(
+                                        new Phrase("Declaro ter recebido a importância líquida discriminada neste recibo.\n\nBase FGTS: R$ "
+                                                        + holerite.getTotalProventos().toString()
+                                                        + "  |  FGTS do Mês: R$ "
+                                                        + holerite.getValorFGTS().toString(), fontNormal));
+                        cMsg.setBorder(Rectangle.NO_BORDER);
+                        tableLiq.addCell(cMsg);
+                        // Adiciona célula com o líquido a receber
+                        PdfPCell cValLiq = new PdfPCell(
+                                        new Phrase("LÍQUIDO A RECEBER\nR$ " + holerite.getSalarioLiquido().toString(),
+                                                        fontBold));
+                        cValLiq.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        cValLiq.setBackgroundColor(new Color(200, 230, 200));
+                        tableLiq.addCell(cValLiq);
+                        // Adiciona a tabela com o líquido a receber ao documento
+                        document.add(tableLiq);
+
+                } catch (DocumentException e) { // Bloco catch para capturar exceções relacionadas ao PDF
+                        Logger.getGlobal().severe(e.getMessage());
+                        Logger.getGlobal().severe("Erro ao gerar PDF: " + e.getMessage());
+                } catch (Exception e) { // Bloco catch para capturar exceções gerais
+                        Logger.getGlobal().severe(e.getMessage());
+                } finally { // Bloco finally para garantir que o documento seja fechado
+                        document.close();
+                }
+        }
+
+        /**
+         * @brief Adiciona uma linha com os dados do lançamento ao documento
+         * @param tabela A tabela de lançamentos
+         * @param col1   A primeira coluna
+         * @param col2   A segunda coluna
+         * @param col3   A terceira coluna
+         * @param col4   A quarta coluna
+         * @param col5   A quinta coluna
+         * @param font   A fonte
+         */
+        private void adicionarLinhaTabela(PdfPTable tabela, String col1, String col2, String col3, String col4,
+                        String col5,
+                        Font font) {
+                // Adiciona a primeira coluna ao documento
+                tabela.addCell(new PdfPCell(new Phrase(col1, font)));
+                // Adiciona a segunda coluna ao documento
+                tabela.addCell(new PdfPCell(new Phrase(col2, font)));
+                // Adiciona a terceira coluna ao documento
+                PdfPCell c3 = new PdfPCell(new Phrase(col3, font));
+                c3.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tabela.addCell(c3);
+                // Adiciona a quarta coluna ao documento
+                PdfPCell c4 = new PdfPCell(new Phrase(col4, font));
+                c4.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                tabela.addCell(c4);
+                // Adiciona a quinta coluna ao documento
+                PdfPCell c5 = new PdfPCell(new Phrase(col5, font));
+                c5.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                tabela.addCell(c5);
+        }
+}

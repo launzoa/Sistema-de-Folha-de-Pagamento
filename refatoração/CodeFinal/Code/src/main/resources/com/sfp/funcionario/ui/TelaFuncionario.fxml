@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.sfp.funcionario.ui.TelaFuncionario" styleClass="conteudo" spacing="20">
+    <stylesheets>
+        <URL value="@/com/sfp/core/ui/style.css"/>
+    </stylesheets>
+
+    <!-- BOTÕES DO TOPO -->
+    <HBox spacing="20" alignment="CENTER_RIGHT">
+        <Button text="+ Novo Funcionário" styleClass="primary-button" onAction="#abrirTelaCadastro"/>
+        <Button text="Editar Funcionário" styleClass="primary-button" onAction="#editarFuncionario"/>
+    </HBox>
+    
+    <!-- TABELA -->
+    <VBox styleClass="card" VBox.vgrow="ALWAYS">
+        <TableView fx:id="tabelaFuncionarios" styleClass="tabela_dash" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colNome" text="Nome completo" prefWidth="150"/>
+                <TableColumn fx:id="colCpf" text="CPF" prefWidth="120"/>
+                <TableColumn fx:id="colCargo" text="Cargo" prefWidth="70"/>
+                <TableColumn fx:id="colAdmissao" text="DT. Admissão" prefWidth="110"/>
+                <TableColumn fx:id="colSalario" text="Salário Base" prefWidth="110"/>
+                <TableColumn fx:id="colStatus" text="Status" prefWidth="80"/>
+            </columns>
+        </TableView>
+    </VBox>
+
+</VBox>

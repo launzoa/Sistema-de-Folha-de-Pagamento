@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.net.URL?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="com.sfp.folha.ui.FormLancamentoController" spacing="15" style="-fx-padding: 20;">
+    
+    <stylesheets>
+        <URL value="@/com/sfp/core/ui/style.css"/>
+    </stylesheets>
+    
+    <Label text="Novo Lançamento" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+    
+    <Label text="Funcionário:"/>
+    <ComboBox fx:id="comboFuncionario" prefWidth="300" promptText="Selecione o Funcionário..."/>
+    
+    <Label text="Rubrica (Evento):"/>
+    <ComboBox fx:id="comboRubrica" prefWidth="300" promptText="Ex: Hora Extra 50%, Faltas..."/>
+    
+    <VBox spacing="8" styleClass="card_dash">
+        <Label text="Matemática do Lançamento:" styleClass="holerite-section-title" style="-fx-font-weight: bold;"/>
+        <HBox spacing="10">
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <Label text="Modalidade:"/>
+                <ComboBox fx:id="cbModalidade" promptText="Valor / Porcentagem / Quantidade" maxWidth="Infinity"/>
+            </VBox>
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <Label text="Valor (R$, % ou Qtd):"/>
+                <TextField fx:id="txtValorOuQtd" promptText="Ex: 150.00 ou 10 ou 2.5"/>
+            </VBox>
+        </HBox>
+        <VBox spacing="5" fx:id="boxBaseCalculo">
+            <Label text="Implica em (Base):"/>
+            <HBox spacing="10">
+                <ComboBox fx:id="cbBaseCalculo" promptText="Selecione a Base" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="txtBaseLivre" promptText="R$ Valor Base Livre" visible="false" managed="false"/>
+            </HBox>
+        </VBox>
+        <CheckBox fx:id="chkDescontoDSR" text="Descontar DSR da Semana (Apenas p/ Faltas/Atrasos)"/>
+    </VBox>
+    
+    <Label text="Data do Ocorrido (Opcional):"/>
+    <DatePicker fx:id="dpDataClt" prefWidth="300"/>
+    
+    <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+        <Button text="Cancelar" onAction="#cancelar" style="-fx-background-color: #ccc;"/>
+        <Button text="Salvar" onAction="#salvar" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+    </HBox>
+</VBox>

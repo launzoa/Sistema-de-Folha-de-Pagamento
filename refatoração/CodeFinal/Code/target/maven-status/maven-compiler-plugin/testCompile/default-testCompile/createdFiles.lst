@@ -1,0 +1,10 @@
+com\sfp\folha\application\ServicoCicloFolhaTest$FakeFolhaMesRepository.class
+com\sfp\core\application\ServicoDashboardTest.class
+com\sfp\folha\application\ProcessadorDeFolhaTest.class
+com\sfp\folha\application\ServicoCicloFolhaTest$1.class
+com\sfp\folha\application\calculadoras\CalculadoraIRRFTest.class
+com\sfp\folha\application\calculadoras\CalculadoraSalarioProporcionalTest.class
+com\sfp\folha\application\ServicoCicloFolhaTest.class
+com\sfp\folha\application\calculadoras\CalculadoraFGTSTest.class
+com\sfp\folha\application\ProcessadorDeFolhaTest$FakeRubricaRepository.class
+com\sfp\folha\application\calculadoras\CalculadoraINSSTest.class
